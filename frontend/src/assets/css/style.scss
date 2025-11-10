@@ -1,0 +1,156 @@
+.header {
+  .top-bar {
+    background-color: #1e3a8a; // bleu foncé
+    font-size: 0.9rem;
+
+    i {
+      margin-right: 5px;
+    }
+  }
+
+  .navbar {
+    .nav-link {
+      color: #1e3a8a !important;
+      font-weight: 500;
+
+      &:hover {
+        color: #0d6efd !important;
+      }
+    }
+
+    .btn {
+      background-color: #1e3a8a;
+      border: none;
+
+      &:hover {
+        background-color: #0d6efd;
+      }
+    }
+  }
+}
+.hero-section {
+  background: #f8faff;
+  border-radius: 1rem;
+  min-height: 80vh;
+
+  h1 {
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+  }
+
+  .btn {
+    font-weight: 600;
+  }
+
+  .stats {
+    div {
+      text-align: left;
+    }
+  }
+
+  .info-card {
+    background: #fff;
+    border: none;
+    padding: 0.75rem 1rem;
+
+    h6 {
+      color: #0f172a;
+    }
+  }
+}
+// Styles pour la section permis
+.permis-section {
+  .permis-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden;
+    
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+  }
+
+  .card-header {
+    border-bottom: none;
+    
+    h4 {
+      font-size: 1.5rem;
+    }
+    
+    .badge {
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+    }
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    color: #1e3a8a;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background-color: #1e3a8a;
+    border-color: #1e3a8a;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+      transform: scale(1.02);
+    }
+  }
+
+  .list-unstyled {
+    li {
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+  }
+
+  // Styles pour le système de réservation
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
+  .modal-header {
+    .btn-close {
+      filter: invert(1);
+    }
+  }
+
+  .time-slot-btn {
+    min-width: 80px;
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .permis-card {
+      margin-bottom: 1.5rem;
+    }
+    
+    .card-header {
+      .d-flex {
+        flex-direction: column;
+        gap: 0.5rem;
+        
+        h4, .badge {
+          text-align: center;
+        }
+      }
+    }
+    
+    .time-slot-btn {
+      min-width: 70px;
+      font-size: 0.8rem;
+    }
+  }
+}
