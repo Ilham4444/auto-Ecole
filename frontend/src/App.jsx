@@ -22,7 +22,7 @@ function App() {
         <main className="container my-5">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/permis" element={<Permis />} />
+            <Route path="/Permis" element={<Permis />} />
             <Route path="/examens" element={<Examens />} />
             <Route path="/moniteurs" element={<Moniteurs />} />
             <Route path="/apropos" element={<Apropos />} />

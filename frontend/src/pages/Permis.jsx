@@ -347,7 +347,7 @@ export default function Permis() {
   };
 
   return (
-    <section className="permis-section py-5 bg-light" id="permis">
+    <section className="permis-section py-5 bg-light" id="Permis">
       <Container>
         <div className="text-center mb-5">
           <h2 className="fw-bold text-primary">Nos Catégories de Permis</h2>
