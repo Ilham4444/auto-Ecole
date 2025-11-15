@@ -14,7 +14,7 @@ const Header = () => {
             <i className="bi bi-telephone"></i> 0631212766
           </span>
           <span>
-            <i className="bi bi-geo-alt"></i> rue de Hassan 2, Agadir
+            <i className="bi bi-geo-alt"></i> Rue de Hassan 2, Agadir
           </span>
         </div>
         <div className="hours">
@@ -37,7 +37,7 @@ const Header = () => {
           <Navbar.Collapse id="main-navbar" className="justify-content-end">
             <Nav className="align-items-center gap-3">
               <Nav.Link href="Permis">Nos Permis</Nav.Link>
-              <Nav.Link href="#examens">Examens</Nav.Link>
+               <Nav.Link as={Link} to="/examens">Examens</Nav.Link>
               <Nav.Link href="#moniteurs">Moniteurs</Nav.Link>
               <Nav.Link href="#apropos">À propos</Nav.Link>
             <Button as={Link} to="/compte" variant="primary">Mon Compte</Button> 

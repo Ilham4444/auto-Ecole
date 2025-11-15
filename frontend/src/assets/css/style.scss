@@ -154,6 +154,7 @@
     }
   }
 }
+ Updated upstream
 /* Conteneur principal */
 .moncompte-container {
   display: flex;
@@ -190,3 +191,98 @@
   margin-top: 15px;
   font-size: 14px;
 }
+.examens-page {
+  width: 100%;
+  padding: 40px 0;
+  background: #f7f9fc;
+
+  .examens-header {
+    text-align: center;
+    margin-bottom: 30px;
+
+    h2 {
+      font-size: 22px;
+      color: #333;
+      font-weight: 600;
+    }
+  }
+
+  .examens-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+
+  .examen-card {
+    width: 380px;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    transition: 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0px 5px 20px rgba(0,0,0,0.15);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 12px;
+      background: #e6f0ff;
+      color: #2563eb;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .description {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .price-box {
+      text-align: center;
+      margin-bottom: 20px;
+
+      h1 {
+        font-size: 36px;
+        font-weight: 800;
+        color: #000;
+      }
+
+      span {
+        color: #666;
+        font-size: 14px;
+      }
+    }
+
+    .pre-requis {
+      h4 {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          margin-bottom: 6px;
+          font-size: 14px;
+          color: #333;
+        }
+      }
+    }
+  }
+}
+
