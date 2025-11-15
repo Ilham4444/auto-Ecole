@@ -43,7 +43,8 @@ export default function Compte() {
 
         <p className="moncompte-footer">
           Vous n'avez pas encore de compte ? <br />
-          <a href="#" className="text-primary">
+          <a href="/register" className="text-primary">
+
             Créez votre compte gratuitement
           </a>
         </p>
