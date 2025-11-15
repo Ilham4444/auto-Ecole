@@ -154,3 +154,39 @@
     }
   }
 }
+/* Conteneur principal */
+.moncompte-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Carte du formulaire */
+.moncompte-card {
+  width: 380px;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  background: #fff;
+}
+
+/* Titres */
+.moncompte-title {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.moncompte-subtitle {
+  text-align: center;
+  color: gray;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* Footer */
+.moncompte-footer {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}

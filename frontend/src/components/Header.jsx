@@ -2,6 +2,7 @@ import React from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import "../assets/css/style.scss";
 import logo from "../assets/logo.png"; // remplace par ton logo réel
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -39,9 +40,7 @@ const Header = () => {
               <Nav.Link href="#examens">Examens</Nav.Link>
               <Nav.Link href="#moniteurs">Moniteurs</Nav.Link>
               <Nav.Link href="#apropos">À propos</Nav.Link>
-              <Button variant="primary" className="rounded-pill px-4">
-                <i className="bi bi-person me-2"></i> Mon Compte
-              </Button>
+            <Button as={Link} to="/compte" variant="primary">Mon Compte</Button> 
             </Nav>
           </Navbar.Collapse>
         </Container>
