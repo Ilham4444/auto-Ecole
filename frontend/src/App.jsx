@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import {BrowserRouter as Router,Routes, Route,useLocation,useNavigate,} from "react-router-dom";
 
 import Header from "./components/Header";
 import "./assets/css/style.scss";
@@ -11,6 +11,7 @@ import Examens from "./pages/Examens";
 import Moniteurs from "./pages/Moniteurs";
 import Apropos from "./pages/Apropos";
 import Compte from "./pages/Compte";
+import Register from "./pages/Register";
 
 function AppContent() {
   const location = useLocation();
@@ -19,7 +20,8 @@ function AppContent() {
   // fermer avec Esc
   useEffect(() => {
     function onKey(e) {
-      if (e.key === "Escape" && location.pathname === "/compte") {
+      if ((e.key === "Escape") &&
+        (location.pathname === "/compte" || location.pathname === "/register")) {
         navigate("/");
       }
     }
@@ -27,17 +29,18 @@ function AppContent() {
     return () => window.removeEventListener("keydown", onKey);
   }, [location.pathname, navigate]);
 
-  // handler de fermeture pour le fond
+  // clic en dehors = fermer
   const handleOverlayClick = () => {
     navigate("/");
   };
 
+  const isAuthModal =
+    location.pathname === "/compte" || location.pathname === "/register";
+
   return (
     <>
-      {/* Header */}
       <Header />
 
-      {/* Contenu principal */}
       <main className="container my-5">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -46,16 +49,16 @@ function AppContent() {
           <Route path="/moniteurs" element={<Moniteurs />} />
           <Route path="/apropos" element={<Apropos />} />
 
-          {/* on garde Home derrière quand l'URL est /compte */}
+          {/* les 2 modals gardent Home derrière */}
           <Route path="/compte" element={<Home />} />
+          <Route path="/register" element={<Home />} />
         </Routes>
       </main>
 
-      {/* Overlay affiché par-dessus quand URL = /compte */}
-      {location.pathname === "/compte" && (
+      {/* Overlay global */}
+      {isAuthModal && (
         <div
-          onClick={handleOverlayClick} // clic sur le fond ferme
-          aria-hidden="true"
+          onClick={handleOverlayClick}
           style={{
             position: "fixed",
             inset: 0,
@@ -63,35 +66,30 @@ function AppContent() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            backdropFilter: "blur(3px)",
             zIndex: 9999,
-            cursor: "pointer",
+            backdropFilter: "blur(3px)",
             padding: "20px",
           }}
         >
-          {/* boîte qui contient le formulaire — empêche la fermeture si on clique dedans */}
           <div
             onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
             style={{
               width: "100%",
               maxWidth: 520,
               background: "#fff",
               borderRadius: 12,
-              boxShadow: "0 8px 30px rgba(0,0,0,0.35)",
               padding: "20px",
-              cursor: "auto",
-              maxHeight: "90vh",
+              boxShadow: "0 8px 30px rgba(0,0,0,0.35)",
               overflowY: "auto",
+              maxHeight: "90vh",
             }}
           >
-            <Compte />
+            {location.pathname === "/compte" && <Compte />}
+            {location.pathname === "/register" && <Register />}
           </div>
         </div>
       )}
 
-      {/* Footer */}
       <footer className="text-center py-3 bg-light text-muted border-top">
         © 2025 Drive UP — Tous droits réservés.
       </footer>
