@@ -3,7 +3,7 @@ import "../assets/css/style.scss";
 
 export default function Examens() {
   return (
-    <section className="examens-page">
+    <section   className="examens-page">
 
       <h2 className="text-primary mb-3">Examens</h2>
       <p>Réservez votre examen de conduite ou de code en ligne.</p>
