@@ -20,7 +20,7 @@ export default function Home() {
           <Row className="align-items-center">
             <Col lg={6} className="mb-4 mb-lg-0">
               <h1 className="fw-bold display-5 mb-3">
-                Obtenez Votre Permis en Toute{" "}
+                Obtenez Votre <br></br>Permis en Toute{" "}<br></br>
                 <span className="text-primary">Confiance</span>
               </h1>
               <p className="text-secondary mb-4">

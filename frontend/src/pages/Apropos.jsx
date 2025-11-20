@@ -1,5 +1,6 @@
 import React from "react";
 import "../assets/css/style.scss";
+import logo from "../assets/logo.png";
 
 export default function Apropos() {
   return (
@@ -7,9 +8,15 @@ export default function Apropos() {
   
       
     <div className="apropos-container">
-      <div className="section">
-        <h2>Drive UP</h2>
-        <p>Votre auto-école de confiance depuis 2005</p>
+      <div className="section ">
+              <img 
+        src={logo} 
+        alt="Drive UP" 
+        className="apropos-image"
+        style={{ width: "50px" }} 
+      />
+      <h2>Drive UP</h2>
+      <p>Votre auto-école de confiance depuis 2005</p>
       </div>
 
       <div className="section">
