@@ -36,9 +36,9 @@ const Header = () => {
           <Navbar.Toggle aria-controls="main-navbar" />
           <Navbar.Collapse id="main-navbar" className="justify-content-end">
             <Nav className="align-items-center gap-3">
-              <Nav.Link href="Permis">Nos Permis</Nav.Link>
-              <Nav.Link as={Link} to="/examens">Examens</Nav.Link>
-               <Nav.Link as={Link} to="/moniteurs">Moniteurs</Nav.Link>
+              <Nav.Link href="#permis">Nos Permis</Nav.Link>
+             <Nav.Link href="#examens">Examens</Nav.Link>
+              <Nav.Link href="#moniteurs">Moniteurs</Nav.Link>
               <Nav.Link as={Link} to="apropos">À propos</Nav.Link>
             <Button as={Link} to="/compte" variant="primary">Mon Compte</Button> 
             </Nav>

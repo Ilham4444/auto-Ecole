@@ -2,6 +2,14 @@ import React from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import "../assets/css/style.scss";
 import heroImage from "../assets/hero.jpg";
+import Permis from "./Permis";
+import Examens from "./Examens";
+import Moniteurs from "./Moniteurs";
+import Apropos from "./Apropos";
+
+
+
+
 
 export default function Home() {
   return (
@@ -72,6 +80,20 @@ export default function Home() {
           </Row>
         </Container>
       </section>
+      <section id="permis">
+        <Permis />
+      </section>
+
+      <section id="examens">
+        <Examens />
+      </section>
+
+      <section id="moniteurs">
+        <Moniteurs/>
+      </section>
+      
+    
+
 
       {/* 🌙 SECTION 2 : ACCÉDEZ À VOS RESSOURCES DE FORMATION */}
       <section className="hero-training-section py-5 text-center text-white">
@@ -95,6 +117,11 @@ export default function Home() {
           </div>
         </Container>
       </section>
+
+         <section id="apropos">
+        <Apropos/>
+      </section>
+
     </>
   );
 }

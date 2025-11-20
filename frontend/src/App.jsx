@@ -12,6 +12,9 @@ import Moniteurs from "./pages/Moniteurs";
 import Apropos from "./pages/Apropos";
 import Compte from "./pages/Compte";
 import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Paiement from "./pages/Paiement"; 
+
 
 function AppContent() {
   const location = useLocation();
@@ -48,6 +51,9 @@ function AppContent() {
           <Route path="/examens" element={<Examens />} />
           <Route path="/moniteurs" element={<Moniteurs />} />
           <Route path="/apropos" element={<Apropos />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/paiement" element={<Paiement />} />
+
 
           {/* les 2 modals gardent Home derrière */}
           <Route path="/compte" element={<Home />} />
