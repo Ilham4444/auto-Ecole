@@ -51,7 +51,6 @@ function AppContent() {
           <Route path="/examens" element={<Examens />} />
           <Route path="/moniteurs" element={<Moniteurs />} />
           <Route path="/apropos" element={<Apropos />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/paiement" element={<Paiement />} />
           <Route path="/dashboard" element={<PrivateRoute>  <Dashboard /> </PrivateRoute> }/>
 

@@ -29,12 +29,13 @@ export default function Home() {
               </p>
 
               <div className="d-flex gap-3 flex-wrap">
-                <Button variant="primary" className="rounded-pill px-4 py-2">
+                <Button variant="primary" className="rounded-pill px-4 py-2" href="/permis">
                   Réserver une leçon
                 </Button>
                 <Button
                   variant="outline-primary"
                   className="rounded-pill px-4 py-2"
+                  href="/examens"
                 >
                   Passer l'examen
                 </Button>
@@ -118,8 +119,8 @@ export default function Home() {
         </Container>
       </section>
 
-         <section id="apropos">
-        <Apropos/>
+     <section id="apropos">
+        <Apropos />
       </section>
 
     </>

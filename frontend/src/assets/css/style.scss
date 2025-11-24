@@ -31,7 +31,8 @@
 .hero-section {
   background: #f8faff;
   min-height: 80vh;
-
+  width: 100%;
+  
   
 
   h1 {
@@ -41,7 +42,21 @@
   }
 
   .btn {
-    font-weight: 600;
+    
+    margin-top: 10px;
+      background-color: #1e3a8a;
+      border: none;
+      color: white;
+      padding: 12px 35px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #0d6efd;
+        transform: scale(1.03);
+      }
   }
 
   .stats {
@@ -199,100 +214,9 @@
   margin-top: 0px;
   font-size: 14px;
 }
-.examens-page {
-  width: 100%;
-  padding: 40px 0;
-  background: #f7f9fc;
 
-  .examens-header {
-    text-align: center;
-    margin-bottom: 30px;
 
-    h2 {
-      font-size: 22px;
-      color: #333;
-      font-weight: 600;
-    }
-  }
-
-  .examens-container {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-  }
-
-  .examen-card {
-    width: 380px;
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-    transition: 0.3s ease;
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0px 5px 20px rgba(0,0,0,0.15);
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 5px 12px;
-      background: #e6f0ff;
-      color: #2563eb;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 500;
-      margin-bottom: 10px;
-    }
-
-    h3 {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-
-    .description {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 20px;
-    }
-
-    .price-box {
-      text-align: center;
-      margin-bottom: 20px;
-
-      h1 {
-        font-size: 36px;
-        font-weight: 800;
-        color: #000;
-      }
-
-      span {
-        color: #666;
-        font-size: 14px;
-      }
-    }
-
-    .pre-requis {
-      h4 {
-        font-size: 16px;
-        margin-bottom: 10px;
-      }
-
-      ul {
-        list-style: none;
-        padding: 0;
-
-        li {
-          margin-bottom: 6px;
-          font-size: 14px;
-          color: #333;
-        }
-      }
-    }
-  }
-}
+    
 /* SECTION BLEUE : Accédez aux ressources */
 .hero-training-section {
   background: linear-gradient(to right, #0d3b8e, #0a2e6e);
@@ -679,6 +603,151 @@
     font-weight: 600;
   }
 }
+.examens-page {
+  padding: 50px 0;
+  text-align: center;
+  background: #f7f9fc;
 
+  .title {
+    font-size: 36px;
+    font-weight: 700;
+    color: #3460d9;
+    margin-bottom: 10px;
+  }
 
+  .examens-header p {
+    color: #555;
+    margin-bottom: 40px;
+    font-size: 18px;
+  }
+
+  .examens-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 35px;
+  }
+
+  .examen-card {
+    width: 380px;
+    background: white;
+    border-radius: 15px;
+    padding-bottom: 25px;
+    overflow: hidden;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    transition: 0.3s ease;
+
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: 0px 6px 22px rgba(0,0,0,0.18);
+    }
+
+    /* --- HEADER BLEU AVEC LE PRIX ET LA DURATION --- */
+    .price-box {
+      background: #0d6efd;
+      color: white;
+      padding: 22px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h1 {
+        font-size: 36px;
+        font-weight: 800;
+        margin: 0;
+      }
+
+      span {
+        font-size: 18px;
+        font-weight: 500;
+        opacity: 0.9;
+      }
+    }
+
+    .card-title {
+      margin-top: 25px;
+      font-size: 24px;
+      font-weight: 700;
+      color: #0a3d91;
+    }
+
+    .description {
+      color: #666;
+      font-size: 16px;
+      margin: 10px auto 25px;
+      width: 80%;
+      line-height: 1.5;
+    }
+
+    /* --- LISTE DES CONDITIONS --- */
+    .pre-requis {
+      text-align: left;
+      width: 80%;
+      margin: 0 auto 25px;
+
+      h4 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: #0a3d91;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          margin: 8px 0;
+          position: relative;
+          padding-left: 28px;
+          font-size: 15px;
+          color: #444;
+
+          &::before {
+            content: "✔";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #06ec38;
+            font-size: 18px;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    /* --- BUTTON --- */
+    .btn-reserver {
+      margin-top: 10px;
+      background-color: #1e3a8a;
+      border: none;
+      color: white;
+      padding: 12px 100px;
+      margin-top: 10px;
+      background-color: #1e3a8a;
+      border: none;
+      color: white;
+      padding: 12px 100px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #0d6efd;
+        transform: scale(1.03);
+      }
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #0d6efd;
+        transform: scale(1.03);
+      }
+    }
+  }
+}
 
