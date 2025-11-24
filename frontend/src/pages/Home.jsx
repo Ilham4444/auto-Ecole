@@ -108,12 +108,15 @@ export default function Home() {
               Accéder aux Cours en Ligne
             </a>
 
-            <a
-              href="/contact"
-              className="btn btn-outline-light px-4 py-2 rounded-pill fw-bold"
-            >
-              Nous Contacter
-            </a>
+                  <a
+          href="https://wa.me/212620958131"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-outline-light px-4 py-2 rounded-pill fw-bold"
+        >
+          Nous Contacter
+        </a>
+
           </div>
         </Container>
       </section>

@@ -7,25 +7,37 @@ export default function Moniteurs() {
       id: 1,
       nom: "Youssef El Amrani",
       experience: "12 ans d'expérience",
-      image: "/images/moniteurs/youssef.jpg",
+      image: "/src/assets/Moniteur1.jpg",
+      rating: "4.9",
+      reviews: 156,
+      skills: ["Débutants", "Conduite urbaine", "Autoroute"],
     },
     {
       id: 2,
       nom: "Fatima Zahra Bennani",
       experience: "8 ans d'expérience",
-      image: "/images/moniteurs/fatima.jpg",
+      image: "/src/assets/Moniteur2.jpg",
+      rating: "4.8",
+      reviews: 203,
+      skills: ["Conduite accompagnée", "Manœuvres", "Perfectionnement"],
     },
     {
       id: 3,
       nom: "Mohammed Alaoui",
       experience: "15 ans d'expérience",
-      image: "/images/moniteurs/mohammed.jpg",
+      image: "/src/assets/Moniteur4.jpg",
+      rating: "4.9",
+      reviews: 189,
+      skills: ["Conduite sportive", "Éco-conduite", "Préparation examen"],
     },
     {
       id: 4,
       nom: "Karima El Idrissi",
       experience: "10 ans d'expérience",
-      image: "/images/moniteurs/karima.jpg",
+      image: "/src/assets/Moniteur3.jpg",
+      rating: "4.9",
+      reviews: 175,
+      skills: ["Débutants", "Conduite de nuit", "Stationnement"],
     },
   ];
 
@@ -40,12 +52,26 @@ export default function Moniteurs() {
         {moniteurs.map((m) => (
           <div className="moniteur-card" key={m.id}>
             <img src={m.image} alt={m.nom} className="moniteur-img" />
+
             <h3 className="moniteur-nom">{m.nom}</h3>
             <p className="moniteur-exp">{m.experience}</p>
+
+            {/* NOTE */}
+            <p className="moniteur-rating">
+              ⭐ {m.rating} <span>({m.reviews})</span>
+            </p>
+
+            {/* COMPÉTENCES */}
+            <div className="moniteur-skills">
+              {m.skills.map((skill, index) => (
+                <span key={index} className="skill-tag">
+                  {skill}
+                </span>
+              ))}
+            </div>
           </div>
         ))}
       </div>
     </section>
   );
 }
-
