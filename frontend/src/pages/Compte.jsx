@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../assets/css/style.scss";
+import {useForm} from "react-hook-form";
+import { Link } from "react-router-dom";
 
 export default function Compte() {
   const [formData, setFormData] = useState({
@@ -12,10 +14,7 @@ export default function Compte() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -24,94 +23,68 @@ export default function Compte() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/login", {
+      const response = await fetch("http://127.0.0.1:8000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json"
+          Accept: "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        mode: "cors"
       });
 
       const data = await response.json();
 
-      if (data.success) {
+      if (response.ok && data.status) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/dashboard"); // Rediriger vers le dashboard
+        navigate("/dashboard");
       } else {
-        setError(data.message || "Erreur de connexion");
+        setError(data.message || "Email ou mot de passe incorrect");
       }
+
     } catch (err) {
-      setError("Erreur de connexion au serveur");
-    } finally {
-      setLoading(false);
+      setError("Connexion echouée.");
     }
+
+    setLoading(false);
   };
 
   return (
     <div className="moncompte-container">
       <div className="moncompte-card">
-        <h3 className="moncompte-title">Connexion à Votre Compte</h3>
-        <p className="moncompte-subtitle">
-          Connectez-vous avec votre email et mot de passe
-        </p>
+        <h3>Connexion à Votre Compte</h3>
 
-        {error && (
-          <div className="alert alert-danger" role="alert">
-            {error}
-          </div>
-        )}
+        {error && <div className="alert alert-danger">{error}</div>}
 
         <form onSubmit={handleSubmit}>
-          {/* Email */}
-          <label className="form-label">Adresse Email</label>
-          <div className="input-group mb-3">
-            <span className="input-group-text bg-light">
-              <i className="bi bi-envelope"></i>
-            </span>
-            <input
-              type="email"
-              name="email"
-              className="form-control"
-              placeholder="votre.email@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            className="form-control mb-3"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
 
-          {/* Mot de passe */}
-          <label className="form-label">Mot de passe</label>
-          <div className="input-group mb-4">
-            <span className="input-group-text bg-light">
-              <i className="bi bi-lock"></i>
-            </span>
-            <input
-              type="password"
-              name="password"
-              className="form-control"
-              placeholder=".........."
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-  
-          <button 
-            type="submit" 
-            className="btn btn-primary w-100"
-            disabled={loading}
-          >
+          <label>Mot de passe</label>
+          <input
+            type="password"
+            name="password"
+            className="form-control mb-4"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+
+          <button className="btn btn-primary w-100" disabled={loading}>
             {loading ? "Connexion..." : "SE CONNECTER →"}
           </button>
         </form>
-        
-        <p className="moncompte-footer">
-          Vous n'avez pas encore de compte ? <br />
-          <a href="/register" className="text-primary">
-            Créez votre compte gratuitement
-          </a>
+
+        <p className="mt-4">
+          Pas de compte ? <a href="/register">Créer un compte</a>
         </p>
       </div>
     </div>
