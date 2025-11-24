@@ -1,14 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Dashboard() {
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    axios.get("http://127.0.0.1:8000/api/dashboard", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json"
+      }
+    })
+    .then(res => {
+      setUser(res.data.user);
+    })
+    .catch(() => {
+      setUser(null);
+    });
+  }, []);
+
   const handleLogout = () => {
-    // Efface les infos utilisateur (token, email, etc.)
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
-    navigate("/"); // Retour page Home
+    navigate("/compte");
   };
+
+  if (!user) return <p>Chargement...</p>;
 
   return (
     <div className="dashboard-container">
@@ -29,7 +50,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <h4>Bienvenue Ilham Elabyad</h4>
+      <h4>Bienvenue {user.nom}</h4>
 
       <div className="row mt-4">
 

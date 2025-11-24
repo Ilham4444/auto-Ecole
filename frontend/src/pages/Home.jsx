@@ -104,7 +104,7 @@ export default function Home() {
           </p>
 
           <div className="d-flex justify-content-center gap-4 flex-wrap">
-            <a href="/cours" className="btn btn-light px-4 py-2 rounded-pill fw-bold">
+            <a href="https://conduire.ma/" className="btn btn-light px-4 py-2 rounded-pill fw-bold">
               Accéder aux Cours en Ligne
             </a>
 

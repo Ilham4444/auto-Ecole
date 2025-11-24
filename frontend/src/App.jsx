@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import {BrowserRouter as Router,Routes, Route,useLocation,useNavigate,} from "react-router-dom";
-
+import { Navigate } from "react-router-dom";
 import Header from "./components/Header";
 import "./assets/css/style.scss";
 
@@ -53,7 +53,7 @@ function AppContent() {
           <Route path="/apropos" element={<Apropos />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/paiement" element={<Paiement />} />
-
+          <Route path="/dashboard" element={<PrivateRoute>  <Dashboard /> </PrivateRoute> }/>
 
           {/* les 2 modals gardent Home derrière */}
           <Route path="/compte" element={<Home />} />
@@ -103,6 +103,11 @@ function AppContent() {
   );
 }
 
+
+function PrivateRoute({ children }) {
+  const token = localStorage.getItem("token");
+  return token ? children : <Navigate to="/compte" />;
+}
 export default function App() {
   return (
     <Router>

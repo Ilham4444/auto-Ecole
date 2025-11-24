@@ -102,37 +102,6 @@ export default function Permis() {
     }
   ];
 
-  const monitors = [
-    {
-      id: 1,
-      name: "Youssef El Amrani",
-      experience: "12 ans d'expérience",
-      rating: "4.9 (156)",
-      specialties: ["Débutants", "Conduite urbaine", "Autoroute"]
-    },
-    {
-      id: 2,
-      name: "Fatima Zahra Bennani",
-      experience: "8 ans d'expérience",
-      rating: "4.8 (203)",
-      specialties: ["Conduite accompagnée", "Manoeuvres", "Perfectionnement"]
-    },
-    {
-      id: 3,
-      name: "Mohammed Alaoui",
-      experience: "15 ans d'expérience",
-      rating: "4.9 (189)",
-      specialties: ["Conduite sportive", "Éco-conduite", "Préparation examen"]
-    },
-    {
-      id: 4,
-      name: "Karima El Idrissi",
-      experience: "10 ans d'expérience",
-      rating: "4.9 (175)",
-      specialties: ["Débutants", "Conduite de nuit", "Stationnement"]
-    }
-  ];
-
   const timeSlots = [
     "08:00", "09:00", "10:00", "11:00", "13:00", 
     "14:00", "15:00", "16:00", "17:00", "18:00"
@@ -168,12 +137,11 @@ export default function Permis() {
   };
 
   const handleConfirmReservation = () => {
-    alert(`Réservation confirmée pour ${selectedPermis.title} avec ${selectedMonitor} le vendredi 5 décembre 2025 à ${selectedTime}`);
+    alert(`Réservation confirmée pour ${selectedPermis.title}  le vendredi 5 décembre 2025 à ${selectedTime}`);
     setSelectedPermis(null);
     setReservationStep(0);
     setSelectedDate("");
     setSelectedTime("");
-    setSelectedMonitor("");
   };
 
   const renderReservationModal = () => {
