@@ -185,49 +185,73 @@ export default function Permis() {
                 <Button variant="outline-secondary" onClick={() => setSelectedPermis(null)}>
                   Annuler
                 </Button>
-                <Button variant="primary" onClick={handleLogin}>
+                <Button variant="primary" href="/compte" onClick={handleLogin}>
                   Se Connecter
                 </Button>
               </div>
             </div>
           )}
 
-          {/* Étape 1: Choix du moniteur */}
-          {reservationStep === 1 && (
-            <div>
-              <h6 className="mb-3">Choisissez votre moniteur</h6>
-              <Row className="g-3">
-                {monitors.map((monitor) => (
-                  <Col md={6} key={monitor.id}>
-                    <Card 
-                      className={`cursor-pointer ${selectedMonitor === monitor.name ? 'border-primary' : ''}`}
-                      onClick={() => setSelectedMonitor(monitor.name)}
-                    >
-                      <Card.Body>
-                        <h6 className="fw-bold">{monitor.name}</h6>
-                        <p className="text-muted mb-2">{monitor.experience}</p>
-                        <Badge bg="success" className="mb-2">{monitor.rating}</Badge>
-                        <div>
-                          {monitor.specialties.map((specialty, index) => (
-                            <Badge key={index} bg="light" text="dark" className="me-1 mb-1">
-                              {specialty}
-                            </Badge>
-                          ))}
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-              
-              <div className="mt-4 text-center">
-                <small className="text-muted">
-                  <i className="bi bi-info-circle me-1"></i>
-                  Ouvert du Lundi au Samedi : 8h - 20h
-                </small>
-              </div>
-            </div>
-          )}
+          
+          {/* Étape 1 : Choix du type de séance */}
+{reservationStep === 1 && (
+  <div>
+    <div className="text-center mb-4">
+      <h5 className="fw-bold text-primary">
+        Réserver : {selectedPermis.title}
+      </h5>
+
+      {/* Indicateur d’étapes */}
+      <div className="d-flex justify-content-center align-items-center gap-3 my-3">
+        <span className="badge rounded-circle bg-primary text-white p-3">1</span>
+        <div style={{ width: "40px", height: "3px", background: "#ccc" }}></div>
+        <span className="badge rounded-circle bg-secondary text-white-50 p-3">2</span>
+        <div style={{ width: "40px", height: "3px", background: "#ccc" }}></div>
+        <span className="badge rounded-circle bg-secondary text-white-50 p-3">3</span>
+      </div>
+
+      <h5 className="fw-semibold mb-3">Type de séance</h5>
+      <p className="text-muted">Souhaitez-vous réserver une séance de code ou de conduite ?</p>
+    </div>
+
+    <Row className="g-4">
+      {/* Carte Séance de Code */}
+      <Col md={6}>
+        <Card 
+          className={`text-center p-4 shadow-sm border ${selectedMonitor === "Séance de Code" ? "border-primary" : "border-0"}`}
+          style={{ cursor: "pointer" }}
+          onClick={() => setSelectedMonitor("Séance de Code")}
+        >
+          <div className="mb-3">
+            <span className="bg-primary bg-opacity-10 p-3 rounded-circle">
+              <i className="bi bi-book fs-3 text-primary"></i>
+            </span>
+          </div>
+          <h5 className="fw-bold">Séance de Code</h5>
+          <p className="text-muted mb-0">Apprenez le code de la route en classe</p>
+        </Card>
+      </Col>
+
+      {/* Carte Séance de Conduite */}
+      <Col md={6}>
+        <Card 
+          className={`text-center p-4 shadow-sm border ${selectedMonitor === "Séance de Conduite" ? "border-primary" : "border-0"}`}
+          style={{ cursor: "pointer" }}
+          onClick={() => setSelectedMonitor("Séance de Conduite")}
+        >
+          <div className="mb-3">
+            <span className="bg-primary bg-opacity-10 p-3 rounded-circle">
+              <i className="bi bi-lightning-charge fs-3 text-primary"></i>
+            </span>
+          </div>
+          <h5 className="fw-bold">Séance de Conduite</h5>
+          <p className="text-muted mb-0">Pratiquez la conduite avec un moniteur</p>
+        </Card>
+      </Col>
+    </Row>
+  </div>
+)}
+
 
           {/* Étape 2: Choix de la date et heure */}
           {reservationStep === 2 && (
@@ -268,7 +292,6 @@ export default function Permis() {
                 <div className="bg-light p-3 rounded text-start">
                   <p><strong>Formation:</strong> {selectedPermis.title}</p>
                   <p><strong>Prix:</strong> {selectedPermis.price}</p>
-                  <p><strong>Moniteur:</strong> {selectedMonitor}</p>
                   <p><strong>Date:</strong> vendredi 5 décembre 2025</p>
                   <p><strong>Heure:</strong> {selectedTime}</p>
                 </div>
@@ -284,15 +307,16 @@ export default function Permis() {
             </Button>
           )}
           
-          {reservationStep === 1 && (
-            <Button 
+         {reservationStep === 1 && (
+             <Button 
               variant="primary" 
               onClick={handleNextStep}
               disabled={!selectedMonitor}
-            >
+             >
               Continuer
-            </Button>
+             </Button>
           )}
+
           
           {reservationStep === 2 && (
             <Button 
