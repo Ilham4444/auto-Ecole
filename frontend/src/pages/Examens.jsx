@@ -35,7 +35,7 @@ export default function Examens() {
               <li>Convocation (fournie)</li>
             </ul>
           </div>
-          <button className="btn-reserver">Réserver</button>
+          <button className="btn-primary">Réserver</button>
         </div>
 
         {/* ----- EXAMEN CONDUITE ----- */}
@@ -60,7 +60,7 @@ export default function Examens() {
               <li>Carte d’identité valide</li>
             </ul>
           </div>
-          <button className="btn-reserver">Réserver</button>
+          <button variant="primary">Réserver</button>
         </div>
 
       </div>
