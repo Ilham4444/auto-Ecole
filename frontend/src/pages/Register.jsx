@@ -295,8 +295,8 @@ export default function Register() {
                 onChange={handleChange}
               />
               <span className="logos">
-                <img src="/visa.png" alt="Visa" />
-                <img src="/mastercard.png" alt="Mastercard" />
+                <img src="../assets/visa.jpg" alt="Visa" />
+                  
               </span>
               <span>Carte Bancaire</span>
             </label>
