@@ -30,7 +30,7 @@ export default function Moniteurs() {
       reviews: 189,
       skills: ["Conduite sportive", "Éco-conduite", "Préparation examen"],
     },
-    {
+    /*{
       id: 4,
       nom: "Karima El Idrissi",
       experience: "10 ans d'expérience",
@@ -38,39 +38,42 @@ export default function Moniteurs() {
       rating: "4.9",
       reviews: 175,
       skills: ["Débutants", "Conduite de nuit", "Stationnement"],
-    },
+    },*/
   ];
 
   return (
     <section className="moniteurs-section">
-      <h2 className="text-primary mb-3 title">Nos Moniteurs Experts</h2>
-      <p className="subtitle">
-        Une équipe passionnée et pédagogique à votre service.
-      </p>
+      <div className="container">
+        <h2 className="title">Nos Moniteurs Experts</h2>
+        <p className="subtitle">
+          Une équipe passionnée et pédagogique à votre service.
+        </p>
 
-      <div className="moniteurs-grid">
-        {moniteurs.map((m) => (
-          <div className="moniteur-card" key={m.id}>
-            <img src={m.image} alt={m.nom} className="moniteur-img" />
+        <div className="moniteurs-grid">
+          {moniteurs.map((m) => (
+            <div className="moniteur-card" key={m.id}>
+              <div className="moniteur-img-wrapper">
+                <img src={m.image} alt={m.nom} className="moniteur-img" />
+              </div>
+              <div className="moniteur-info">
+                <h3 className="moniteur-nom">{m.nom}</h3>
+                <p className="moniteur-exp">{m.experience}</p>
 
-            <h3 className="moniteur-nom">{m.nom}</h3>
-            <p className="moniteur-exp">{m.experience}</p>
+                <p className="moniteur-rating">
+                  ⭐ {m.rating} <span>({m.reviews}) avis</span>
+                </p>
 
-            {/* NOTE */}
-            <p className="moniteur-rating">
-              ⭐ {m.rating} <span>({m.reviews})</span>
-            </p>
-
-            {/* COMPÉTENCES */}
-            <div className="moniteur-skills">
-              {m.skills.map((skill, index) => (
-                <span key={index} className="skill-tag">
-                  {skill}
-                </span>
-              ))}
+                <div className="moniteur-skills">
+                  {m.skills.map((skill, index) => (
+                    <span key={index} className="skill-tag">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );

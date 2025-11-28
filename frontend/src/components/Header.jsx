@@ -39,7 +39,7 @@ const Header = () => {
               <Nav.Link href="#permis">Nos Permis</Nav.Link>
              <Nav.Link href="#examens">Examens</Nav.Link>
               <Nav.Link href="#moniteurs">Moniteurs</Nav.Link>
-              <Nav.Link as={Link} to="apropos">À propos</Nav.Link>
+              <Nav.Link href="#apropos">À propos</Nav.Link>
             <Button as={Link} to="/compte" variant="primary">Mon Compte</Button> 
             </Nav>
           </Navbar.Collapse>
