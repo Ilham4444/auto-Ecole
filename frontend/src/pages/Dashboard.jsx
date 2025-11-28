@@ -17,6 +17,14 @@ export default function Dashboard() {
       return;
     }
 
+    // Si on a déjà l'utilisateur dans le contexte, pas besoin de recharger
+    if (contextUser) {
+      setUser(contextUser);
+      setLoading(false);
+      return;
+    }
+
+    // Sinon, charger depuis l'API
     axios
       .get("http://127.0.0.1:8000/api/dashboard", {
         headers: {
@@ -32,11 +40,14 @@ export default function Dashboard() {
         console.error("Erreur chargement dashboard", err);
         setLoading(false);
         if (err.response && err.response.status === 401) {
+          alert("Session expirée. Veuillez vous reconnecter.");
           logoutUser();
           navigate("/compte");
+        } else {
+          alert("Erreur de chargement des données. Veuillez réessayer.");
         }
       });
-  }, []);
+  }, [contextUser, navigate, logoutUser]);
 
   const handleLogout = () => {
     logoutUser();
@@ -59,10 +70,6 @@ export default function Dashboard() {
               onClick={() => navigate("/")}
             >
               🏠 Accueil
-            </button>
-
-            <button className="btn btn-outline-danger" onClick={handleLogout}>
-              👤 Se déconnecter
             </button>
           </div>
         </div>

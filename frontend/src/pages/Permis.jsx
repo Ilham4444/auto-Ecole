@@ -6,6 +6,8 @@ export default function Permis() {
   const { user } = useUser(); // Récupérer l'utilisateur connecté
   const [selectedPermis, setSelectedPermis] = useState(null);
   const [reservationStep, setReservationStep] = useState(0);
+  const [selectedType, setSelectedType] = useState(""); // Code ou Conduite
+  const [selectedDay, setSelectedDay] = useState(""); // Jour de réservation
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
@@ -13,10 +15,10 @@ export default function Permis() {
     {
       id: 1,
       title: "Permis B - Véhicules Légers",
-      category: "B", // Ajout de la catégorie pour comparaison
+      category: "B",
       price: "4500 Dh",
       hours: "30 heures",
-      description: "Formation complète pour conduire les voitures, camionnettes et véhicules légers (PTAC ≤ 3,5 tonnes)",
+      description: "Formation complète pour conduire les voitures, camionnettes et véhicules légers (PT AC ≤ 3,5 tonnes)",
       features: [
         "20h de code de la route",
         "30h de conduite pratique",
@@ -93,7 +95,7 @@ export default function Permis() {
     {
       id: 6,
       title: "Permis EB - Remorque",
-      category: "EB", // Supposons EC ou EB selon backend
+      category: "EB",
       price: "2000 Dh",
       hours: "8 heures",
       description: "Extension du permis B pour tracter une remorque ou caravane (PTAC > 750 kg)",
@@ -113,6 +115,16 @@ export default function Permis() {
     "14:00", "15:00", "16:00", "17:00", "18:00"
   ];
 
+  const availableDays = [
+    { date: "2025-12-01", day: "Lundi 1 Décembre 2025" },
+    { date: "2025-12-02", day: "Mardi 2 Décembre 2025" },
+    { date: "2025-12-03", day: "Mercredi 3 Décembre 2025" },
+    { date: "2025-12-04", day: "Jeudi 4 Décembre 2025" },
+    { date: "2025-12-05", day: "Vendredi 5 Décembre 2025" },
+    { date: "2025-12-08", day: "Lundi 8 Décembre 2025" },
+    { date: "2025-12-09", day: "Mardi 9 Décembre 2025" }
+  ];
+
   const handleReservation = (permis) => {
     setSelectedPermis(permis);
     if (!user) {
@@ -123,12 +135,11 @@ export default function Permis() {
   };
 
   const handleLogin = () => {
-    // Redirection gérée par Link ou useNavigate normalement
     setReservationStep(1);
   };
 
   const handleNextStep = () => {
-    if (reservationStep < 3) {
+    if (reservationStep < 4) {
       setReservationStep(reservationStep + 1);
     }
   };
@@ -143,9 +154,12 @@ export default function Permis() {
   };
 
   const handleConfirmReservation = () => {
-    alert(`Réservation confirmée pour ${selectedPermis.title}  le vendredi 5 décembre 2025 à ${selectedTime}`);
+    const selectedDayObj = availableDays.find(d => d.date === selectedDay);
+    alert(`Réservation confirmée pour ${selectedPermis.title}\nType: ${selectedType}\nDate: ${selectedDayObj?.day}\nHeure: ${selectedTime}`);
     setSelectedPermis(null);
     setReservationStep(0);
+    setSelectedType("");
+    setSelectedDay("");
     setSelectedDate("");
     setSelectedTime("");
   };
@@ -154,7 +168,13 @@ export default function Permis() {
     if (!selectedPermis) return null;
 
     return (
-      <Modal show={true} onHide={() => { setSelectedPermis(null); setReservationStep(0); }} size="lg" centered>
+      <Modal show={true} onHide={() => {
+        setSelectedPermis(null);
+        setReservationStep(0);
+        setSelectedType("");
+        setSelectedDay("");
+        setSelectedTime("");
+      }} size="lg" centered>
         <Modal.Header closeButton className="bg-primary text-white">
           <Modal.Title>
             {reservationStep === 0 ? "Connexion Requise" : `Réserver : ${selectedPermis.title}`}
@@ -198,8 +218,6 @@ export default function Permis() {
             </div>
           )}
 
-
-          {/* Étape 1 : Choix du type de séance */}
           {/* Étape 1 : Choix du type de séance */}
           {reservationStep === 1 && (
             <div>
@@ -208,13 +226,15 @@ export default function Permis() {
                   Réserver : {selectedPermis.title}
                 </h5>
 
-                {/* Indicateur d’étapes */}
-                <div className="d-flex justify-content-center align-items-center gap-3 my-3">
+                {/* Indicateur d'étapes */}
+                <div className="d-flex justify-content-center align-items-center gap-2 my-3">
                   <span className="badge rounded-circle bg-primary text-white p-3">1</span>
-                  <div style={{ width: "40px", height: "3px", background: "#ccc" }}></div>
+                  <div style={{ width: "30px", height: "3px", background: "#ccc" }}></div>
                   <span className="badge rounded-circle bg-secondary text-white-50 p-3">2</span>
-                  <div style={{ width: "40px", height: "3px", background: "#ccc" }}></div>
+                  <div style={{ width: "30px", height: "3px", background: "#ccc" }}></div>
                   <span className="badge rounded-circle bg-secondary text-white-50 p-3">3</span>
+                  <div style={{ width: "30px", height: "3px", background: "#ccc" }}></div>
+                  <span className="badge rounded-circle bg-secondary text-white-50 p-3">4</span>
                 </div>
 
                 <h5 className="fw-semibold mb-3">Type de séance</h5>
@@ -224,7 +244,11 @@ export default function Permis() {
               <Row className="g-4">
                 {/* Carte Séance de Code */}
                 <Col md={6}>
-                  <Card className="text-center p-4 shadow-sm border-0" style={{ cursor: "pointer" }}>
+                  <Card
+                    className={`text-center p-4 shadow-sm border-2 ${selectedType === 'code' ? 'border-primary' : 'border-light'}`}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setSelectedType('code')}
+                  >
                     <div className="mb-3">
                       <span className="bg-primary bg-opacity-10 p-3 rounded-circle">
                         <i className="bi bi-book fs-3 text-primary"></i>
@@ -232,33 +256,75 @@ export default function Permis() {
                     </div>
                     <h5 className="fw-bold">Séance de Code</h5>
                     <p className="text-muted mb-0">Apprenez le code de la route en classe</p>
+                    {selectedType === 'code' && (
+                      <div className="mt-2">
+                        <i className="bi bi-check-circle-fill text-primary fs-4"></i>
+                      </div>
+                    )}
                   </Card>
                 </Col>
 
                 {/* Carte Séance de Conduite */}
                 <Col md={6}>
-                  <Card className="text-center p-4 shadow-sm border-0" style={{ cursor: "pointer" }}>
+                  <Card
+                    className={`text-center p-4 shadow-sm border-2 ${selectedType === 'conduite' ? 'border-primary' : 'border-light'}`}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setSelectedType('conduite')}
+                  >
                     <div className="mb-3">
                       <span className="bg-primary bg-opacity-10 p-3 rounded-circle">
-                        <i className="bi bi-lightning-charge fs-3 text-primary"></i>
+                        <i className="bi bi-car-front fs-3 text-primary"></i>
                       </span>
                     </div>
                     <h5 className="fw-bold">Séance de Conduite</h5>
                     <p className="text-muted mb-0">Pratiquez la conduite avec un moniteur</p>
+                    {selectedType === 'conduite' && (
+                      <div className="mt-2">
+                        <i className="bi bi-check-circle-fill text-primary fs-4"></i>
+                      </div>
+                    )}
                   </Card>
                 </Col>
               </Row>
             </div>
           )}
 
-
-          {/* Étape 2: Choix de la date et heure */}
+          {/* Étape 2: Choix du jour */}
           {reservationStep === 2 && (
+            <div>
+              <div className="text-center mb-4">
+                <h5 className="fw-semibold mb-3">Choisissez un jour</h5>
+                <p className="text-muted">Sélectionnez une date disponible pour votre séance de {selectedType}</p>
+              </div>
+
+              <Row className="g-3">
+                {availableDays.map((dayObj) => (
+                  <Col key={dayObj.date} md={6}>
+                    <Card
+                      className={`p-3 text-center ${selectedDay === dayObj.date ? 'border-primary border-2' : 'border-light'}`}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setSelectedDay(dayObj.date)}
+                    >
+                      <div className="d-flex align-items-center justify-content-between">
+                        <span>{dayObj.day}</span>
+                        {selectedDay === dayObj.date && (
+                          <i className="bi bi-check-circle-fill text-primary fs-5"></i>
+                        )}
+                      </div>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          )}
+
+          {/* Étape 3: Choix de l'heure */}
+          {reservationStep === 3 && (
             <div>
               <h6 className="mb-3">Choisissez un horaire</h6>
 
               <div className="mb-4">
-                <h6 className="text-primary">vendredi 5 décembre 2025</h6>
+                <h6 className="text-primary">{availableDays.find(d => d.date === selectedDay)?.day}</h6>
                 <div className="d-flex flex-wrap gap-2 mt-3">
                   {timeSlots.map((time, index) => (
                     <Button
@@ -276,14 +342,15 @@ export default function Permis() {
               <div className="bg-light p-3 rounded">
                 <h6>Résumé de votre réservation:</h6>
                 <p className="mb-1"><strong>Permis:</strong> {selectedPermis.title}</p>
-                <p className="mb-1"><strong>Moniteur:</strong> Moniteur Assigné</p>
+                <p className="mb-1"><strong>Type:</strong> {selectedType === 'code' ? 'Séance de Code' : 'Séance de Conduite'}</p>
+                <p className="mb-1"><strong>Date:</strong> {availableDays.find(d => d.date === selectedDay)?.day}</p>
                 <p className="mb-0"><strong>Horaire:</strong> {selectedTime}</p>
               </div>
             </div>
           )}
 
-          {/* Étape 3: Confirmation */}
-          {reservationStep === 3 && (
+          {/* Étape 4: Confirmation */}
+          {reservationStep === 4 && (
             <div className="text-center">
               <div className="mb-4">
                 <i className="bi bi-check-circle-fill text-success display-4"></i>
@@ -291,7 +358,8 @@ export default function Permis() {
                 <div className="bg-light p-3 rounded text-start">
                   <p><strong>Formation:</strong> {selectedPermis.title}</p>
                   <p><strong>Prix:</strong> {selectedPermis.price}</p>
-                  <p><strong>Date:</strong> vendredi 5 décembre 2025</p>
+                  <p><strong>Type:</strong> {selectedType === 'code' ? 'Séance de Code' : 'Séance de Conduite'}</p>
+                  <p><strong>Date:</strong> {availableDays.find(d => d.date === selectedDay)?.day}</p>
                   <p><strong>Heure:</strong> {selectedTime}</p>
                 </div>
               </div>
@@ -310,6 +378,7 @@ export default function Permis() {
             <Button
               variant="primary"
               onClick={handleNextStep}
+              disabled={!selectedType}
             >
               Continuer
             </Button>
@@ -319,13 +388,23 @@ export default function Permis() {
             <Button
               variant="primary"
               onClick={handleNextStep}
-              disabled={!selectedTime}
+              disabled={!selectedDay}
             >
               Continuer
             </Button>
           )}
 
           {reservationStep === 3 && (
+            <Button
+              variant="primary"
+              onClick={handleNextStep}
+              disabled={!selectedTime}
+            >
+              Continuer
+            </Button>
+          )}
+
+          {reservationStep === 4 && (
             <Button variant="success" onClick={handleConfirmReservation}>
               Confirmer la réservation
             </Button>
