@@ -28,12 +28,13 @@
     }
   }
 }
+
 .hero-section {
   background: #f8faff;
   min-height: 80vh;
   width: 100%;
-  
-  
+
+
 
   h1 {
     font-weight: 800;
@@ -42,21 +43,21 @@
   }
 
   .btn {
-    
-    margin-top: 10px;
-      background-color: #1e3a8a;
-      border: none;
-      color: white;
-      padding: 12px 35px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
 
-      &:hover {
-        background-color: #0d6efd;
-        transform: scale(1.03);
-      }
+    margin-top: 10px;
+    background-color: #1e3a8a;
+    border: none;
+    color: white;
+    padding: 12px 35px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #0d6efd;
+      transform: scale(1.03);
+    }
   }
 
   .stats {
@@ -69,22 +70,23 @@
     background: #fff;
     border: none;
     padding: 0rem 0rem;
-    width : 80%;
+    width: 80%;
     padding-top: 10px;
 
     h6 {
       color: #0f172a;
-      
+
     }
   }
 }
+
 // Styles pour la section permis
 .permis-section {
   .permis-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-radius: 15px;
     overflow: hidden;
-    
+
     &:hover {
       transform: translateY(-8px);
       box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15) !important;
@@ -93,11 +95,11 @@
 
   .card-header {
     border-bottom: none;
-    
+
     h4 {
       font-size: 1.5rem;
     }
-    
+
     .badge {
       font-size: 0.9rem;
       padding: 0.5rem 1rem;
@@ -120,7 +122,7 @@
     border-radius: 8px;
     font-weight: 600;
     transition: all 0.3s ease;
-    
+
     &:hover {
       background-color: #0d6efd;
       border-color: #0d6efd;
@@ -155,18 +157,19 @@
     .permis-card {
       margin-bottom: 1.5rem;
     }
-    
+
     .card-header {
       .d-flex {
         flex-direction: column;
         gap: 0.5rem;
-        
-        h4, .badge {
+
+        h4,
+        .badge {
           text-align: center;
         }
       }
     }
-    
+
     .time-slot-btn {
       min-width: 70px;
       font-size: 0.8rem;
@@ -192,7 +195,7 @@
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   background: #fff;
- 
+
 }
 
 /* Titres */
@@ -216,7 +219,7 @@
 }
 
 
-    
+
 /* SECTION BLEUE : Accédez aux ressources */
 .hero-training-section {
   background: linear-gradient(to right, #0d3b8e, #0a2e6e);
@@ -296,6 +299,7 @@
   color: #ffffff;
   text-decoration: underline;
 }
+
 .moniteurs-section {
   text-align: center;
   padding: 60px 20px;
@@ -377,8 +381,9 @@
 .dashboard-card {
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  width: 1200px;   /* Augmente ici */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 1200px;
+  /* Augmente ici */
   max-width: 95%;
 }
 
@@ -391,25 +396,26 @@
   right: 0px;
   width: 80vw;
   height: 100vh;
-  
+
   justify-content: center;
   align-items: flex-start;
-  padding-top: 20px;        
+  padding-top: 20px;
   background: rgba(0, 0, 0, 0.45);
-  overflow-y: auto;          
-  
- 
+  overflow-y: auto;
+
+
 }
+
 .register-card {
   width: 90%;
   max-width: 1300px;
   background: #fff;
   padding: 40px;
   border-radius: 20px;
-  max-height: none;          
-  margin: 0;    
- 
-              
+  max-height: none;
+  margin: 0;
+
+
 }
 
 
@@ -447,6 +453,7 @@
 
   h3 {
     font-size: 18px;
+
     font-weight: 600;
     margin: 0;
   }
@@ -454,7 +461,7 @@
 
 /* ====== Formulaire en grille ====== */
 .form-grid {
-  display: flexbox;
+  display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px 25px;
 
@@ -531,6 +538,7 @@
     font-weight: 600;
   }
 }
+
 .payment-options {
   display: flex;
   flex-direction: column;
@@ -603,6 +611,7 @@
     font-weight: 600;
   }
 }
+
 .examens-page {
   padding: 50px 0;
   text-align: center;
@@ -634,12 +643,12 @@
     border-radius: 15px;
     padding-bottom: 25px;
     overflow: hidden;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     transition: 0.3s ease;
 
     &:hover {
       transform: translateY(-6px);
-      box-shadow: 0px 6px 22px rgba(0,0,0,0.18);
+      box-shadow: 0px 6px 22px rgba(0, 0, 0, 0.18);
     }
 
     /* --- HEADER BLEU AVEC LE PRIX ET LA DURATION --- */
@@ -738,6 +747,7 @@
         background-color: #0d6efd;
         transform: scale(1.03);
       }
+
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
@@ -750,6 +760,7 @@
     }
   }
 }
+
 .dashboard-container {
-    margin-top: 200px; /* ou la hauteur exacte du header */
+  /* margin géré par App.jsx */
 }

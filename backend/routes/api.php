@@ -56,6 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reservations', [ReservationController::class, 'index']);     // Liste des réservations de l'utilisateur
     Route::post('/reservations', [ReservationController::class, 'store']);    // Créer une réservation
     Route::get('/reservations/{id}', [ReservationController::class, 'show']); // Détail d'une réservation
+    Route::put('/reservations/{id}/confirm', [ReservationController::class, 'confirm']); // Confirmer une réservation (Moniteur)
     Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']); // Annuler une réservation
 
     /* ============================

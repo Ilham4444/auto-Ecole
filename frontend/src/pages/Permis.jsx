@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Card, Button, Modal, Form, Badge } from "react-bootstrap";
+import { useUser } from "../context/UserContext"; // Import du contexte
 
 export default function Permis() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user } = useUser(); // Récupérer l'utilisateur connecté
   const [selectedPermis, setSelectedPermis] = useState(null);
   const [reservationStep, setReservationStep] = useState(0);
   const [selectedDate, setSelectedDate] = useState("");
@@ -12,6 +13,7 @@ export default function Permis() {
     {
       id: 1,
       title: "Permis B - Véhicules Légers",
+      category: "B", // Ajout de la catégorie pour comparaison
       price: "4500 Dh",
       hours: "30 heures",
       description: "Formation complète pour conduire les voitures, camionnettes et véhicules légers (PTAC ≤ 3,5 tonnes)",
@@ -27,6 +29,7 @@ export default function Permis() {
     {
       id: 2,
       title: "Permis A - Motocycles",
+      category: "A",
       price: "3800 Dh",
       hours: "20 heures",
       description: "Formation pour conduire les motos et motocyclettes de toutes cylindrées",
@@ -42,6 +45,7 @@ export default function Permis() {
     {
       id: 3,
       title: "Permis C - Poids Lourds",
+      category: "C",
       price: "8500 Dh",
       hours: "40 heures",
       description: "Formation pour conduire les camions et véhicules de transport de marchandises (PTAC > 3,5 tonnes)",
@@ -57,6 +61,7 @@ export default function Permis() {
     {
       id: 4,
       title: "Permis D - Transport de Personnes",
+      category: "D",
       price: "9000 Dh",
       hours: "35 heures",
       description: "Formation pour conduire les autobus et véhicules de transport en commun (>9 places)",
@@ -72,6 +77,7 @@ export default function Permis() {
     {
       id: 5,
       title: "Permis A1 - Motos Légères",
+      category: "A1",
       price: "2500 Dh",
       hours: "12 heures",
       description: "Formation pour conduire les motocyclettes légères jusqu'à 125cc (dès 16 ans)",
@@ -87,6 +93,7 @@ export default function Permis() {
     {
       id: 6,
       title: "Permis EB - Remorque",
+      category: "EB", // Supposons EC ou EB selon backend
       price: "2000 Dh",
       hours: "8 heures",
       description: "Extension du permis B pour tracter une remorque ou caravane (PTAC > 750 kg)",
@@ -102,13 +109,13 @@ export default function Permis() {
   ];
 
   const timeSlots = [
-    "08:00", "09:00", "10:00", "11:00", "13:00", 
+    "08:00", "09:00", "10:00", "11:00", "13:00",
     "14:00", "15:00", "16:00", "17:00", "18:00"
   ];
 
   const handleReservation = (permis) => {
     setSelectedPermis(permis);
-    if (!isLoggedIn) {
+    if (!user) {
       setReservationStep(0); // Étape de connexion
     } else {
       setReservationStep(1); // Première étape de réservation
@@ -116,7 +123,7 @@ export default function Permis() {
   };
 
   const handleLogin = () => {
-    setIsLoggedIn(true);
+    // Redirection gérée par Link ou useNavigate normalement
     setReservationStep(1);
   };
 
@@ -153,7 +160,7 @@ export default function Permis() {
             {reservationStep === 0 ? "Connexion Requise" : `Réserver : ${selectedPermis.title}`}
           </Modal.Title>
         </Modal.Header>
-        
+
         <Modal.Body>
           {/* Étape 0: Connexion requise */}
           {reservationStep === 0 && (
@@ -171,85 +178,85 @@ export default function Permis() {
                   ))}
                 </div>
               </div>
-              
+
               <div className="alert alert-warning">
-                <Form.Check 
+                <Form.Check
                   type="checkbox"
                   label="Vous n'avez pas de compte. Veuillez vous connecter ou créer un compte pour effectuer une réservation."
                   className="mb-3"
                 />
               </div>
-              
+
               <div className="d-flex gap-3 justify-content-center">
                 <Button variant="outline-secondary" onClick={() => setSelectedPermis(null)}>
                   Annuler
                 </Button>
-                <Button variant="primary" href="/compte" onClick={handleLogin}>
+                <Button variant="primary" href="/compte">
                   Se Connecter
                 </Button>
               </div>
             </div>
           )}
 
-          
+
           {/* Étape 1 : Choix du type de séance */}
-{/* Étape 1 : Choix du type de séance */}
-{reservationStep === 1 && (
-  <div>
-    <div className="text-center mb-4">
-      <h5 className="fw-bold text-primary">
-        Réserver : {selectedPermis.title}
-      </h5>
+          {/* Étape 1 : Choix du type de séance */}
+          {reservationStep === 1 && (
+            <div>
+              <div className="text-center mb-4">
+                <h5 className="fw-bold text-primary">
+                  Réserver : {selectedPermis.title}
+                </h5>
 
-      {/* Indicateur d’étapes */}
-      <div className="d-flex justify-content-center align-items-center gap-3 my-3">
-        <span className="badge rounded-circle bg-primary text-white p-3">1</span>
-        <div style={{ width: "40px", height: "3px", background: "#ccc" }}></div>
-        <span className="badge rounded-circle bg-secondary text-white-50 p-3">2</span>
-        <div style={{ width: "40px", height: "3px", background: "#ccc" }}></div>
-        <span className="badge rounded-circle bg-secondary text-white-50 p-3">3</span>
-      </div>
+                {/* Indicateur d’étapes */}
+                <div className="d-flex justify-content-center align-items-center gap-3 my-3">
+                  <span className="badge rounded-circle bg-primary text-white p-3">1</span>
+                  <div style={{ width: "40px", height: "3px", background: "#ccc" }}></div>
+                  <span className="badge rounded-circle bg-secondary text-white-50 p-3">2</span>
+                  <div style={{ width: "40px", height: "3px", background: "#ccc" }}></div>
+                  <span className="badge rounded-circle bg-secondary text-white-50 p-3">3</span>
+                </div>
 
-      <h5 className="fw-semibold mb-3">Type de séance</h5>
-      <p className="text-muted">Souhaitez-vous réserver une séance de code ou de conduite ?</p>
-    </div>
+                <h5 className="fw-semibold mb-3">Type de séance</h5>
+                <p className="text-muted">Souhaitez-vous réserver une séance de code ou de conduite ?</p>
+              </div>
 
-    <Row className="g-4">
-      {/* Carte Séance de Code */}
-      <Col md={6}>
-        <Card className="text-center p-4 shadow-sm border-0" style={{ cursor: "pointer" }}>
-          <div className="mb-3">
-            <span className="bg-primary bg-opacity-10 p-3 rounded-circle">
-              <i className="bi bi-book fs-3 text-primary"></i>
-            </span>
-          </div>
-          <h5 className="fw-bold">Séance de Code</h5>
-          <p className="text-muted mb-0">Apprenez le code de la route en classe</p>
-        </Card>
-      </Col>
+              <Row className="g-4">
+                {/* Carte Séance de Code */}
+                <Col md={6}>
+                  <Card className="text-center p-4 shadow-sm border-0" style={{ cursor: "pointer" }}>
+                    <div className="mb-3">
+                      <span className="bg-primary bg-opacity-10 p-3 rounded-circle">
+                        <i className="bi bi-book fs-3 text-primary"></i>
+                      </span>
+                    </div>
+                    <h5 className="fw-bold">Séance de Code</h5>
+                    <p className="text-muted mb-0">Apprenez le code de la route en classe</p>
+                  </Card>
+                </Col>
 
-      {/* Carte Séance de Conduite */}
-      <Col md={6}>
-        <Card className="text-center p-4 shadow-sm border-0" style={{ cursor: "pointer" }}>
-          <div className="mb-3">
-            <span className="bg-primary bg-opacity-10 p-3 rounded-circle">
-              <i className="bi bi-lightning-charge fs-3 text-primary"></i>
-            </span>
-          </div>
-          <h5 className="fw-bold">Séance de Conduite</h5>
-          <p className="text-muted mb-0">Pratiquez la conduite avec un moniteur</p>
-        </Card>
-      </Col>
-    </Row>
-  </div>
-)}
+                {/* Carte Séance de Conduite */}
+                <Col md={6}>
+                  <Card className="text-center p-4 shadow-sm border-0" style={{ cursor: "pointer" }}>
+                    <div className="mb-3">
+                      <span className="bg-primary bg-opacity-10 p-3 rounded-circle">
+                        <i className="bi bi-lightning-charge fs-3 text-primary"></i>
+                      </span>
+                    </div>
+                    <h5 className="fw-bold">Séance de Conduite</h5>
+                    <p className="text-muted mb-0">Pratiquez la conduite avec un moniteur</p>
+                  </Card>
+                </Col>
+              </Row>
+            </div>
+          )}
 
 
           {/* Étape 2: Choix de la date et heure */}
           {reservationStep === 2 && (
             <div>
               <h6 className="mb-3">Choisissez un horaire</h6>
-              
+
               <div className="mb-4">
                 <h6 className="text-primary">vendredi 5 décembre 2025</h6>
                 <div className="d-flex flex-wrap gap-2 mt-3">
@@ -269,7 +276,7 @@ export default function Permis() {
               <div className="bg-light p-3 rounded">
                 <h6>Résumé de votre réservation:</h6>
                 <p className="mb-1"><strong>Permis:</strong> {selectedPermis.title}</p>
-                <p className="mb-1"><strong>Moniteur:</strong> {selectedMonitor}</p>
+                <p className="mb-1"><strong>Moniteur:</strong> Moniteur Assigné</p>
                 <p className="mb-0"><strong>Horaire:</strong> {selectedTime}</p>
               </div>
             </div>
@@ -291,33 +298,33 @@ export default function Permis() {
             </div>
           )}
         </Modal.Body>
-        
+
         <Modal.Footer>
           {reservationStep > 0 && (
             <Button variant="outline-secondary" onClick={handlePreviousStep}>
               Retour
             </Button>
           )}
-          
-        {reservationStep === 1 && (
-  <Button 
-    variant="primary" 
-    onClick={handleNextStep}
-  >
-    Continuer
-  </Button>
-)}
-          
+
+          {reservationStep === 1 && (
+            <Button
+              variant="primary"
+              onClick={handleNextStep}
+            >
+              Continuer
+            </Button>
+          )}
+
           {reservationStep === 2 && (
-            <Button 
-              variant="primary" 
+            <Button
+              variant="primary"
               onClick={handleNextStep}
               disabled={!selectedTime}
             >
               Continuer
             </Button>
           )}
-          
+
           {reservationStep === 3 && (
             <Button variant="success" onClick={handleConfirmReservation}>
               Confirmer la réservation
@@ -340,49 +347,56 @@ export default function Permis() {
         </div>
 
         <Row className="g-4">
-          {permisCategories.map((permis) => (
-            <Col key={permis.id} md={6} lg={4}>
-              <Card className="h-100 shadow-sm border-0 permis-card">
-                <Card.Header className="bg-primary text-white text-center py-3">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <h4 className="mb-0 fw-bold">{permis.price}</h4>
-                    <span className="badge bg-light text-dark fs-6">{permis.hours}</span>
-                  </div>
-                </Card.Header>
-                
-                <Card.Body className="d-flex flex-column">
-                  <h5 className="card-title text-center mb-3 fw-bold">{permis.title}</h5>
-                  <p className="card-text flex-grow-1 text-muted">{permis.description}</p>
-                  
-                  <div className="mt-3">
-                    <h6 className="text-primary fw-semibold mb-2">Ce qui est inclus :</h6>
-                    <ul className="list-unstyled">
-                      {permis.features.map((feature, index) => (
-                        <li key={index} className="mb-2 d-flex align-items-start">
-                          <i className="bi bi-check-circle-fill text-success me-2 mt-1"></i>
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="mt-auto pt-3">
-                    <Button 
-                      variant="primary" 
-                      className="w-100 py-2 fw-semibold"
-                      onClick={() => handleReservation(permis)}
-                    >
-                      {permis.buttonText}
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
+          {permisCategories.map((permis) => {
+            // Logique de restriction : si connecté, on ne peut cliquer que sur son permis
+            const isAllowed = !user || user.categorie_permis === permis.category;
+            const cardStyle = isAllowed ? {} : { filter: "blur(2px)", opacity: 0.6, pointerEvents: "none" };
+
+            return (
+              <Col key={permis.id} md={6} lg={4}>
+                <Card className="h-100 shadow-sm border-0 permis-card" style={cardStyle}>
+                  <Card.Header className="bg-primary text-white text-center py-3">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <h4 className="mb-0 fw-bold">{permis.price}</h4>
+                      <span className="badge bg-light text-dark fs-6">{permis.hours}</span>
+                    </div>
+                  </Card.Header>
+
+                  <Card.Body className="d-flex flex-column">
+                    <h5 className="card-title text-center mb-3 fw-bold">{permis.title}</h5>
+                    <p className="card-text flex-grow-1 text-muted">{permis.description}</p>
+
+                    <div className="mt-3">
+                      <h6 className="text-primary fw-semibold mb-2">Ce qui est inclus :</h6>
+                      <ul className="list-unstyled">
+                        {permis.features.map((feature, index) => (
+                          <li key={index} className="mb-2 d-flex align-items-start">
+                            <i className="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="mt-auto pt-3">
+                      <Button
+                        variant="primary"
+                        className="w-100 py-2 fw-semibold"
+                        onClick={() => handleReservation(permis)}
+                        disabled={!isAllowed}
+                      >
+                        {isAllowed ? permis.buttonText : "Non disponible"}
+                      </Button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            );
+          })}
         </Row>
 
         {renderReservationModal()}
       </Container>
     </section>
   );
-} 
+}
