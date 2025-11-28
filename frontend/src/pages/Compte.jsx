@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "../assets/css/style.scss";
-import {useForm} from "react-hook-form";
-import { Link } from "react-router-dom";
+import { useUser } from "../context/UserContext"; // ← IMPORT CONTEXTE
 
 export default function Compte() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: ""
-  });
+  const { loginUser } = useUser(); // ← Fonction du contexte
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -30,21 +28,22 @@ export default function Compte() {
           Accept: "application/json",
         },
         body: JSON.stringify(formData),
-        mode: "cors"
+        mode: "cors",
       });
 
       const data = await response.json();
 
       if (response.ok && data.status) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        // 🔥 Met à jour le contexte + localStorage
+        loginUser(data.user, data.token);
+
+        // 🔥 Redirection vers dashboard
         navigate("/dashboard");
       } else {
         setError(data.message || "Email ou mot de passe incorrect");
       }
-
     } catch (err) {
-      setError("Connexion echouée.");
+      setError("Connexion échouée.");
     }
 
     setLoading(false);
@@ -84,7 +83,7 @@ export default function Compte() {
         </form>
 
         <p className="mt-4">
-          Pas de compte ? <a href="/register">Créer un compte</a>
+          Pas de compte ? <Link to="/register">Créer un compte</Link>
         </p>
       </div>
     </div>

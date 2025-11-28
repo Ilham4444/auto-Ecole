@@ -7,7 +7,6 @@ export default function Permis() {
   const [reservationStep, setReservationStep] = useState(0);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
-  const [selectedMonitor, setSelectedMonitor] = useState("");
 
   const permisCategories = [
     {
@@ -194,6 +193,7 @@ export default function Permis() {
 
           
           {/* Étape 1 : Choix du type de séance */}
+{/* Étape 1 : Choix du type de séance */}
 {reservationStep === 1 && (
   <div>
     <div className="text-center mb-4">
@@ -217,11 +217,7 @@ export default function Permis() {
     <Row className="g-4">
       {/* Carte Séance de Code */}
       <Col md={6}>
-        <Card 
-          className={`text-center p-4 shadow-sm border ${selectedMonitor === "Séance de Code" ? "border-primary" : "border-0"}`}
-          style={{ cursor: "pointer" }}
-          onClick={() => setSelectedMonitor("Séance de Code")}
-        >
+        <Card className="text-center p-4 shadow-sm border-0" style={{ cursor: "pointer" }}>
           <div className="mb-3">
             <span className="bg-primary bg-opacity-10 p-3 rounded-circle">
               <i className="bi bi-book fs-3 text-primary"></i>
@@ -234,11 +230,7 @@ export default function Permis() {
 
       {/* Carte Séance de Conduite */}
       <Col md={6}>
-        <Card 
-          className={`text-center p-4 shadow-sm border ${selectedMonitor === "Séance de Conduite" ? "border-primary" : "border-0"}`}
-          style={{ cursor: "pointer" }}
-          onClick={() => setSelectedMonitor("Séance de Conduite")}
-        >
+        <Card className="text-center p-4 shadow-sm border-0" style={{ cursor: "pointer" }}>
           <div className="mb-3">
             <span className="bg-primary bg-opacity-10 p-3 rounded-circle">
               <i className="bi bi-lightning-charge fs-3 text-primary"></i>
@@ -307,16 +299,14 @@ export default function Permis() {
             </Button>
           )}
           
-         {reservationStep === 1 && (
-             <Button 
-              variant="primary" 
-              onClick={handleNextStep}
-              disabled={!selectedMonitor}
-             >
-              Continuer
-             </Button>
-          )}
-
+        {reservationStep === 1 && (
+  <Button 
+    variant="primary" 
+    onClick={handleNextStep}
+  >
+    Continuer
+  </Button>
+)}
           
           {reservationStep === 2 && (
             <Button 
@@ -395,4 +385,4 @@ export default function Permis() {
       </Container>
     </section>
   );
-}
+} 

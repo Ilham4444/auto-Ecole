@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -53,18 +53,18 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <h4>Bienvenue {user.nom}</h4>
+        <h4>Bienvenue {user.nom} {user.prenom}</h4>
 
         <div className="row mt-4">
           {/* --- Carte CODE DE LA ROUTE --- */}
           <div className="col-md-4 mb-4">
             <div className="dashboard-card p-3">
               <h5>Code de la Route</h5>
-              <p>Progression : 0/20 heures</p>
+              <p>Progression : {user.cours_code || 0}/20 heures</p>
               <div className="progress mb-2">
-                <div className="progress-bar" style={{ width: "0%" }}></div>
+                <div className="progress-bar" style={{ width: `${(user.cours_code || 0) * 5}%` }}></div>
               </div>
-              <small>Examen : Non passé</small>
+              <small>Examen : {user.examen_code ? "Réussi" : "Non passé"}</small>
             </div>
           </div>
 
@@ -72,11 +72,16 @@ export default function Dashboard() {
           <div className="col-md-4 mb-4">
             <div className="dashboard-card p-3">
               <h5>Conduite Pratique</h5>
-              <p>Progression : 0/30 heures</p>
+              <p>Progression : {user.cours_conduite || 0}/30 heures</p>
+
               <div className="progress mb-2">
-                <div className="progress-bar" style={{ width: "0%" }}></div>
+                <div
+                  className="progress-bar"
+                  style={{ width: `${((user.cours_conduite || 0) / 30) * 100}%` }}
+                ></div>
               </div>
-              <small>Heures restantes : 30h</small>
+
+              <small>Heures restantes : {30 - (user.cours_conduite || 0)}h</small>
             </div>
           </div>
 
@@ -92,13 +97,17 @@ export default function Dashboard() {
               </button>
 
               <h5>Solde Restant</h5>
-              <p>Payé : 0 Dh</p>
+
+              <p>Payé : {user.total_paye || 0} Dh</p>
 
               <div className="progress mb-2">
-                <div className="progress-bar" style={{ width: "0%" }}></div>
+                <div
+                  className="progress-bar"
+                  style={{ width: `${(user.total_paye || 0) / (user.total_a_payer || 1) * 100}%` }}
+                ></div>
               </div>
 
-              <small>Reste à payer : 0 Dh</small>
+              <small>Reste à payer : {(user.total_a_payer || 0) - (user.total_paye || 0)} Dh</small>
             </div>
           </div>
         </div>
@@ -193,15 +202,10 @@ export default function Dashboard() {
           <div className="tab-pane fade" id="profil">
             <h4>Mon Profil</h4>
 
-            <p>
-              <strong>Nom :</strong> {user.nom}
-            </p>
-            <p>
-              <strong>Email :</strong> {user.email}
-            </p>
-            <p>
-              <strong>Téléphone :</strong> {user.telephone}
-            </p>
+            <p><strong>Nom :</strong> {user.nom} {user.prenom}</p>
+            <p><strong>Email :</strong> {user.email}</p>
+            <p><strong>Téléphone :</strong> {user.telephone}</p>
+            <p><strong>Catégorie du permis :</strong> {user.categorie_permis}</p>
 
             <button className="btn btn-primary mt-2">
               ✏ Modifier les informations
@@ -224,8 +228,7 @@ export default function Dashboard() {
               </button>
             ) : (
               <p className="text-danger mt-3">
-                ⚠ Vous devez terminer tous les cours, tous les paiements et
-                réussir l'examen.
+                ⚠ Vous devez terminer tous les cours, tous les paiements et réussir l'examen.
               </p>
             )}
           </div>
