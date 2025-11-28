@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "../assets/css/style.scss";
-import { useUser } from "../context/UserContext"; // ← IMPORT CONTEXTE
+import { useUser } from "../context/UserContext";
+import api from "../api";
 
 export default function Compte() {
-  const { loginUser } = useUser(); // ← Fonction du contexte
+  const { loginUser } = useUser();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -21,29 +22,22 @@ export default function Compte() {
     setError("");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(formData),
-        mode: "cors",
-      });
+      const response = await api.post("/login", formData);
 
-      const data = await response.json();
+      if (response.data.status) {
+        // Stocker le token et les infos utilisateur
+        loginUser(response.data.user, response.data.token);
 
-      if (response.ok && data.status) {
-        // 🔥 Met à jour le contexte + localStorage
-        loginUser(data.user, data.token);
-
-        // 🔥 Redirection vers dashboard
+        // Redirection vers dashboard
         navigate("/dashboard");
       } else {
-        setError(data.message || "Email ou mot de passe incorrect");
+        setError(response.data.message || "Email ou mot de passe incorrect");
       }
     } catch (err) {
-      setError("Connexion échouée.");
+      console.error("Erreur de connexion:", err);
+      setError(
+        err.response?.data?.message || "Connexion échouée. Vérifiez vos identifiants."
+      );
     }
 
     setLoading(false);

@@ -7,10 +7,6 @@ import Examens from "./Examens";
 import Moniteurs from "./Moniteurs";
 import Apropos from "./Apropos";
 
-
-
-
-
 export default function Home() {
   return (
     <>
@@ -29,13 +25,13 @@ export default function Home() {
               </p>
 
               <div className="d-flex gap-3 flex-wrap">
-                <Button variant="primary" className="rounded-pill px-4 py-2" href="/permis">
+                <Button variant="primary" className="rounded-pill px-4 py-2" href="#permis">
                   Réserver une leçon
                 </Button>
                 <Button
                   variant="outline-primary"
                   className="rounded-pill px-4 py-2"
-                  href="/examens"
+                  href="#examens"
                 >
                   Passer l'examen
                 </Button>

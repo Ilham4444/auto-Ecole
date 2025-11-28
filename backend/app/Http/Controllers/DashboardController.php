@@ -5,31 +5,62 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Models\Paiement;
+use App\Models\User;  // Ajouté pour les requêtes sur les utilisateurs
 
 class DashboardController extends Controller
 {
+    /**
+     * Dashboard générique : redirige vers le bon dashboard basé sur le rôle
+     */
     public function index(Request $request)
     {
         $user = $request->user();
+        $redirectUrl = '';
 
-        // 🔹 Historique des réservations
-        $reservations = Reservation::where('user_id', $user->id)
-            ->orderBy('date', 'desc')
-            ->get();
+        switch ($user->role) {
+            case 'candidate':
+                $redirectUrl = '/api/dashboard/candidate';
+                break;
+            case 'moniteur':
+                $redirectUrl = '/api/dashboard/moniteur';
+                break;
+            case 'admin':
+                $redirectUrl = '/api/dashboard/admin';  // Optionnel
+                break;
+            default:
+                return response()->json(['status' => false, 'message' => 'Rôle non reconnu'], 403);
+        }
 
-        // 🔹 Historique des paiements
-        $paiements = Paiement::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        return response()->json([
+            'status' => true,
+            'message' => 'Redirection vers dashboard',
+            'redirect_to' => $redirectUrl
+        ]);
+    }
 
-        // 🔹 Calcul progression (exemple simple)
+    /**
+     * Dashboard pour candidat (intègre votre logique existante)
+     */
+    public function candidate(Request $request)
+    {
+        $user = $request->user();
+        if ($user->role !== 'candidate') {
+            return response()->json(['status' => false, 'message' => 'Accès refusé'], 403);
+        }
+
+        // 🔹 Historique des réservations (utilise la relation du modèle User)
+        $reservations = $user->reservations()->orderBy('date', 'desc')->get();
+
+        // 🔹 Historique des paiements (utilise la relation du modèle User)
+        $paiements = $user->paiements()->orderBy('created_at', 'desc')->get();
+
+        // 🔹 Calcul progression (votre logique existante)
         $total_cours = 20;
         $total_conduite = 30;
-
         $progress_cours = $user->cours_completes ?? 0;
         $progress_conduite = $user->conduite_completes ?? 0;
 
-        // 🔹 Vérification certificat
+        // 🔹 Vérification certificat (votre logique existante)
         $certificat_disponible =
             ($user->cours_completes >= $total_cours) &&
             ($user->paiements_completes == 1) &&
@@ -37,7 +68,7 @@ class DashboardController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Bienvenue sur votre dashboard',
+            'message' => 'Bienvenue sur votre dashboard candidat',
 
             // 👤 Infos utilisateur
             'user' => $user,
@@ -64,5 +95,76 @@ class DashboardController extends Controller
             'certificat_disponible' => $certificat_disponible
         ]);
     }
-}
 
+    /**
+     * Dashboard pour moniteur
+     */
+    public function moniteur(Request $request)
+    {
+        $user = $request->user();
+        if ($user->role !== 'moniteur') {
+            return response()->json(['status' => false, 'message' => 'Accès refusé'], 403);
+        }
+
+        // 🔹 Liste des candidats (utilise le modèle User)
+        $candidates = User::where('role', 'candidate')->get(['id', 'nom', 'prenom', 'email', 'telephone']);
+
+        // 🔹 Réservations gérées par le moniteur (utilise la relation du modèle User)
+        $reservations = $user->reservations()->orderBy('date', 'desc')->get();
+
+        // 🔹 Statistiques simples (adaptez selon vos besoins)
+        $totalCandidates = $candidates->count();
+        $totalReservations = $reservations->count();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Bienvenue sur votre dashboard moniteur',
+
+            // 👤 Infos utilisateur
+            'user' => $user,
+
+            // 👥 Liste des candidats
+            'candidates' => $candidates,
+
+            // 📅 Réservations gérées
+            'reservations' => $reservations,
+
+            // 📊 Statistiques
+            'stats' => [
+                'total_candidates' => $totalCandidates,
+                'total_reservations' => $totalReservations
+            ]
+        ]);
+    }
+
+    /**
+     * Dashboard pour admin (optionnel)
+     */
+    public function admin(Request $request)
+    {
+        $user = $request->user();
+        if ($user->role !== 'admin') {
+            return response()->json(['status' => false, 'message' => 'Accès refusé'], 403);
+        }
+
+        // 🔹 Statistiques globales (adaptez selon vos besoins)
+        $totalUsers = User::count();
+        $totalReservations = Reservation::count();
+        $totalPaiements = Paiement::count();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Bienvenue sur votre dashboard admin',
+
+            // 👤 Infos utilisateur
+            'user' => $user,
+
+            // 📊 Statistiques globales
+            'stats' => [
+                'total_users' => $totalUsers,
+                'total_reservations' => $totalReservations,
+                'total_paiements' => $totalPaiements
+            ]
+        ]);
+    }
+}

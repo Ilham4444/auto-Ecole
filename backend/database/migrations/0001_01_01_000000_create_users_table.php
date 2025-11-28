@@ -22,13 +22,15 @@ return new class extends Migration
             $table->enum('methode_paiement', ['carte', 'virement'])->nullable();
             $table->enum('categorie_permis', ['A', 'A1', 'B', 'C', 'D', 'EC'])->nullable();
             $table->string('photo_identite')->nullable();
-            $table->string('recto_carte_nationale')->nullable();
-            $table->string('verso_carte_nationale')->nullable();
+            $table->string('recto_carte')->nullable();
+            $table->string('verso_carte')->nullable();
             $table->string('certificat_medical')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->enum('role', ['candidate', 'moniteur', 'admin'])->default('candidate');
+
         });
     }
 

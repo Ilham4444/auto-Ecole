@@ -1,8 +1,10 @@
- import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useUser } from "../context/UserContext";
 
 export default function Dashboard() {
+  const { user: contextUser, logoutUser } = useUser();
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
@@ -25,8 +27,7 @@ export default function Dashboard() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    logoutUser();
     navigate("/compte");
   };
 
@@ -221,8 +222,8 @@ export default function Dashboard() {
             </button>
 
             {user.cours_completes &&
-            user.paiements_completes &&
-            user.examen_reussi ? (
+              user.paiements_completes &&
+              user.examen_reussi ? (
               <button className="btn btn-success w-100 mt-3">
                 🎉 Télécharger Certificat de Réussite
               </button>

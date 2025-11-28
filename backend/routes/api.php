@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\CertificatController;
@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\PermisController;
 use Illuminate\Support\Facades\Route;
 
 /* ============================
-|  Test API
+|  TEST API
 ============================ */
 Route::get('/test', function () {
     return response()->json([
@@ -20,63 +20,60 @@ Route::get('/test', function () {
     ]);
 });
 
-
 /* ============================
-|  Authentification
+|  AUTHENTIFICATION
 ============================ */
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
-
-
 /* ============================
-|  Routes sécurisées
+|  ROUTES SÉCURISÉES (SANCTUM)
 ============================ */
 Route::middleware('auth:sanctum')->group(function () {
 
-    /* --- Dashboard --- */
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+    /* --- Dashboard générique (redirige vers le bon dashboard basé sur le rôle) --- */
+    Route::get('/dashboard', [DashboardController::class, 'index']);  // Modifié pour gérer la redirection
+
+    /* --- Dashboards spécifiques par rôle --- */
+    Route::get('/dashboard/candidate', [DashboardController::class, 'candidate']);  // Nouveau : pour candidat
+    Route::get('/dashboard/moniteur', [DashboardController::class, 'moniteur']);    // Nouveau : pour moniteur
+    // Ajoutez /dashboard/admin si nécessaire pour admin
 
     /* --- Déconnexion --- */
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    /* --- Infos utilisateur --- */
+    /* --- Infos utilisateur connecté --- */
     Route::get('/user', [AuthController::class, 'user']);
 
-
-
     /* ============================
-    |  Réservations
+    |  PERMIS
     ============================ */
     Route::get('/permis', [PermisController::class, 'index']);
-    Route::get('/reservations', [ReservationController::class, 'index']);          // Liste historique
-    Route::post('/reservations', [ReservationController::class, 'store']);         // Ajouter réservation
-    Route::get('/reservations', [ReservationController::class, 'userReservations']);
-    Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']); // Annuler réservation
-    
-
 
     /* ============================
-    |  Paiements
+    |  RÉSERVATIONS
+    ============================ */
+    Route::get('/reservations', [ReservationController::class, 'index']);     // Liste des réservations de l'utilisateur
+    Route::post('/reservations', [ReservationController::class, 'store']);    // Créer une réservation
+    Route::get('/reservations/{id}', [ReservationController::class, 'show']); // Détail d'une réservation
+    Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']); // Annuler une réservation
+
+    /* ============================
+    |  PAIEMENTS
     ============================ */
     Route::get('/paiements', [PaiementController::class, 'index']);              // Historique paiements
-    Route::post('/paiements', [PaiementController::class, 'store']);             // Ajouter paiement
-    Route::get('/paiements/{id}/recu', [PaiementController::class, 'download']);  // Télécharger reçu PDF
-
-
+    Route::post('/paiements', [PaiementController::class, 'store']);             // Effectuer un paiement
+    Route::get('/paiements/{id}/recu', [PaiementController::class, 'download']);  // Télécharger le reçu PDF
 
     /* ============================
-    |  Profil
+    |  PROFIL
     ============================ */
-    Route::get('/profil', [ProfilController::class, 'show']);              // Afficher mes infos
-    Route::post('/profil/update', [ProfilController::class, 'update']);    // Modifier mes infos
-    Route::post('/profil/photo', [ProfilController::class, 'updatePhoto']); // Modifier photo identité
-
-
+    Route::get('/profil', [ProfilController::class, 'show']);          // Afficher profil
+    Route::put('/profil', [ProfilController::class, 'update']);        // Modifier infos profil
+    Route::post('/profil/photo', [ProfilController::class, 'updatePhoto']); // Modifier photo
 
     /* ============================
-    |  Certificat de réussite
+    |  CERTIFICAT
     ============================ */
     Route::get('/certificat', [CertificatController::class, 'download']);
 });
-
