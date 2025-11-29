@@ -33,7 +33,16 @@ export default function Dashboard() {
         },
       })
       .then((res) => {
-        setUser(res.data.user);
+        // Enrichir l'objet user avec les données retournées du backend
+        const userData = {
+          ...res.data.user,
+          reservations: res.data.reservations || [],
+          paiements: res.data.paiements || [],
+          cours_code: res.data.progression?.cours?.fait || 0,
+          cours_conduite: res.data.progression?.conduite?.fait || 0,
+          candidates: res.data.candidates || [],
+        };
+        setUser(userData);
         setLoading(false);
       })
       .catch((err) => {
@@ -170,7 +179,24 @@ export default function Dashboard() {
                             <p className="mt-2">{r.permis}</p>
                             <small>📅 {r.date} à {r.time}</small>
                           </div>
-                          <button className="btn btn-outline-danger">🗑 Annuler</button>
+                          <button
+                            className="btn btn-outline-danger"
+                            onClick={async () => {
+                              if (window.confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
+                                try {
+                                  const api = (await import('../api.jsx')).default;
+                                  await api.delete(`/reservations/${r.id}`);
+                                  alert('✅ Réservation annulée avec succès');
+                                  window.location.reload();
+                                } catch (error) {
+                                  console.error('Erreur:', error);
+                                  alert('❌ Erreur lors de l\'annulation');
+                                }
+                              }
+                            }}
+                          >
+                            🗑 Annuler
+                          </button>
                         </div>
                       </div>
                     ))

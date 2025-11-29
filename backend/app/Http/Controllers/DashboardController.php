@@ -10,32 +10,22 @@ use App\Models\User;  // Ajouté pour les requêtes sur les utilisateurs
 class DashboardController extends Controller
 {
     /**
-     * Dashboard générique : redirige vers le bon dashboard basé sur le rôle
+     * Dashboard générique : retourne directement les données selon le rôle
      */
     public function index(Request $request)
     {
         $user = $request->user();
-        $redirectUrl = '';
 
         switch ($user->role) {
             case 'candidate':
-                $redirectUrl = '/api/dashboard/candidate';
-                break;
+                return $this->candidate($request);
             case 'moniteur':
-                $redirectUrl = '/api/dashboard/moniteur';
-                break;
+                return $this->moniteur($request);
             case 'admin':
-                $redirectUrl = '/api/dashboard/admin';  // Optionnel
-                break;
+                return $this->admin($request);
             default:
                 return response()->json(['status' => false, 'message' => 'Rôle non reconnu'], 403);
         }
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Redirection vers dashboard',
-            'redirect_to' => $redirectUrl
-        ]);
     }
 
     /**

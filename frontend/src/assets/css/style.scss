@@ -374,58 +374,6 @@
   transition: 0.3s;
 }
 
-.payment-card:hover {
-  background: #f3f3f3;
-}
-
-.dashboard-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: 1200px;
-  /* Augmente ici */
-  max-width: 95%;
-}
-
-/* ====== Layout général ====== */
-/* LE CONTENEUR DE LA MODAL */
-.register-container {
-  position: fixed;
-  top: 0;
-  left: 150px;
-  right: 0px;
-  width: 80vw;
-  height: 100vh;
-
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 20px;
-  background: rgba(0, 0, 0, 0.45);
-  overflow-y: auto;
-
-
-}
-
-.register-card {
-  width: 90%;
-  max-width: 1300px;
-  background: #fff;
-  padding: 40px;
-  border-radius: 20px;
-  max-height: none;
-  margin: 0;
-
-
-}
-
-
-/* ====== Titres ====== */
-.title {
-  text-align: center;
-  font-size: 28px;
-  font-weight: 700;
-}
-
 .subtitle {
   text-align: center;
   color: #777;

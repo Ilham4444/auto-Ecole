@@ -153,15 +153,36 @@ export default function Permis() {
     }
   };
 
-  const handleConfirmReservation = () => {
-    const selectedDayObj = availableDays.find(d => d.date === selectedDay);
-    alert(`Réservation confirmée pour ${selectedPermis.title}\nType: ${selectedType}\nDate: ${selectedDayObj?.day}\nHeure: ${selectedTime}`);
-    setSelectedPermis(null);
-    setReservationStep(0);
-    setSelectedType("");
-    setSelectedDay("");
-    setSelectedDate("");
-    setSelectedTime("");
+ const handleConfirmReservation = async () => {
+    try {
+      const api = (await import('../api.jsx')).default;
+      const selectedDayObj = availableDays.find(d => d.date === selectedDay);
+      
+      const reservationData = {
+        permis_id: selectedPermis.id,
+        monitor: "Moniteur Auto",
+        date: selectedDay,
+        time: selectedTime,
+        type: selectedType,
+      };
+      const response = await api.post('/reservations', reservationData);
+      if (response.data.status) {
+        alert(`✅ Réservation confirmée avec succès!\n\nFormation: ${selectedPermis.title}\nType: ${selectedType === 'code' ? 'Séance de Code' : 'Séance de Conduite'}\nDate: ${selectedDayObj?.day}\nHeure: ${selectedTime}`);
+        
+        setSelectedPermis(null);
+        setReservationStep(0);
+        setSelectedType("");
+        setSelectedDay("");
+        setSelectedDate("");
+        setSelectedTime("");
+        
+        window.location.href = "/dashboard";
+      }
+    } catch (error) {
+      console.error("Erreur lors de la réservation:", error);
+      const errorMessage = error.response?.data?.message || error.response?.data?.errors || "Une erreur est survenue";
+      alert(`❌ Erreur: ${typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage}`);
+    }
   };
 
   const renderReservationModal = () => {

@@ -19,14 +19,23 @@ class ReservationController extends Controller {
             'monitor' => 'required|string',
             'date' => 'required|date',
             'time' => 'required',
+            'type' => 'nullable|string', // Type de séance: code ou conduite
         ]);
 
         $reservation = Reservation::create([
             'user_id' => $request->user()->id,
+            'status' => 'pending', // Statut par défaut
             ...$validated
         ]);
 
-        return response()->json($reservation, 201);
+        // Charger les relations pour la réponse
+        $reservation->load('permis', 'user');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Réservation créée avec succès',
+            'reservation' => $reservation
+        ], 201);
     }
 
     public function show(Request $request, $id) {
