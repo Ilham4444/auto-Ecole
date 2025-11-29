@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\PaiementController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\CertificatController;
 use App\Http\Controllers\Api\PermisController;
@@ -77,4 +78,11 @@ Route::middleware('auth:sanctum')->group(function () {
     |  CERTIFICAT
     ============================ */
     Route::get('/certificat', [CertificatController::class, 'download']);
+
+    /* ============================
+    |  PDF - REÇUS ET CERTIFICATS
+    ============================ */
+    Route::get('/pdf/recu-inscription', [PdfController::class, 'recuInscription']);  // Reçu d'inscription
+    Route::get('/pdf/recu-paiement/{id}', [PdfController::class, 'recuPaiement']);   // Reçu de paiement
+    Route::get('/pdf/certificat', [PdfController::class, 'certificat']);              // Certificat de réussite
 });

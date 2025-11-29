@@ -2,12 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
+import { Modal, Button, Form } from 'react-bootstrap';
 
 export default function Dashboard() {
   const { user: contextUser, logoutUser } = useUser();
-  const [user, setUser] = useState(contextUser); // Initialiser avec le contexte si disponible
-  const [loading, setLoading] = useState(!contextUser); // Charger seulement si pas d'user dans le contexte
+  const [user, setUser] = useState(contextUser);
+  const [loading, setLoading] = useState(!contextUser);
   const navigate = useNavigate();
+
+  // État pour la modale de modification de profil
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    nom: "",
+    prenom: "",
+    telephone: "",
+    email: ""
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -17,14 +27,12 @@ export default function Dashboard() {
       return;
     }
 
-    // Si on a déjà l'utilisateur dans le contexte, pas besoin de recharger
     if (contextUser) {
       setUser(contextUser);
       setLoading(false);
       return;
     }
 
-    // Sinon, charger depuis l'API
     axios
       .get("http://127.0.0.1:8000/api/dashboard", {
         headers: {
@@ -33,7 +41,6 @@ export default function Dashboard() {
         },
       })
       .then((res) => {
-        // Enrichir l'objet user avec les données retournées du backend
         const userData = {
           ...res.data.user,
           reservations: res.data.reservations || [],
@@ -63,21 +70,53 @@ export default function Dashboard() {
     navigate("/compte");
   };
 
+  // Gestion de l'ouverture de la modale
+  const handleEditClick = () => {
+    setEditFormData({
+      nom: user.nom || "",
+      prenom: user.prenom || "",
+      telephone: user.telephone || "",
+      email: user.email || ""
+    });
+    setShowEditModal(true);
+  };
+
+  // Gestion des changements dans le formulaire
+  const handleEditChange = (e) => {
+    setEditFormData({
+      ...editFormData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  // Soumission du formulaire de modification
+  const handleEditSubmit = async () => {
+    try {
+      const api = (await import('../api.jsx')).default;
+      const response = await api.put('/profil', editFormData);
+
+      if (response.data.status) {
+        alert("✅ Profil mis à jour avec succès !");
+        // Mettre à jour l'utilisateur localement avec les nouvelles données
+        setUser({ ...user, ...response.data.user });
+        setShowEditModal(false);
+      }
+    } catch (error) {
+      console.error("Erreur mise à jour profil", error);
+      alert("❌ Erreur lors de la mise à jour du profil.");
+    }
+  };
+
   if (loading) return <div className="text-center mt-5"><div className="spinner-border text-primary" role="status"></div><p>Chargement...</p></div>;
   if (!user) return <div className="text-center mt-5"><p>Erreur de chargement des données. Veuillez vous reconnecter.</p><button className="btn btn-primary" onClick={() => navigate("/compte")}>Se connecter</button></div>;
 
   return (
     <>
-      {/* ======== PARTIE 1 : TABLEAU DE BORD ========= */}
       <div className="dashboard-container">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2>Tableau de Bord {user.role === 'moniteur' ? '(Moniteur)' : ''}</h2>
-
           <div>
-            <button
-              className="btn btn-outline-primary me-2"
-              onClick={() => navigate("/")}
-            >
+            <button className="btn btn-outline-primary me-2" onClick={() => navigate("/")}>
               🏠 Accueil
             </button>
           </div>
@@ -89,7 +128,6 @@ export default function Dashboard() {
         {user.role === 'candidate' && (
           <>
             <div className="row mt-4">
-              {/* --- Carte CODE DE LA ROUTE --- */}
               <div className="col-md-4 mb-4">
                 <div className="dashboard-card p-3">
                   <h5>Code de la Route</h5>
@@ -101,72 +139,46 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* --- Carte CONDUITE --- */}
               <div className="col-md-4 mb-4">
                 <div className="dashboard-card p-3">
                   <h5>Conduite Pratique</h5>
                   <p>Progression : {user.cours_conduite || 0}/30 heures</p>
-
                   <div className="progress mb-2">
-                    <div
-                      className="progress-bar"
-                      style={{ width: `${((user.cours_conduite || 0) / 30) * 100}%` }}
-                    ></div>
+                    <div className="progress-bar" style={{ width: `${((user.cours_conduite || 0) / 30) * 100}%` }}></div>
                   </div>
-
                   <small>Heures restantes : {30 - (user.cours_conduite || 0)}h</small>
                 </div>
               </div>
 
-              {/* --- Carte SOLDE --- */}
               <div className="col-md-4 mb-4">
                 <div className="dashboard-card p-3 position-relative">
-                  <button
-                    className="btn btn-sm btn-primary position-absolute"
-                    style={{ top: "10px", right: "10px" }}
-                    onClick={() => navigate("/paiement")}
-                  >
+                  <button className="btn btn-sm btn-primary position-absolute" style={{ top: "10px", right: "10px" }} onClick={() => navigate("/paiement")}>
                     💳 Payer
                   </button>
-
                   <h5>Solde Restant</h5>
-
                   <p>Payé : {user.total_paye || 0} Dh</p>
-
                   <div className="progress mb-2">
-                    <div
-                      className="progress-bar"
-                      style={{ width: `${(user.total_paye || 0) / (user.total_a_payer || 1) * 100}%` }}
-                    ></div>
+                    <div className="progress-bar" style={{ width: `${(user.total_paye || 0) / (user.total_a_payer || 1) * 100}%` }}></div>
                   </div>
-
                   <small>Reste à payer : {(user.total_a_payer || 0) - (user.total_paye || 0)} Dh</small>
                 </div>
               </div>
             </div>
 
-            {/* ======== PARTIE 2 : ONGLET RESERVATION / PAIEMENT / PROFIL (CANDIDAT) ========= */}
             <div className="mt-5">
               <ul className="nav nav-tabs">
                 <li className="nav-item">
-                  <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#reservations">
-                    Réservations
-                  </button>
+                  <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#reservations">Réservations</button>
                 </li>
                 <li className="nav-item">
-                  <button className="nav-link" data-bs-toggle="tab" data-bs-target="#paiements">
-                    Paiements
-                  </button>
+                  <button className="nav-link" data-bs-toggle="tab" data-bs-target="#paiements">Paiements</button>
                 </li>
                 <li className="nav-item">
-                  <button className="nav-link" data-bs-toggle="tab" data-bs-target="#profil">
-                    Mon Profil
-                  </button>
+                  <button className="nav-link" data-bs-toggle="tab" data-bs-target="#profil">Mon Profil</button>
                 </li>
               </ul>
 
               <div className="tab-content p-3 border border-top-0">
-                {/* ... (Contenu existant des onglets candidat) ... */}
                 <div className="tab-pane fade show active" id="reservations">
                   <h4>Mes Réservations</h4>
                   {user.reservations && user.reservations.length > 0 ? (
@@ -215,7 +227,35 @@ export default function Dashboard() {
                         <span className="badge bg-success">{p.status}</span>
                         <button
                           className="btn btn-sm btn-secondary mt-2"
-                          onClick={() => window.open(`http://127.0.0.1:8000/api/paiements/${p.id}/recu`, '_blank')}
+                          onClick={async () => {
+                            try {
+                              const token = localStorage.getItem("token");
+                              if (!token) {
+                                alert("Vous devez être connecté pour télécharger ce document.");
+                                return;
+                              }
+
+                              const response = await axios.get(`http://127.0.0.1:8000/api/pdf/recu-paiement/${p.id}`, {
+                                headers: {
+                                  Authorization: `Bearer ${token}`,
+                                  Accept: "application/pdf",
+                                },
+                                responseType: 'blob',
+                              });
+
+                              const url = window.URL.createObjectURL(new Blob([response.data]));
+                              const link = document.createElement('a');
+                              link.href = url;
+                              link.setAttribute('download', `recu_paiement_${p.id}.pdf`);
+                              document.body.appendChild(link);
+                              link.click();
+                              link.remove();
+                              window.URL.revokeObjectURL(url);
+                            } catch (error) {
+                              console.error("Erreur téléchargement:", error);
+                              alert(`Erreur lors du téléchargement: ${error.message}`);
+                            }
+                          }}
                         >
                           📄 Télécharger Reçu
                         </button>
@@ -233,18 +273,89 @@ export default function Dashboard() {
                   <p><strong>Téléphone :</strong> {user.telephone}</p>
                   <p><strong>Catégorie du permis :</strong> {user.categorie_permis}</p>
 
-                  <button
-                    className="btn btn-primary mt-2"
-                    onClick={() => alert("Fonctionnalité de modification de profil à implémenter complètement (Formulaire)")}
-                  >
+                  <button className="btn btn-primary mt-2" onClick={handleEditClick}>
                     ✏ Modifier les informations
                   </button>
 
                   <h5 className="mt-4">Téléchargements</h5>
-                  <button className="btn btn-outline-secondary w-100 mt-2">📄 Reçu d’inscription</button>
-                  <button className="btn btn-outline-secondary w-100 mt-2">🧾 Reçu des paiements</button>
+                  <button
+                    className="btn btn-outline-secondary w-100 mt-2"
+                    onClick={async () => {
+                      try {
+                        const token = localStorage.getItem("token");
+                        if (!token) {
+                          alert("Vous devez être connecté pour télécharger ce document.");
+                          return;
+                        }
+
+                        const response = await axios.get("http://127.0.0.1:8000/api/pdf/recu-inscription", {
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/pdf",
+                          },
+                          responseType: 'blob',
+                        });
+
+                        const url = window.URL.createObjectURL(new Blob([response.data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', 'recu_inscription.pdf');
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                        window.URL.revokeObjectURL(url);
+                      } catch (error) {
+                        console.error("Erreur téléchargement:", error);
+                        alert(`Erreur lors du téléchargement: ${error.message}`);
+                      }
+                    }}
+                  >
+                    📄 Reçu d'inscription
+                  </button>
+                  <button
+                    className="btn btn-outline-secondary w-100 mt-2"
+                    onClick={() => {
+                      const tabButton = document.querySelector('button[data-bs-target="#paiements"]');
+                      if (tabButton) tabButton.click();
+                    }}
+                  >
+                    🧾 Reçu des paiements
+                  </button>
                   {user.cours_completes && user.paiements_completes && user.examen_reussi ? (
-                    <button className="btn btn-success w-100 mt-3">🎉 Télécharger Certificat de Réussite</button>
+                    <button
+                      className="btn btn-success w-100 mt-3"
+                      onClick={async () => {
+                        try {
+                          const token = localStorage.getItem("token");
+                          if (!token) {
+                            alert("Vous devez être connecté pour télécharger ce document.");
+                            return;
+                          }
+
+                          const response = await axios.get("http://127.0.0.1:8000/api/pdf/certificat", {
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                              Accept: "application/pdf",
+                            },
+                            responseType: 'blob',
+                          });
+
+                          const url = window.URL.createObjectURL(new Blob([response.data]));
+                          const link = document.createElement('a');
+                          link.href = url;
+                          link.setAttribute('download', 'certificat_reussite.pdf');
+                          document.body.appendChild(link);
+                          link.click();
+                          link.remove();
+                          window.URL.revokeObjectURL(url);
+                        } catch (error) {
+                          console.error("Erreur téléchargement:", error);
+                          alert(`Erreur lors du téléchargement: ${error.message}`);
+                        }
+                      }}
+                    >
+                      🎉 Télécharger Certificat de Réussite
+                    </button>
                   ) : (
                     <p className="text-danger mt-3">⚠ Vous devez terminer tous les cours, tous les paiements et réussir l'examen.</p>
                   )}
@@ -295,15 +406,12 @@ export default function Dashboard() {
                         <p className="mt-2">{r.permis}</p>
                         <small>📅 {r.date} à {r.time}</small>
                       </div>
-
                       {r.status !== 'confirmed' && (
                         <button
                           className="btn btn-success"
                           onClick={async () => {
                             try {
                               await api.put(`/reservations/${r.id}/confirm`);
-                              // Mettre à jour l'état local pour refléter le changement
-                              // Idéalement, on rechargerait les données utilisateur ici
                               alert("Réservation confirmée !");
                               window.location.reload();
                             } catch (error) {
@@ -315,7 +423,6 @@ export default function Dashboard() {
                           ✅ Confirmer
                         </button>
                       )}
-
                       {r.status === 'confirmed' && (
                         <button className="btn btn-outline-secondary" disabled>Déjà validé</button>
                       )}
@@ -329,6 +436,65 @@ export default function Dashboard() {
           </>
         )}
       </div>
+
+      {/* MODALE DE MODIFICATION DE PROFIL */}
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modifier mes informations</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Nom</Form.Label>
+              <Form.Control
+                type="text"
+                name="nom"
+                value={editFormData.nom}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Prénom</Form.Label>
+              <Form.Control
+                type="text"
+                name="prenom"
+                value={editFormData.prenom}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                name="email"
+                value={editFormData.email}
+                onChange={handleEditChange}
+                disabled // L'email est souvent utilisé comme identifiant, à voir si on autorise la modif
+              />
+              <Form.Text className="text-muted">
+                L'email ne peut pas être modifié pour des raisons de sécurité.
+              </Form.Text>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Téléphone</Form.Label>
+              <Form.Control
+                type="text"
+                name="telephone"
+                value={editFormData.telephone}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+            Annuler
+          </Button>
+          <Button variant="primary" onClick={handleEditSubmit}>
+            Enregistrer les modifications
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
