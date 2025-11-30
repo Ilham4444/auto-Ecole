@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
@@ -10,7 +10,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(!contextUser);
   const navigate = useNavigate();
 
-  // État pour la modale de modification de profil
+  // ├ëtat pour la modale de modification de profil
   const [showEditModal, setShowEditModal] = useState(false);
   const [editFormData, setEditFormData] = useState({
     nom: "",
@@ -18,264 +18,321 @@ export default function Dashboard() {
     telephone: "",
     email: ""
   });
+
   useEffect(() => {
-    if (!contextUser) {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/compte");
+      return;
+    }
+
+    if (contextUser) {
+      setUser(contextUser);
       setLoading(false);
       return;
     }
 
-    import('../api.jsx').then(module => {
-      const api = module.default;
-      api.get('/dashboard')
-        .then((res) => {
-          const userData = {
-            ...res.data.user,
-            reservations: res.data.reservations || [],
-            paiements: res.data.paiements || [],
-            cours_code: res.data.progression?.cours?.fait || 0,
-            cours_conduite: res.data.progression?.conduite?.fait || 0,
-            candidates: res.data.candidates || [],
-          };
-          setUser(userData);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error("Erreur chargement dashboard", err);
-          setLoading(false);
-          if (err.response && err.response.status === 401) {
-            alert("Session expirée. Veuillez vous reconnecter.");
-            logoutUser();
-            navigate("/compte");
-          } else {
-            alert("Erreur de chargement des données. Veuillez réessayer.");
-          }
-        });
-    }, [contextUser, navigate, logoutUser]);
-
-    const handleLogout = () => {
-      logoutUser();
-      navigate("/compte");
-    };
-
-    // Gestion de l'ouverture de la modale
-    const handleEditClick = () => {
-      setEditFormData({
-        nom: user.nom || "",
-        prenom: user.prenom || "",
-        telephone: user.telephone || "",
-        email: user.email || ""
-      });
-      setShowEditModal(true);
-    };
-
-    // Gestion des changements dans le formulaire
-    const handleEditChange = (e) => {
-      setEditFormData({
-        ...editFormData,
-        [e.target.name]: e.target.value
-      });
-    };
-
-    // Soumission du formulaire de modification
-    const handleEditSubmit = async () => {
-      try {
-        const api = (await import('../api.jsx')).default;
-        const response = await api.put('/profil', editFormData);
-
-        if (response.data.status) {
-          alert("✅ Profil mis à jour avec succès !");
-          // Mettre à jour l'utilisateur localement avec les nouvelles données
-          setUser({ ...user, ...response.data.user });
-          setShowEditModal(false);
+    axios
+      .get("http://127.0.0.1:8000/api/dashboard", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      })
+      .then((res) => {
+        const userData = {
+          ...res.data.user,
+          reservations: res.data.reservations || [],
+          paiements: res.data.paiements || [],
+          cours_code: res.data.progression?.cours?.fait || 0,
+          cours_conduite: res.data.progression?.conduite?.fait || 0,
+          candidates: res.data.candidates || [],
+        };
+        setUser(userData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Erreur chargement dashboard", err);
+        setLoading(false);
+        if (err.response && err.response.status === 401) {
+          alert("Session expir├®e. Veuillez vous reconnecter.");
+          logoutUser();
+          navigate("/compte");
+        } else {
+          alert("Erreur de chargement des donn├®es. Veuillez r├®essayer.");
         }
-      } catch (error) {
-        console.error("Erreur mise à jour profil", error);
-        alert("❌ Erreur lors de la mise à jour du profil.");
+      });
+  }, [contextUser, navigate, logoutUser]);
+
+  const handleLogout = () => {
+    logoutUser();
+    navigate("/compte");
+  };
+
+  // Gestion de l'ouverture de la modale
+  const handleEditClick = () => {
+    setEditFormData({
+      nom: user.nom || "",
+      prenom: user.prenom || "",
+      telephone: user.telephone || "",
+      email: user.email || ""
+    });
+    setShowEditModal(true);
+  };
+
+  // Gestion des changements dans le formulaire
+  const handleEditChange = (e) => {
+    setEditFormData({
+      ...editFormData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  // Soumission du formulaire de modification
+  const handleEditSubmit = async () => {
+    try {
+      const api = (await import('../api.jsx')).default;
+      const response = await api.put('/profil', editFormData);
+
+      if (response.data.status) {
+        alert("Ô£à Profil mis ├á jour avec succ├¿s !");
+        // Mettre ├á jour l'utilisateur localement avec les nouvelles donn├®es
+        setUser({ ...user, ...response.data.user });
+        setShowEditModal(false);
       }
-    };
+    } catch (error) {
+      console.error("Erreur mise ├á jour profil", error);
+      alert("ÔØî Erreur lors de la mise ├á jour du profil.");
+    }
+  };
 
-    if (loading) return <div className="text-center mt-5"><div className="spinner-border text-primary" role="status"></div><p>Chargement...</p></div>;
-    if (!user) return <div className="text-center mt-5"><p>Erreur de chargement des données. Veuillez vous reconnecter.</p><button className="btn btn-primary" onClick={() => navigate("/compte")}>Se connecter</button></div>;
+  if (loading) return <div className="text-center mt-5"><div className="spinner-border text-primary" role="status"></div><p>Chargement...</p></div>;
+  if (!user) return <div className="text-center mt-5"><p>Erreur de chargement des donn├®es. Veuillez vous reconnecter.</p><button className="btn btn-primary" onClick={() => navigate("/compte")}>Se connecter</button></div>;
 
-    return (
-      <>
-        <div className="dashboard-container">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2>Tableau de Bord {user.role === 'moniteur' ? '(Moniteur)' : ''}</h2>
-            <div>
-              <button className="btn btn-outline-primary me-2" onClick={() => navigate("/")}>
-                🏠 Accueil
-              </button>
-            </div>
+  return (
+    <>
+      <div className="dashboard-container">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2>Tableau de Bord {user.role === 'moniteur' ? '(Moniteur)' : ''}</h2>
+          <div>
+            <button className="btn btn-outline-primary me-2" onClick={() => navigate("/")}>
+              ­ƒÅá Accueil
+            </button>
           </div>
+        </div>
 
-          <h4>Bienvenue {user.nom} {user.prenom}</h4>
+        <h4>Bienvenue {user.nom} {user.prenom}</h4>
 
-          {/* ================== VUE CANDIDAT ================== */}
-          {user.role === 'candidate' && (
-            <>
-              <div className="row mt-4">
-                <div className="col-md-4 mb-4">
-                  <div className="dashboard-card p-3">
-                    <h5>Code de la Route</h5>
-                    <p>Progression : {user.cours_code || 0}/20 heures</p>
-                    <div className="progress mb-2">
-                      <div className="progress-bar" style={{ width: `${(user.cours_code || 0) * 5}%` }}></div>
-                    </div>
-                    <small>Examen : {user.examen_code ? "Réussi" : "Non passé"}</small>
+        {/* ================== VUE CANDIDAT ================== */}
+        {user.role === 'candidate' && (
+          <>
+            <div className="row mt-4">
+              <div className="col-md-4 mb-4">
+                <div className="dashboard-card p-3">
+                  <h5>Code de la Route</h5>
+                  <p>Progression : {user.cours_code || 0}/20 heures</p>
+                  <div className="progress mb-2">
+                    <div className="progress-bar" style={{ width: `${(user.cours_code || 0) * 5}%` }}></div>
                   </div>
-                </div>
-
-                <div className="col-md-4 mb-4">
-                  <div className="dashboard-card p-3">
-                    <h5>Conduite Pratique</h5>
-                    <p>Progression : {user.cours_conduite || 0}/30 heures</p>
-                    <div className="progress mb-2">
-                      <div className="progress-bar" style={{ width: `${((user.cours_conduite || 0) / 30) * 100}%` }}></div>
-                    </div>
-                    <small>Heures restantes : {30 - (user.cours_conduite || 0)}h</small>
-                  </div>
-                </div>
-
-                <div className="col-md-4 mb-4">
-                  <div className="dashboard-card p-3 position-relative">
-                    <button className="btn btn-sm btn-primary position-absolute" style={{ top: "10px", right: "10px" }} onClick={() => navigate("/paiement")}>
-                      💳 Payer
-                    </button>
-                    <h5>Solde Restant</h5>
-                    <p>Payé : {user.total_paye || 0} Dh</p>
-                    <div className="progress mb-2">
-                      <div className="progress-bar" style={{ width: `${(user.total_paye || 0) / (user.total_a_payer || 1) * 100}%` }}></div>
-                    </div>
-                    <small>Reste à payer : {(user.total_a_payer || 0) - (user.total_paye || 0)} Dh</small>
-                  </div>
+                  <small>Examen : {user.examen_code ? "R├®ussi" : "Non pass├®"}</small>
                 </div>
               </div>
 
-              <div className="mt-5">
-                <ul className="nav nav-tabs">
-                  <li className="nav-item">
-                    <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#reservations">Réservations</button>
-                  </li>
-                  <li className="nav-item">
-                    <button className="nav-link" data-bs-toggle="tab" data-bs-target="#paiements">Paiements</button>
-                  </li>
-                  <li className="nav-item">
-                    <button className="nav-link" data-bs-toggle="tab" data-bs-target="#profil">Mon Profil</button>
-                  </li>
-                </ul>
-
-                <div className="tab-content p-3 border border-top-0">
-                  <div className="tab-pane fade show active" id="reservations">
-                    <h4>Mes Réservations</h4>
-                    {user.reservations && user.reservations.length > 0 ? (
-                      user.reservations.map((r) => (
-                        <div className="card p-3 mt-3" key={r.id}>
-                          <div className="d-flex justify-content-between align-items-center">
-                            <div>
-                              <h5>{r.type}</h5>
-                              <span className="badge bg-primary">{r.status}</span>
-                              <p className="mt-2">{r.permis?.title || 'Permis'}</p>
-                              <small>📅 {r.date} à {r.time}</small>
-                            </div>
-                            <button
-                              className="btn btn-outline-danger"
-                              onClick={async () => {
-                                if (window.confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
-                                  try {
-                                    const api = (await import('../api.jsx')).default;
-                                    await api.delete(`/reservations/${r.id}`);
-                                    alert('✅ Réservation annulée avec succès');
-                                    window.location.reload();
-                                  } catch (error) {
-                                    console.error('Erreur:', error);
-                                    alert('❌ Erreur lors de l\'annulation');
-                                  }
-                                }
-                              }}
-                            >
-                              🗑 Annuler
-                            </button>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p>Aucune réservation</p>
-                    )}
+              <div className="col-md-4 mb-4">
+                <div className="dashboard-card p-3">
+                  <h5>Conduite Pratique</h5>
+                  <p>Progression : {user.cours_conduite || 0}/30 heures</p>
+                  <div className="progress mb-2">
+                    <div className="progress-bar" style={{ width: `${((user.cours_conduite || 0) / 30) * 100}%` }}></div>
                   </div>
+                  <small>Heures restantes : {30 - (user.cours_conduite || 0)}h</small>
+                </div>
+              </div>
 
-                  <div className="tab-pane fade" id="paiements">
-                    <h4>Historique des Paiements</h4>
-                    {user.paiements && user.paiements.length > 0 ? (
-                      user.paiements.map((p) => (
-                        <div className="card p-3 mt-3" key={p.id}>
-                          <h5>{p.montant} Dh</h5>
-                          <p>📅 {p.date}</p>
-                          <span className="badge bg-success">{p.status}</span>
+              <div className="col-md-4 mb-4">
+                <div className="dashboard-card p-3 position-relative">
+                  <button className="btn btn-sm btn-primary position-absolute" style={{ top: "10px", right: "10px" }} onClick={() => navigate("/paiement")}>
+                    ­ƒÆ│ Payer
+                  </button>
+                  <h5>Solde Restant</h5>
+                  <p>Pay├® : {user.total_paye || 0} Dh</p>
+                  <div className="progress mb-2">
+                    <div className="progress-bar" style={{ width: `${(user.total_paye || 0) / (user.total_a_payer || 1) * 100}%` }}></div>
+                  </div>
+                  <small>Reste ├á payer : {(user.total_a_payer || 0) - (user.total_paye || 0)} Dh</small>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <ul className="nav nav-tabs">
+                <li className="nav-item">
+                  <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#reservations">R├®servations</button>
+                </li>
+                <li className="nav-item">
+                  <button className="nav-link" data-bs-toggle="tab" data-bs-target="#paiements">Paiements</button>
+                </li>
+                <li className="nav-item">
+                  <button className="nav-link" data-bs-toggle="tab" data-bs-target="#profil">Mon Profil</button>
+                </li>
+              </ul>
+
+              <div className="tab-content p-3 border border-top-0">
+                <div className="tab-pane fade show active" id="reservations">
+                  <h4>Mes R├®servations</h4>
+                  {user.reservations && user.reservations.length > 0 ? (
+                    user.reservations.map((r) => (
+                      <div className="card p-3 mt-3" key={r.id}>
+                        <div className="d-flex justify-content-between align-items-center">
+                          <div>
+                            <h5>{r.type}</h5>
+                            <span className="badge bg-primary">{r.status}</span>
+                            <p className="mt-2">{r.permis}</p>
+                            <small>­ƒôà {r.date} ├á {r.time}</small>
+                          </div>
                           <button
-                            className="btn btn-sm btn-secondary mt-2"
+                            className="btn btn-outline-danger"
                             onClick={async () => {
-                              try {
-                                const token = localStorage.getItem("token");
-                                if (!token) {
-                                  alert("Vous devez être connecté pour télécharger ce document.");
-                                  return;
+                              if (window.confirm('├ètes-vous s├╗r de vouloir annuler cette r├®servation ?')) {
+                                try {
+                                  const api = (await import('../api.jsx')).default;
+                                  await api.delete(`/reservations/${r.id}`);
+                                  alert('Ô£à R├®servation annul├®e avec succ├¿s');
+                                  window.location.reload();
+                                } catch (error) {
+                                  console.error('Erreur:', error);
+                                  alert('ÔØî Erreur lors de l\'annulation');
                                 }
-
-                                const response = await axios.get(`http://127.0.0.1:8000/api/pdf/recu-paiement/${p.id}`, {
-                                  headers: {
-                                    Authorization: `Bearer ${token}`,
-                                    Accept: "application/pdf",
-                                  },
-                                  responseType: 'blob',
-                                });
-
-                                const url = window.URL.createObjectURL(new Blob([response.data]));
-                                const link = document.createElement('a');
-                                link.href = url;
-                                link.setAttribute('download', `recu_paiement_${p.id}.pdf`);
-                                document.body.appendChild(link);
-                                link.click();
-                                link.remove();
-                                window.URL.revokeObjectURL(url);
-                              } catch (error) {
-                                console.error("Erreur téléchargement:", error);
-                                alert(`Erreur lors du téléchargement: ${error.message}`);
                               }
                             }}
                           >
-                            📄 Télécharger Reçu
+                            ­ƒùæ Annuler
                           </button>
                         </div>
-                      ))
-                    ) : (
-                      <p>Aucun paiement trouvé.</p>
-                    )}
-                  </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p>Aucune r├®servation</p>
+                  )}
+                </div>
 
-                  <div className="tab-pane fade" id="profil">
-                    <h4>Mon Profil</h4>
-                    <p><strong>Nom :</strong> {user.nom} {user.prenom}</p>
-                    <p><strong>Email :</strong> {user.email}</p>
-                    <p><strong>Téléphone :</strong> {user.telephone}</p>
-                    <p><strong>Catégorie du permis :</strong> {user.categorie_permis}</p>
+                <div className="tab-pane fade" id="paiements">
+                  <h4>Historique des Paiements</h4>
+                  {user.paiements && user.paiements.length > 0 ? (
+                    user.paiements.map((p) => (
+                      <div className="card p-3 mt-3" key={p.id}>
+                        <h5>{p.montant} Dh</h5>
+                        <p>­ƒôà {p.date}</p>
+                        <span className="badge bg-success">{p.status}</span>
+                        <button
+                          className="btn btn-sm btn-secondary mt-2"
+                          onClick={async () => {
+                            try {
+                              const token = localStorage.getItem("token");
+                              if (!token) {
+                                alert("Vous devez ├¬tre connect├® pour t├®l├®charger ce document.");
+                                return;
+                              }
 
-                    <button className="btn btn-primary mt-2" onClick={handleEditClick}>
-                      ✏ Modifier les informations
-                    </button>
+                              const response = await axios.get(`http://127.0.0.1:8000/api/pdf/recu-paiement/${p.id}`, {
+                                headers: {
+                                  Authorization: `Bearer ${token}`,
+                                  Accept: "application/pdf",
+                                },
+                                responseType: 'blob',
+                              });
 
-                    <h5 className="mt-4">Téléchargements</h5>
+                              const url = window.URL.createObjectURL(new Blob([response.data]));
+                              const link = document.createElement('a');
+                              link.href = url;
+                              link.setAttribute('download', `recu_paiement_${p.id}.pdf`);
+                              document.body.appendChild(link);
+                              link.click();
+                              link.remove();
+                              window.URL.revokeObjectURL(url);
+                            } catch (error) {
+                              console.error("Erreur t├®l├®chargement:", error);
+                              alert(`Erreur lors du t├®l├®chargement: ${error.message}`);
+                            }
+                          }}
+                        >
+                          ­ƒôä T├®l├®charger Re├ºu
+                        </button>
+                      </div>
+                    ))
+                  ) : (
+                    <p>Aucun paiement trouv├®.</p>
+                  )}
+                </div>
+
+                <div className="tab-pane fade" id="profil">
+                  <h4>Mon Profil</h4>
+                  <p><strong>Nom :</strong> {user.nom} {user.prenom}</p>
+                  <p><strong>Email :</strong> {user.email}</p>
+                  <p><strong>T├®l├®phone :</strong> {user.telephone}</p>
+                  <p><strong>Cat├®gorie du permis :</strong> {user.categorie_permis}</p>
+
+                  <button className="btn btn-primary mt-2" onClick={handleEditClick}>
+                    Ô£Å Modifier les informations
+                  </button>
+
+                  <h5 className="mt-4">T├®l├®chargements</h5>
+                  <button
+                    className="btn btn-outline-secondary w-100 mt-2"
+                    onClick={async () => {
+                      try {
+                        const token = localStorage.getItem("token");
+                        if (!token) {
+                          alert("Vous devez ├¬tre connect├® pour t├®l├®charger ce document.");
+                          return;
+                        }
+
+                        const response = await axios.get("http://127.0.0.1:8000/api/pdf/recu-inscription", {
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/pdf",
+                          },
+                          responseType: 'blob',
+                        });
+
+                        const url = window.URL.createObjectURL(new Blob([response.data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', 'recu_inscription.pdf');
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                        window.URL.revokeObjectURL(url);
+                      } catch (error) {
+                        console.error("Erreur t├®l├®chargement:", error);
+                        alert(`Erreur lors du t├®l├®chargement: ${error.message}`);
+                      }
+                    }}
+                  >
+                    ­ƒôä Re├ºu d'inscription
+                  </button>
+                  <button
+                    className="btn btn-outline-secondary w-100 mt-2"
+                    onClick={() => {
+                      const tabButton = document.querySelector('button[data-bs-target="#paiements"]');
+                      if (tabButton) tabButton.click();
+                    }}
+                  >
+                    ­ƒº¥ Re├ºu des paiements
+                  </button>
+                  {user.cours_completes && user.paiements_completes && user.examen_reussi ? (
                     <button
-                      className="btn btn-outline-secondary w-100 mt-2"
+                      className="btn btn-success w-100 mt-3"
                       onClick={async () => {
                         try {
                           const token = localStorage.getItem("token");
                           if (!token) {
-                            alert("Vous devez être connecté pour télécharger ce document.");
+                            alert("Vous devez ├¬tre connect├® pour t├®l├®charger ce document.");
                             return;
                           }
 
-                          const response = await axios.get("http://127.0.0.1:8000/api/pdf/recu-inscription", {
+                          const response = await axios.get("http://127.0.0.1:8000/api/pdf/certificat", {
                             headers: {
                               Authorization: `Bearer ${token}`,
                               Accept: "application/pdf",
@@ -286,247 +343,158 @@ export default function Dashboard() {
                           const url = window.URL.createObjectURL(new Blob([response.data]));
                           const link = document.createElement('a');
                           link.href = url;
-                          link.setAttribute('download', 'recu_inscription.pdf');
+                          link.setAttribute('download', 'certificat_reussite.pdf');
                           document.body.appendChild(link);
                           link.click();
                           link.remove();
                           window.URL.revokeObjectURL(url);
                         } catch (error) {
-                          console.error("Erreur téléchargement:", error);
-                          alert(`Erreur lors du téléchargement: ${error.message}`);
+                          console.error("Erreur t├®l├®chargement:", error);
+                          alert(`Erreur lors du t├®l├®chargement: ${error.message}`);
                         }
                       }}
                     >
-                      📄 Reçu d'inscription
+                      ­ƒÄë T├®l├®charger Certificat de R├®ussite
                     </button>
-                    <button
-                      className="btn btn-outline-secondary w-100 mt-2"
-                      onClick={() => {
-                        const tabButton = document.querySelector('button[data-bs-target="#paiements"]');
-                        if (tabButton) tabButton.click();
-                      }}
-                    >
-                      🧾 Reçu des paiements
-                    </button>
-                    {user.cours_completes && user.paiements_completes && user.examen_reussi ? (
-                      <button
-                        className="btn btn-success w-100 mt-3"
-                        onClick={async () => {
-                          try {
-                            const token = localStorage.getItem("token");
-                            if (!token) {
-                              alert("Vous devez être connecté pour télécharger ce document.");
-                              return;
+                  ) : (
+                    <p className="text-danger mt-3">ÔÜá Vous devez terminer tous les cours, tous les paiements et r├®ussir l'examen.</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* ================== VUE MONITEUR ================== */}
+        {user.role === 'moniteur' && (
+          <>
+            <div className="row mt-4">
+              <div className="col-md-4 mb-4">
+                <div className="dashboard-card p-3">
+                  <h5>Mes ├ël├¿ves</h5>
+                  <p>Total : {user.candidates ? user.candidates.length : 0} ├®l├¿ves</p>
+                  <button className="btn btn-primary btn-sm">Voir la liste</button>
+                </div>
+              </div>
+              <div className="col-md-4 mb-4">
+                <div className="dashboard-card p-3">
+                  <h5>Planning Aujourd'hui</h5>
+                  <p>{user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0} le├ºons confirm├®es</p>
+                  <button className="btn btn-info btn-sm text-white">Voir le planning</button>
+                </div>
+              </div>
+              <div className="col-md-4 mb-4">
+                <div className="dashboard-card p-3">
+                  <h5>Ma Disponibilit├®</h5>
+                  <p>G├®rer vos cr├®neaux horaires</p>
+                  <button className="btn btn-warning btn-sm text-white" onClick={() => alert("Fonctionnalit├® de gestion de disponibilit├® ├á venir")}>G├®rer</button>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <h4>Gestion des R├®servations</h4>
+              {user.reservations && user.reservations.length > 0 ? (
+                user.reservations.map((r) => (
+                  <div className="card p-3 mt-3" key={r.id}>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h5>{r.type} avec {r.student_name || "├ël├¿ve"}</h5>
+                        <span className={`badge ${r.status === 'confirmed' ? 'bg-success' : 'bg-warning'}`}>
+                          {r.status === 'confirmed' ? 'Confirm├®' : 'En attente'}
+                        </span>
+                        <p className="mt-2">{r.permis}</p>
+                        <small>­ƒôà {r.date} ├á {r.time}</small>
+                      </div>
+                      {r.status !== 'confirmed' && (
+                        <button
+                          className="btn btn-success"
+                          onClick={async () => {
+                            try {
+                              await api.put(`/reservations/${r.id}/confirm`);
+                              alert("R├®servation confirm├®e !");
+                              window.location.reload();
+                            } catch (error) {
+                              console.error("Erreur confirmation", error);
+                              alert("Erreur lors de la confirmation");
                             }
-
-                            const response = await axios.get("http://127.0.0.1:8000/api/pdf/certificat", {
-                              headers: {
-                                Authorization: `Bearer ${token}`,
-                                Accept: "application/pdf",
-                              },
-                              responseType: 'blob',
-                            });
-
-                            const url = window.URL.createObjectURL(new Blob([response.data]));
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.setAttribute('download', 'certificat_reussite.pdf');
-                            document.body.appendChild(link);
-                            link.click();
-                            link.remove();
-                            window.URL.revokeObjectURL(url);
-                          } catch (error) {
-                            console.error("Erreur téléchargement:", error);
-                            alert(`Erreur lors du téléchargement: ${error.message}`);
-                          }
-                        }}
-                      >
-                        🎉 Télécharger Certificat de Réussite
-                      </button>
-                    ) : (
-                      <p className="text-danger mt-3">⚠ Vous devez terminer tous les cours, tous les paiements et réussir l'examen.</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-
-          {/* ================== VUE MONITEUR ================== */}
-          {user.role === 'moniteur' && (
-            <>
-              <div className="row mt-4">
-                <div className="col-md-12 mb-4">
-                  <div className="dashboard-card p-3">
-                    <h5>📚 Mes Élèves Assignés</h5>
-                    <p className="text-muted">Total : {user.candidates ? user.candidates.length : 0} élève(s)</p>
-
-                    {user.candidates && user.candidates.length > 0 ? (
-                      <div className="table-responsive">
-                        <table className="table table-hover">
-                          <thead>
-                            <tr>
-                              <th>Nom</th>
-                              <th>Email</th>
-                              <th>Téléphone</th>
-                              <th>Permis</th>
-                              <th>Assigné le</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {user.candidates.map((eleve) => (
-                              <tr key={eleve.id}>
-                                <td>{eleve.nom} {eleve.prenom}</td>
-                                <td>{eleve.email}</td>
-                                <td>{eleve.telephone}</td>
-                                <td>
-                                  <span className="badge bg-primary">{eleve.categorie_permis || 'N/A'}</span>
-                                </td>
-                                <td>
-                                  <small>{eleve.assigned_at ? new Date(eleve.assigned_at).toLocaleDateString() : 'N/A'}</small>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    ) : (
-                      <div className="alert alert-info">
-                        Aucun élève ne vous est assigné pour le moment. Contactez l'administrateur.
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-md-4 mb-4">
-                  <div className="dashboard-card p-3">
-                    <h5>Planning Aujourd'hui</h5>
-                    <p>{user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0} leçons confirmées</p>
-                    <button className="btn btn-info btn-sm text-white">Voir le planning</button>
-                  </div>
-                </div>
-                <div className="col-md-4 mb-4">
-                  <div className="dashboard-card p-3">
-                    <h5>Ma Disponibilité</h5>
-                    <p>Gérer vos créneaux horaires</p>
-                    <button className="btn btn-warning btn-sm text-white" onClick={() => alert("Fonctionnalité de gestion de disponibilité à venir")}>Gérer</button>
-                  </div>
-                </div>
-                <div className="col-md-4 mb-4">
-                  <div className="dashboard-card p-3">
-                    <h5>Statistiques</h5>
-                    <p>Réservations totales: {user.reservations ? user.reservations.length : 0}</p>
-                    <button className="btn btn-secondary btn-sm">Voir détails</button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-5">
-                <h4>Gestion des Réservations</h4>
-                {user.reservations && user.reservations.length > 0 ? (
-                  user.reservations.map((r) => (
-                    <div className="card p-3 mt-3" key={r.id}>
-                      <div className="d-flex justify-content-between align-items-center">
-                        <div>
-                          <h5>{r.type} avec {r.student_name || "Élève"}</h5>
-                          <span className={`badge ${r.status === 'confirmed' ? 'bg-success' : 'bg-warning'}`}>
-                            {r.status === 'confirmed' ? 'Confirmé' : 'En attente'}
-                          </span>
-                          <p className="mt-2">{r.permis}</p>
-                          <small>📅 {r.date} à {r.time}</small>
-                        </div>
-                        {r.status !== 'confirmed' && (
-                          <button
-                            className="btn btn-success"
-                            onClick={async () => {
-                              try {
-                                const api = (await import('../api.jsx')).default;
-                                await api.put(`/reservations/${r.id}/confirm`);
-                                alert("Réservation confirmée !");
-                                window.location.reload();
-                              } catch (error) {
-                                console.error("Erreur confirmation", error);
-                                alert("Erreur lors de la confirmation");
-                              }
-                            }}
-                          >
-                            ✅ Confirmer
-                          </button>
-                        )}
-                        {r.status === 'confirmed' && (
-                          <button className="btn btn-outline-secondary" disabled>Déjà validé</button>
-                        )}
-                      </div>
+                          }}
+                        >
+                          Ô£à Confirmer
+                        </button>
+                      )}
+                      {r.status === 'confirmed' && (
+                        <button className="btn btn-outline-secondary" disabled>D├®j├á valid├®</button>
+                      )}
                     </div>
-                  ))
-                ) : (
-                  <p>Aucune réservation trouvée.</p>
-                )}
-              </div>
-            </>
-          )}
-        </div>
+                  </div>
+                ))
+              ) : (
+                <p>Aucune r├®servation trouv├®e.</p>
+              )}
+            </div>
+          </>
+        )}
+      </div>
 
-        {/* MODALE DE MODIFICATION DE PROFIL */}
-        <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Modifier mes informations</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group className="mb-3">
-                <Form.Label>Nom</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="nom"
-                  value={editFormData.nom}
-                  onChange={handleEditChange}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Prénom</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="prenom"
-                  value={editFormData.prenom}
-                  onChange={handleEditChange}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
-                  value={editFormData.email}
-                  onChange={handleEditChange}
-                  disabled
-                />
-                <Form.Text className="text-muted">
-                  L'email ne peut pas être modifié pour des raisons de sécurité.
-                </Form.Text>
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Téléphone</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="telephone"
-                  value={editFormData.telephone}
-                  onChange={handleEditChange}
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-              Annuler
-            </Button>
-            <Button variant="primary" onClick={handleEditSubmit}>
-              Enregistrer les modifications
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  }
+      {/* MODALE DE MODIFICATION DE PROFIL */}
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modifier mes informations</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Nom</Form.Label>
+              <Form.Control
+                type="text"
+                name="nom"
+                value={editFormData.nom}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Pr├®nom</Form.Label>
+              <Form.Control
+                type="text"
+                name="prenom"
+                value={editFormData.prenom}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                name="email"
+                value={editFormData.email}
+                onChange={handleEditChange}
+                disabled // L'email est souvent utilis├® comme identifiant, ├á voir si on autorise la modif
+              />
+              <Form.Text className="text-muted">
+                L'email ne peut pas ├¬tre modifi├® pour des raisons de s├®curit├®.
+              </Form.Text>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>T├®l├®phone</Form.Label>
+              <Form.Control
+                type="text"
+                name="telephone"
+                value={editFormData.telephone}
+                onChange={handleEditChange}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+            Annuler
+          </Button>
+          <Button variant="primary" onClick={handleEditSubmit}>
+            Enregistrer les modifications
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
