@@ -9,15 +9,17 @@ class CreatePaiementsTable extends Migration
 {
     public function up()
     {
-        Schema::create('paiements', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->integer('montant');
-            $table->string('status')->default('Payé'); // Payé / En attente / Remboursé
-            $table->date('date');
-            $table->string('motif')->nullable(); // ex: "Inscription Permis B"
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('paiements')) {
+            Schema::create('paiements', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('user_id')->constrained()->onDelete('cascade');
+                $table->integer('montant');
+                $table->string('status')->default('Payé'); // Payé / En attente / Remboursé
+                $table->date('date');
+                $table->string('motif')->nullable(); // ex: "Inscription Permis B"
+                $table->timestamps();
+            });
+        }
     }
 
     public function down()

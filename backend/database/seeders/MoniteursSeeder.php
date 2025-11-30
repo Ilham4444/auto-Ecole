@@ -26,6 +26,7 @@ class MoniteursSeeder extends Seeder
                 'carte_nationale' => 'A100001',
                 'recto_carte_nationale' => 'default_recto.jpg',
                 'verso_carte_nationale' => 'default_verso.jpg',
+                'specialite_permis' => 'B',
             ],
             [
                 'nom' => 'Bennani',
@@ -39,6 +40,7 @@ class MoniteursSeeder extends Seeder
                 'carte_nationale' => 'A100002',
                 'recto_carte_nationale' => 'default_recto.jpg',
                 'verso_carte_nationale' => 'default_verso.jpg',
+                'specialite_permis' => 'B',
             ],
             [
                 'nom' => 'Alaoui',
@@ -52,6 +54,7 @@ class MoniteursSeeder extends Seeder
                 'carte_nationale' => 'A100003',
                 'recto_carte_nationale' => 'default_recto.jpg',
                 'verso_carte_nationale' => 'default_verso.jpg',
+                'specialite_permis' => 'A',
             ],
             [
                 'nom' => 'El Idrissi',
@@ -65,6 +68,7 @@ class MoniteursSeeder extends Seeder
                 'carte_nationale' => 'A100004',
                 'recto_carte_nationale' => 'default_recto.jpg',
                 'verso_carte_nationale' => 'default_verso.jpg',
+                'specialite_permis' => 'C',
             ],
         ];
 

@@ -13,6 +13,7 @@ import Apropos from "./pages/Apropos";
 import Compte from "./pages/Compte";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import Paiement from "./pages/Paiement";
 
 
@@ -53,6 +54,7 @@ function AppContent() {
           <Route path="/apropos" element={<Apropos />} />
           <Route path="/paiement" element={<Paiement />} />
           <Route path="/dashboard" element={<PrivateRoute>  <Dashboard /> </PrivateRoute>} />
+          <Route path="/admin" element={<PrivateRoute>  <AdminDashboard /> </PrivateRoute>} />
 
           {/* les 2 modals gardent Home derrière */}
           <Route path="/compte" element={<Home />} />

@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('reservations', function (Blueprint $table) {
-            $table->string('status')->default('pending'); // pending, confirmed, cancelled
-        });
+        if (!Schema::hasColumn('reservations', 'status')) {
+            Schema::table('reservations', function (Blueprint $table) {
+                $table->string('status')->default('pending'); // pending, confirmed, cancelled
+            });
+        }
     }
 
     /**

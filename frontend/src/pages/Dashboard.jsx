@@ -369,13 +369,50 @@ export default function Dashboard() {
         {user.role === 'moniteur' && (
           <>
             <div className="row mt-4">
-              <div className="col-md-4 mb-4">
+              <div className="col-md-12 mb-4">
                 <div className="dashboard-card p-3">
-                  <h5>Mes Élèves</h5>
-                  <p>Total : {user.candidates ? user.candidates.length : 0} élèves</p>
-                  <button className="btn btn-primary btn-sm">Voir la liste</button>
+                  <h5>📚 Mes Élèves Assignés</h5>
+                  <p className="text-muted">Total : {user.candidates ? user.candidates.length : 0} élève(s)</p>
+
+                  {user.candidates && user.candidates.length > 0 ? (
+                    <div className="table-responsive">
+                      <table className="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Téléphone</th>
+                            <th>Permis</th>
+                            <th>Assigné le</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {user.candidates.map((eleve) => (
+                            <tr key={eleve.id}>
+                              <td>{eleve.nom} {eleve.prenom}</td>
+                              <td>{eleve.email}</td>
+                              <td>{eleve.telephone}</td>
+                              <td>
+                                <span className="badge bg-primary">{eleve.categorie_permis || 'N/A'}</span>
+                              </td>
+                              <td>
+                                <small>{eleve.assigned_at ? new Date(eleve.assigned_at).toLocaleDateString() : 'N/A'}</small>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <div className="alert alert-info">
+                      Aucun élève ne vous est assigné pour le moment. Contactez l'administrateur.
+                    </div>
+                  )}
                 </div>
               </div>
+            </div>
+
+            <div className="row">
               <div className="col-md-4 mb-4">
                 <div className="dashboard-card p-3">
                   <h5>Planning Aujourd'hui</h5>
@@ -388,6 +425,13 @@ export default function Dashboard() {
                   <h5>Ma Disponibilité</h5>
                   <p>Gérer vos créneaux horaires</p>
                   <button className="btn btn-warning btn-sm text-white" onClick={() => alert("Fonctionnalité de gestion de disponibilité à venir")}>Gérer</button>
+                </div>
+              </div>
+              <div className="col-md-4 mb-4">
+                <div className="dashboard-card p-3">
+                  <h5>Statistiques</h5>
+                  <p>Réservations totales: {user.reservations ? user.reservations.length : 0}</p>
+                  <button className="btn btn-secondary btn-sm">Voir détails</button>
                 </div>
               </div>
             </div>

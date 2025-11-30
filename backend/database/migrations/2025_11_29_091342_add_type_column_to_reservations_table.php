@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('reservations', function (Blueprint $table) {
-            $table->string('type')->nullable()->after('time'); // Type de séance: code ou conduite
-        });
+        if (!Schema::hasColumn('reservations', 'type')) {
+            Schema::table('reservations', function (Blueprint $table) {
+                $table->string('type')->nullable()->after('time'); // Type de séance: code ou conduite
+            });
+        }
     }
 
     /**

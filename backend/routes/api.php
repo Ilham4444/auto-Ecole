@@ -8,6 +8,7 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\CertificatController;
 use App\Http\Controllers\Api\PermisController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /* ============================
@@ -45,6 +46,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /* --- Infos utilisateur connecté --- */
     Route::get('/user', [AuthController::class, 'user']);
+
+    /* ============================
+    |  ADMIN - GESTION DES ASSIGNATIONS
+    ============================ */
+    Route::prefix('admin')->group(function () {
+        Route::get('/candidates', [AdminController::class, 'getCandidates']);
+        Route::get('/monitors', [AdminController::class, 'getMonitors']);
+        Route::post('/assign', [AdminController::class, 'assignCandidate']);
+        Route::delete('/assign/{monitorId}/{candidatId}', [AdminController::class, 'unassignCandidate']);
+        Route::get('/assignments', [AdminController::class, 'getAssignments']);
+    });
 
     /* ============================
     |  PERMIS

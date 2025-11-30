@@ -27,7 +27,8 @@ class User extends Authenticatable
     'verso_carte_nationale',
     'certificat_medical',
     'is_active',
-    'role'
+    'role',
+    'specialite_permis'
 ];
 
     protected $hidden = [
@@ -93,5 +94,25 @@ class User extends Authenticatable
     public function fichiers()
     {
         return $this->hasMany(\App\Models\Fichier::class);
+    }
+
+    /**
+     * Pour les moniteurs : accéder à leurs élèves assignés
+     */
+    public function eleves()
+    {
+        return $this->belongsToMany(User::class, 'monitor_candidat', 'monitor_id', 'candidat_id')
+            ->withTimestamps()
+            ->withPivot('assigned_at');
+    }
+
+    /**
+     * Pour les candidats : accéder à leur moniteur assigné
+     */
+    public function moniteur()
+    {
+        return $this->belongsToMany(User::class, 'monitor_candidat', 'candidat_id', 'monitor_id')
+            ->withTimestamps()
+            ->withPivot('assigned_at');
     }
 }

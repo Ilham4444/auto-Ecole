@@ -96,8 +96,10 @@ class DashboardController extends Controller
             return response()->json(['status' => false, 'message' => 'Accès refusé'], 403);
         }
 
-        // 🔹 Liste des candidats (utilise le modèle User)
-        $candidates = User::where('role', 'candidate')->get(['id', 'nom', 'prenom', 'email', 'telephone']);
+        // 🔹 Liste des candidats assignés au moniteur (et non tous les candidats)
+        $candidates = $user->eleves()
+            ->select('users.id', 'users.nom', 'users.prenom', 'users.email', 'users.telephone', 'users.categorie_permis', 'monitor_candidat.assigned_at')
+            ->get();
 
         // 🔹 Réservations gérées par le moniteur (utilise la relation du modèle User)
         $reservations = $user->reservations()->orderBy('date', 'desc')->get();
