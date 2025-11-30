@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
@@ -10,7 +10,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(!contextUser);
   const navigate = useNavigate();
 
-  // ├ëtat pour la modale de modification de profil
+  // État pour la modale de modification de profil
   const [showEditModal, setShowEditModal] = useState(false);
   const [editFormData, setEditFormData] = useState({
     nom: "",
@@ -56,11 +56,11 @@ export default function Dashboard() {
         console.error("Erreur chargement dashboard", err);
         setLoading(false);
         if (err.response && err.response.status === 401) {
-          alert("Session expir├®e. Veuillez vous reconnecter.");
+          alert("Session expirée. Veuillez vous reconnecter.");
           logoutUser();
           navigate("/compte");
         } else {
-          alert("Erreur de chargement des donn├®es. Veuillez r├®essayer.");
+          alert("Erreur de chargement des données. Veuillez réessayer.");
         }
       });
   }, [contextUser, navigate, logoutUser]);
@@ -96,19 +96,19 @@ export default function Dashboard() {
       const response = await api.put('/profil', editFormData);
 
       if (response.data.status) {
-        alert("Ô£à Profil mis ├á jour avec succ├¿s !");
-        // Mettre ├á jour l'utilisateur localement avec les nouvelles donn├®es
+        alert("✅ Profil mis à jour avec succès !");
+        // Mettre à jour l'utilisateur localement avec les nouvelles données
         setUser({ ...user, ...response.data.user });
         setShowEditModal(false);
       }
     } catch (error) {
-      console.error("Erreur mise ├á jour profil", error);
-      alert("ÔØî Erreur lors de la mise ├á jour du profil.");
+      console.error("Erreur mise à jour profil", error);
+      alert("❌ Erreur lors de la mise à jour du profil.");
     }
   };
 
   if (loading) return <div className="text-center mt-5"><div className="spinner-border text-primary" role="status"></div><p>Chargement...</p></div>;
-  if (!user) return <div className="text-center mt-5"><p>Erreur de chargement des donn├®es. Veuillez vous reconnecter.</p><button className="btn btn-primary" onClick={() => navigate("/compte")}>Se connecter</button></div>;
+  if (!user) return <div className="text-center mt-5"><p>Erreur de chargement des données. Veuillez vous reconnecter.</p><button className="btn btn-primary" onClick={() => navigate("/compte")}>Se connecter</button></div>;
 
   return (
     <>
@@ -117,7 +117,7 @@ export default function Dashboard() {
           <h2>Tableau de Bord {user.role === 'moniteur' ? '(Moniteur)' : ''}</h2>
           <div>
             <button className="btn btn-outline-primary me-2" onClick={() => navigate("/")}>
-              ­ƒÅá Accueil
+              🏠 Accueil
             </button>
           </div>
         </div>
@@ -135,7 +135,7 @@ export default function Dashboard() {
                   <div className="progress mb-2">
                     <div className="progress-bar" style={{ width: `${(user.cours_code || 0) * 5}%` }}></div>
                   </div>
-                  <small>Examen : {user.examen_code ? "R├®ussi" : "Non pass├®"}</small>
+                  <small>Examen : {user.examen_code ? "Réussi" : "Non passé"}</small>
                 </div>
               </div>
 
@@ -153,14 +153,14 @@ export default function Dashboard() {
               <div className="col-md-4 mb-4">
                 <div className="dashboard-card p-3 position-relative">
                   <button className="btn btn-sm btn-primary position-absolute" style={{ top: "10px", right: "10px" }} onClick={() => navigate("/paiement")}>
-                    ­ƒÆ│ Payer
+                    💳 Payer
                   </button>
                   <h5>Solde Restant</h5>
-                  <p>Pay├® : {user.total_paye || 0} Dh</p>
+                  <p>Payé : {user.total_paye || 0} Dh</p>
                   <div className="progress mb-2">
                     <div className="progress-bar" style={{ width: `${(user.total_paye || 0) / (user.total_a_payer || 1) * 100}%` }}></div>
                   </div>
-                  <small>Reste ├á payer : {(user.total_a_payer || 0) - (user.total_paye || 0)} Dh</small>
+                  <small>Reste à payer : {(user.total_a_payer || 0) - (user.total_paye || 0)} Dh</small>
                 </div>
               </div>
             </div>
@@ -168,7 +168,7 @@ export default function Dashboard() {
             <div className="mt-5">
               <ul className="nav nav-tabs">
                 <li className="nav-item">
-                  <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#reservations">R├®servations</button>
+                  <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#reservations">Réservations</button>
                 </li>
                 <li className="nav-item">
                   <button className="nav-link" data-bs-toggle="tab" data-bs-target="#paiements">Paiements</button>
@@ -180,7 +180,7 @@ export default function Dashboard() {
 
               <div className="tab-content p-3 border border-top-0">
                 <div className="tab-pane fade show active" id="reservations">
-                  <h4>Mes R├®servations</h4>
+                  <h4>Mes Réservations</h4>
                   {user.reservations && user.reservations.length > 0 ? (
                     user.reservations.map((r) => (
                       <div className="card p-3 mt-3" key={r.id}>
@@ -188,32 +188,32 @@ export default function Dashboard() {
                           <div>
                             <h5>{r.type}</h5>
                             <span className="badge bg-primary">{r.status}</span>
-                            <p className="mt-2">{r.permis}</p>
-                            <small>­ƒôà {r.date} ├á {r.time}</small>
+                            <p className="mt-2">{r.permis?.title || 'Permis'}</p>
+                            <small>📅 {r.date} à {r.time}</small>
                           </div>
                           <button
                             className="btn btn-outline-danger"
                             onClick={async () => {
-                              if (window.confirm('├ètes-vous s├╗r de vouloir annuler cette r├®servation ?')) {
+                              if (window.confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
                                 try {
                                   const api = (await import('../api.jsx')).default;
                                   await api.delete(`/reservations/${r.id}`);
-                                  alert('Ô£à R├®servation annul├®e avec succ├¿s');
+                                  alert('✅ Réservation annulée avec succès');
                                   window.location.reload();
                                 } catch (error) {
                                   console.error('Erreur:', error);
-                                  alert('ÔØî Erreur lors de l\'annulation');
+                                  alert('❌ Erreur lors de l\'annulation');
                                 }
                               }
                             }}
                           >
-                            ­ƒùæ Annuler
+                            🗑 Annuler
                           </button>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <p>Aucune r├®servation</p>
+                    <p>Aucune réservation</p>
                   )}
                 </div>
 
@@ -223,7 +223,7 @@ export default function Dashboard() {
                     user.paiements.map((p) => (
                       <div className="card p-3 mt-3" key={p.id}>
                         <h5>{p.montant} Dh</h5>
-                        <p>­ƒôà {p.date}</p>
+                        <p>📅 {p.date}</p>
                         <span className="badge bg-success">{p.status}</span>
                         <button
                           className="btn btn-sm btn-secondary mt-2"
@@ -231,11 +231,11 @@ export default function Dashboard() {
                             try {
                               const token = localStorage.getItem("token");
                               if (!token) {
-                                alert("Vous devez ├¬tre connect├® pour t├®l├®charger ce document.");
+                                alert("Vous devez être connecté pour télécharger ce document.");
                                 return;
                               }
 
-                              const response = await axios.get(`http://127.0.0.1:8000/api/pdf/recu-paiement/${p.id}`, {
+                              const response = await axios.get(`http://127.0.0.1:8000/api/paiements/${p.id}/recu`, {
                                 headers: {
                                   Authorization: `Bearer ${token}`,
                                   Accept: "application/pdf",
@@ -252,17 +252,17 @@ export default function Dashboard() {
                               link.remove();
                               window.URL.revokeObjectURL(url);
                             } catch (error) {
-                              console.error("Erreur t├®l├®chargement:", error);
-                              alert(`Erreur lors du t├®l├®chargement: ${error.message}`);
+                              console.error("Erreur téléchargement:", error);
+                              alert(`Erreur lors du téléchargement: ${error.message}`);
                             }
                           }}
                         >
-                          ­ƒôä T├®l├®charger Re├ºu
+                          📄 Télécharger Reçu
                         </button>
                       </div>
                     ))
                   ) : (
-                    <p>Aucun paiement trouv├®.</p>
+                    <p>Aucun paiement trouvé.</p>
                   )}
                 </div>
 
@@ -270,21 +270,21 @@ export default function Dashboard() {
                   <h4>Mon Profil</h4>
                   <p><strong>Nom :</strong> {user.nom} {user.prenom}</p>
                   <p><strong>Email :</strong> {user.email}</p>
-                  <p><strong>T├®l├®phone :</strong> {user.telephone}</p>
-                  <p><strong>Cat├®gorie du permis :</strong> {user.categorie_permis}</p>
+                  <p><strong>Téléphone :</strong> {user.telephone}</p>
+                  <p><strong>Catégorie du permis :</strong> {user.categorie_permis}</p>
 
                   <button className="btn btn-primary mt-2" onClick={handleEditClick}>
-                    Ô£Å Modifier les informations
+                    ✏ Modifier les informations
                   </button>
 
-                  <h5 className="mt-4">T├®l├®chargements</h5>
+                  <h5 className="mt-4">Téléchargements</h5>
                   <button
                     className="btn btn-outline-secondary w-100 mt-2"
                     onClick={async () => {
                       try {
                         const token = localStorage.getItem("token");
                         if (!token) {
-                          alert("Vous devez ├¬tre connect├® pour t├®l├®charger ce document.");
+                          alert("Vous devez être connecté pour télécharger ce document.");
                           return;
                         }
 
@@ -305,12 +305,12 @@ export default function Dashboard() {
                         link.remove();
                         window.URL.revokeObjectURL(url);
                       } catch (error) {
-                        console.error("Erreur t├®l├®chargement:", error);
-                        alert(`Erreur lors du t├®l├®chargement: ${error.message}`);
+                        console.error("Erreur téléchargement:", error);
+                        alert(`Erreur lors du téléchargement: ${error.message}`);
                       }
                     }}
                   >
-                    ­ƒôä Re├ºu d'inscription
+                    📄 Reçu d'inscription
                   </button>
                   <button
                     className="btn btn-outline-secondary w-100 mt-2"
@@ -319,7 +319,7 @@ export default function Dashboard() {
                       if (tabButton) tabButton.click();
                     }}
                   >
-                    ­ƒº¥ Re├ºu des paiements
+                    🧾 Reçu des paiements
                   </button>
                   {user.cours_completes && user.paiements_completes && user.examen_reussi ? (
                     <button
@@ -328,7 +328,7 @@ export default function Dashboard() {
                         try {
                           const token = localStorage.getItem("token");
                           if (!token) {
-                            alert("Vous devez ├¬tre connect├® pour t├®l├®charger ce document.");
+                            alert("Vous devez être connecté pour télécharger ce document.");
                             return;
                           }
 
@@ -349,15 +349,15 @@ export default function Dashboard() {
                           link.remove();
                           window.URL.revokeObjectURL(url);
                         } catch (error) {
-                          console.error("Erreur t├®l├®chargement:", error);
-                          alert(`Erreur lors du t├®l├®chargement: ${error.message}`);
+                          console.error("Erreur téléchargement:", error);
+                          alert(`Erreur lors du téléchargement: ${error.message}`);
                         }
                       }}
                     >
-                      ­ƒÄë T├®l├®charger Certificat de R├®ussite
+                      🎉 Télécharger Certificat de Réussite
                     </button>
                   ) : (
-                    <p className="text-danger mt-3">ÔÜá Vous devez terminer tous les cours, tous les paiements et r├®ussir l'examen.</p>
+                    <p className="text-danger mt-3">⚠ Vous devez terminer tous les cours, tous les paiements et réussir l'examen.</p>
                   )}
                 </div>
               </div>
@@ -371,40 +371,40 @@ export default function Dashboard() {
             <div className="row mt-4">
               <div className="col-md-4 mb-4">
                 <div className="dashboard-card p-3">
-                  <h5>Mes ├ël├¿ves</h5>
-                  <p>Total : {user.candidates ? user.candidates.length : 0} ├®l├¿ves</p>
+                  <h5>Mes Élèves</h5>
+                  <p>Total : {user.candidates ? user.candidates.length : 0} élèves</p>
                   <button className="btn btn-primary btn-sm">Voir la liste</button>
                 </div>
               </div>
               <div className="col-md-4 mb-4">
                 <div className="dashboard-card p-3">
                   <h5>Planning Aujourd'hui</h5>
-                  <p>{user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0} le├ºons confirm├®es</p>
+                  <p>{user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0} leçons confirmées</p>
                   <button className="btn btn-info btn-sm text-white">Voir le planning</button>
                 </div>
               </div>
               <div className="col-md-4 mb-4">
                 <div className="dashboard-card p-3">
-                  <h5>Ma Disponibilit├®</h5>
-                  <p>G├®rer vos cr├®neaux horaires</p>
-                  <button className="btn btn-warning btn-sm text-white" onClick={() => alert("Fonctionnalit├® de gestion de disponibilit├® ├á venir")}>G├®rer</button>
+                  <h5>Ma Disponibilité</h5>
+                  <p>Gérer vos créneaux horaires</p>
+                  <button className="btn btn-warning btn-sm text-white" onClick={() => alert("Fonctionnalité de gestion de disponibilité à venir")}>Gérer</button>
                 </div>
               </div>
             </div>
 
             <div className="mt-5">
-              <h4>Gestion des R├®servations</h4>
+              <h4>Gestion des Réservations</h4>
               {user.reservations && user.reservations.length > 0 ? (
                 user.reservations.map((r) => (
                   <div className="card p-3 mt-3" key={r.id}>
                     <div className="d-flex justify-content-between align-items-center">
                       <div>
-                        <h5>{r.type} avec {r.student_name || "├ël├¿ve"}</h5>
+                        <h5>{r.type} avec {r.student_name || "Élève"}</h5>
                         <span className={`badge ${r.status === 'confirmed' ? 'bg-success' : 'bg-warning'}`}>
-                          {r.status === 'confirmed' ? 'Confirm├®' : 'En attente'}
+                          {r.status === 'confirmed' ? 'Confirmé' : 'En attente'}
                         </span>
                         <p className="mt-2">{r.permis}</p>
-                        <small>­ƒôà {r.date} ├á {r.time}</small>
+                        <small>📅 {r.date} à {r.time}</small>
                       </div>
                       {r.status !== 'confirmed' && (
                         <button
@@ -412,7 +412,7 @@ export default function Dashboard() {
                           onClick={async () => {
                             try {
                               await api.put(`/reservations/${r.id}/confirm`);
-                              alert("R├®servation confirm├®e !");
+                              alert("Réservation confirmée !");
                               window.location.reload();
                             } catch (error) {
                               console.error("Erreur confirmation", error);
@@ -420,17 +420,17 @@ export default function Dashboard() {
                             }
                           }}
                         >
-                          Ô£à Confirmer
+                          ✅ Confirmer
                         </button>
                       )}
                       {r.status === 'confirmed' && (
-                        <button className="btn btn-outline-secondary" disabled>D├®j├á valid├®</button>
+                        <button className="btn btn-outline-secondary" disabled>Déjà validé</button>
                       )}
                     </div>
                   </div>
                 ))
               ) : (
-                <p>Aucune r├®servation trouv├®e.</p>
+                <p>Aucune réservation trouvée.</p>
               )}
             </div>
           </>
@@ -454,7 +454,7 @@ export default function Dashboard() {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Pr├®nom</Form.Label>
+              <Form.Label>Prénom</Form.Label>
               <Form.Control
                 type="text"
                 name="prenom"
@@ -469,14 +469,14 @@ export default function Dashboard() {
                 name="email"
                 value={editFormData.email}
                 onChange={handleEditChange}
-                disabled // L'email est souvent utilis├® comme identifiant, ├á voir si on autorise la modif
+                disabled // L'email est souvent utilisé comme identifiant, à voir si on autorise la modif
               />
               <Form.Text className="text-muted">
-                L'email ne peut pas ├¬tre modifi├® pour des raisons de s├®curit├®.
+                L'email ne peut pas être modifié pour des raisons de sécurité.
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>T├®l├®phone</Form.Label>
+              <Form.Label>Téléphone</Form.Label>
               <Form.Control
                 type="text"
                 name="telephone"
