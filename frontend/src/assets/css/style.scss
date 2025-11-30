@@ -34,10 +34,6 @@
   min-height: 80vh;
   width: 100%;
 
-
-
-
-
   h1 {
     font-weight: 800;
     color: #0f172a;
@@ -45,7 +41,6 @@
   }
 
   .btn {
-
     margin-top: 10px;
     background-color: #1e3a8a;
     border: none;
@@ -77,7 +72,6 @@
 
     h6 {
       color: #0f172a;
-
     }
   }
 }
@@ -139,7 +133,6 @@
     }
   }
 
-  // Styles pour le système de réservation
   .cursor-pointer {
     cursor: pointer;
   }
@@ -154,7 +147,6 @@
     min-width: 80px;
   }
 
-  // Responsive adjustments
   @media (max-width: 768px) {
     .permis-card {
       margin-bottom: 1.5rem;
@@ -179,7 +171,6 @@
   }
 }
 
-
 /* Conteneur principal */
 .moncompte-container {
   display: flex;
@@ -197,7 +188,6 @@
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
   background: #fff;
-  background: #fff;
 }
 
 /* Titres */
@@ -213,16 +203,13 @@
   margin-bottom: 0px;
 }
 
-/* Footer */
 .moncompte-footer {
   text-align: center;
   margin-top: 0px;
   font-size: 14px;
 }
 
-
-
-/* SECTION BLEUE : Accédez aux ressources */
+/* SECTION BLEUE */
 .hero-training-section {
   background: linear-gradient(to right, #0d3b8e, #0a2e6e);
 
@@ -254,12 +241,11 @@
   }
 }
 
-
 .apropos-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  background-color: #0b1c40; // bleu foncé
+  background-color: #0b1c40;
   color: #ffffff;
   padding: 50px;
   gap: 40px;
@@ -303,9 +289,8 @@
 }
 
 /* =========================================
-   MONITEURS SECTION (Figma Style)
+   MONITEURS SECTION
 ========================================= */
-
 
 .moniteurs-section {
   text-align: center;
@@ -432,8 +417,6 @@
   }
 }
 
-
-
 .payment-card {
   display: block;
   padding: 12px;
@@ -450,7 +433,7 @@
   margin-bottom: 30px;
 }
 
-/* ====== Sections numérotées ====== */
+/* Sections numérotées */
 .section-header {
   display: flex;
   align-items: center;
@@ -471,13 +454,12 @@
 
   h3 {
     font-size: 18px;
-
     font-weight: 600;
     margin: 0;
   }
 }
 
-/* ====== Formulaire en grille ====== */
+/* Formulaire en grille */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -512,7 +494,7 @@
   }
 }
 
-/* ====== Paiement ====== */
+/* Paiement */
 .payment-box {
   padding: 15px;
   border: 1px solid #dcdcdc;
@@ -527,7 +509,6 @@
   }
 }
 
-/* ====== Bouton ====== */
 .register-btn {
   margin-top: 25px;
   width: 100%;
@@ -546,7 +527,6 @@
   }
 }
 
-/* ====== Pied ====== */
 .login-text {
   text-align: center;
   margin-top: 20px;
@@ -587,7 +567,7 @@
   }
 }
 
-/* Uploads */
+/* Upload */
 .upload-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -657,382 +637,5 @@
 
   .examen-card {
     width: 380px;
-    background: white;
-    border-radius: 15px;
-    padding-bottom: 25px;
-    overflow: hidden;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    transition: 0.3s ease;
-
-    &:hover {
-      transform: translateY(-6px);
-      box-shadow: 0px 6px 22px rgba(0, 0, 0, 0.18);
-    }
-
-    /* --- HEADER BLEU AVEC LE PRIX ET LA DURATION --- */
-    .price-box {
-      background: #0d6efd;
-      color: white;
-      padding: 22px 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      h1 {
-        font-size: 36px;
-        font-weight: 800;
-        margin: 0;
-      }
-
-      span {
-        font-size: 18px;
-        font-weight: 500;
-        opacity: 0.9;
-      }
-    }
-
-    .card-title {
-      margin-top: 25px;
-      font-size: 24px;
-      font-weight: 700;
-      color: #0a3d91;
-    }
-
-    .description {
-      color: #666;
-      font-size: 16px;
-      margin: 10px auto 25px;
-      width: 80%;
-      line-height: 1.5;
-    }
-
-    /* --- LISTE DES CONDITIONS --- */
-    .pre-requis {
-      text-align: left;
-      width: 80%;
-      margin: 0 auto 25px;
-
-      h4 {
-        font-size: 18px;
-        margin-bottom: 10px;
-        font-weight: 600;
-        color: #0a3d91;
-      }
-
-      ul {
-        list-style: none;
-        padding: 0;
-
-        li {
-          margin: 8px 0;
-          position: relative;
-          padding-left: 28px;
-          font-size: 15px;
-          color: #444;
-
-          &::before {
-            content: "✔";
-            position: absolute;
-            left: 0;
-            top: 0;
-            color: #06ec38;
-            font-size: 18px;
-            font-weight: bold;
-          }
-        }
-      }
-    }
-
-    /* --- BUTTON --- */
-    .btn-reserver {
-      margin-top: 10px;
-      background-color: #1e3a8a;
-      border: none;
-      color: white;
-      padding: 12px 100px;
-      margin-top: 10px;
-      background-color: #1e3a8a;
-      border: none;
-      color: white;
-      padding: 12px 100px;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      &:hover {
-        background-color: #0d6efd;
-        transform: scale(1.03);
-      }
-
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      &:hover {
-        background-color: #0d6efd;
-        transform: scale(1.03);
-      }
-
-
-    }
   }
 }
-
-.dashboard-container {
-  <<<<<<< HEAD <<<<<<< Updated upstream=======>>>>>>>Stashed changes .dashboard-container {
-    /* margin géré par App.jsx */
-  }
-
-  =======.payment-card {
-    display: block;
-    padding: 12px;
-    margin-bottom: 10px;
-    border: 1px solid #dcdcdc;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-
-  .payment-card:hover {
-    background: #f3f3f3;
-  }
-
-  .dashboard-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    width: 1200px;
-    /* Augmente ici */
-    max-width: 95%;
-  }
-
-  /* ====== Layout général ====== */
-  /* LE CONTENEUR DE LA MODAL */
-  .register-container {
-    position: fixed;
-    top: 0;
-    left: 150px;
-    right: 0px;
-    width: 80vw;
-    height: 100vh;
-
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 20px;
-    background: rgba(0, 0, 0, 0.45);
-    overflow-y: auto;
-
-
-  }
-
-  .register-card {
-    width: 90%;
-    max-width: 1300px;
-    background: #fff;
-    padding: 40px;
-    border-radius: 20px;
-    max-height: none;
-    margin: 0;
-
-
-  }
-
-
-  /* ====== Titres ====== */
-  .title {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 700;
-  }
-
-  .subtitle {
-    text-align: center;
-    color: #777;
-    margin-bottom: 30px;
-  }
-
-  /* ====== Sections numérotées ====== */
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 25px 0;
-
-    .number {
-      width: 33px;
-      height: 33px;
-      border-radius: 50%;
-      background: #005bff;
-      color: white;
-      font-weight: 700;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    h3 {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 0;
-    }
-  }
-
-  /* ====== Formulaire en grille ====== */
-  .form-grid {
-    display: flexbox;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px 25px;
-
-    .full {
-      grid-column: span 2;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-
-      label {
-        font-weight: 600;
-        margin-bottom: 5px;
-      }
-
-      input,
-      select {
-        padding: 11px 14px;
-        border-radius: 10px;
-        border: 1px solid #dcdcdc;
-        background: #f9fafb;
-        transition: 0.2s ease;
-
-        &:focus {
-          border-color: #005bff;
-          background: white;
-        }
-      }
-    }
-  }
-
-  /* ====== Paiement ====== */
-  .payment-box {
-    padding: 15px;
-    border: 1px solid #dcdcdc;
-    border-radius: 12px;
-    background: #f9fafb;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    img {
-      width: 35px;
-    }
-  }
-
-  /* ====== Bouton ====== */
-  .register-btn {
-    margin-top: 25px;
-    width: 100%;
-    padding: 13px;
-    border-radius: 10px;
-    background: #005bff;
-    color: white;
-    font-size: 17px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: 0.2s;
-
-    &:hover {
-      background: #0041c7;
-    }
-  }
-
-  /* ====== Pied ====== */
-  .login-text {
-    text-align: center;
-    margin-top: 20px;
-
-    a {
-      color: #005bff;
-      font-weight: 600;
-    }
-  }
-
-  .payment-options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .payment-box {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 18px;
-    border-radius: 15px;
-    background: #fafafa;
-    border: 1px solid #e2e2e2;
-    cursor: pointer;
-
-    input {
-      transform: scale(1.3);
-      margin-right: 8px;
-    }
-
-    .logos img {
-      width: 32px;
-    }
-
-    .bank-icon {
-      font-size: 26px;
-    }
-  }
-
-  /* Uploads */
-  .upload-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-  }
-
-  .upload-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-
-    input[type="file"] {
-      padding: 12px;
-      border-radius: 12px;
-      background: #f8f9fc;
-      border: 1px solid #dcdcdc;
-    }
-  }
-
-  /* Gros bouton */
-  .register-btn.big {
-    margin-top: 30px;
-    padding: 15px;
-    background: #005bff;
-    color: #fff;
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: 700;
-    border: none;
-    width: 100%;
-  }
-
-  .return-login {
-    text-align: center;
-    margin-top: 20px;
-
-    a {
-      color: #005bff;
-      font-weight: 600;
-    }
-  }
-
-
-
-  <<<<<<< Updated upstream>>>>>>>Stashed changes=======>>>>>>>03072afe97ad3e28d47067c6654b4eff43298598=======>>>>>>>Stashed changes=======>>>>>>>03072afe97ad3e28d47067c6654b4eff43298598>>>>>>>Stashed changes
