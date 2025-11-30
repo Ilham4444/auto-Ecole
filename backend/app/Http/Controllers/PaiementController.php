@@ -34,7 +34,12 @@ class PaiementController extends Controller
     {
         $paiement = Paiement::findOrFail($id);
         
-        $pdf = Pdf::loadView('recu_paiement', [
+        // Vérifier que l'utilisateur ne peut télécharger que ses propres reçus
+        if ($paiement->user_id !== auth()->id()) {
+            abort(403, 'Accès non autorisé');
+        }
+        
+        $pdf = Pdf::loadView('pdfs.recu_paiement', [
             'paiement' => $paiement,
             'user' => $paiement->user
         ]);
