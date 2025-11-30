@@ -17,9 +17,10 @@ export default function Register() {
     methode_paiement: 'carte',
     categorie_permis: '',
     photo_identite: null,
-    recto_carte: null,
-    verso_carte: null,
-    certificat_medical: null
+    recto_carte_nationale: null,
+    verso_carte_nationale: null,
+    certificat_medical: null,
+    role: 'candidate'
   });
 
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,7 @@ export default function Register() {
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
-    
+
     if (type === 'file') {
       setFormData(prev => ({
         ...prev,
@@ -65,7 +66,7 @@ export default function Register() {
 
     try {
       const data = new FormData();
-      
+
       // Ajouter tous les champs au FormData
       Object.keys(formData).forEach(key => {
         if (formData[key] !== null && formData[key] !== '') {
@@ -73,32 +74,32 @@ export default function Register() {
         }
       });
 
-    const response = await axios.post(
-  'http://127.0.0.1:8000/api/register',
-  data
-);
+      const response = await axios.post(
+        'http://127.0.0.1:8000/api/register',
+        data
+      );
 
       if (response.data.status) {
         setStatus({
           status: true,
           message: response.data.message
         });
-        
+
         console.log('Compte créé:', response.data);
-        
+
         // Stocker le token
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        
+
         // Redirection après 2 secondes
         setTimeout(() => {
           window.location.href = '/dashboard';
         }, 2000);
       }
-      
+
     } catch (error) {
       console.error('Erreur:', error);
-      
+
       if (error.response?.data?.errors) {
         // Gestion des erreurs de validation Laravel
         setErrors(error.response.data.errors);
@@ -126,7 +127,7 @@ export default function Register() {
   return (
     <div className="register-container">
       <div className="register-card">
-        
+
         {/* TITRE */}
         <h2 className="title">Créer Votre Compte Drive UP</h2>
         <p className="subtitle">
@@ -150,10 +151,10 @@ export default function Register() {
 
           <div className="form-group">
             <label>Nom *</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               name="nom"
-              placeholder="Votre nom" 
+              placeholder="Votre nom"
               value={formData.nom}
               onChange={handleChange}
               required
@@ -164,10 +165,10 @@ export default function Register() {
 
           <div className="form-group">
             <label>Prénom *</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               name="prenom"
-              placeholder="Votre prénom" 
+              placeholder="Votre prénom"
               value={formData.prenom}
               onChange={handleChange}
               required
@@ -178,8 +179,8 @@ export default function Register() {
 
           <div className="form-group">
             <label>Date de naissance *</label>
-            <input 
-              type="date" 
+            <input
+              type="date"
               name="date_naissance"
               value={formData.date_naissance}
               onChange={handleChange}
@@ -193,10 +194,10 @@ export default function Register() {
 
           <div className="form-group">
             <label>Téléphone *</label>
-            <input 
-              type="tel" 
+            <input
+              type="tel"
               name="telephone"
-              placeholder="0612345678" 
+              placeholder="0612345678"
               value={formData.telephone}
               onChange={handleChange}
               required
@@ -209,10 +210,10 @@ export default function Register() {
 
           <div className="form-group">
             <label>N° Carte Nationale *</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               name="carte_nationale"
-              placeholder="AB123456" 
+              placeholder="AB123456"
               value={formData.carte_nationale}
               onChange={handleChange}
               required
@@ -223,10 +224,10 @@ export default function Register() {
 
           <div className="form-group">
             <label>Adresse *</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               name="adresse"
-              placeholder="Votre adresse complète" 
+              placeholder="Votre adresse complète"
               value={formData.adresse}
               onChange={handleChange}
               required
@@ -237,10 +238,10 @@ export default function Register() {
 
           <div className="form-group full">
             <label>Email *</label>
-            <input 
-              type="email" 
+            <input
+              type="email"
               name="email"
-              placeholder="exemple@email.com" 
+              placeholder="exemple@email.com"
               value={formData.email}
               onChange={handleChange}
               required
@@ -251,8 +252,8 @@ export default function Register() {
 
           <div className="form-group">
             <label>Mot de passe (Min. 6 caractères) *</label>
-            <input 
-              type="password" 
+            <input
+              type="password"
               name="password"
               placeholder="••••••"
               value={formData.password}
@@ -266,8 +267,8 @@ export default function Register() {
 
           <div className="form-group">
             <label>Confirmer mot de passe *</label>
-            <input 
-              type="password" 
+            <input
+              type="password"
               name="password_confirmation"
               placeholder="••••••"
               value={formData.password_confirmation}
@@ -287,24 +288,24 @@ export default function Register() {
 
           <div className="payment-options">
             <label className="payment-box">
-              <input 
-                type="radio" 
-                name="methode_paiement" 
+              <input
+                type="radio"
+                name="methode_paiement"
                 value="carte"
                 checked={formData.methode_paiement === 'carte'}
                 onChange={handleChange}
               />
               <span className="logos">
                 <img src="../assets/visa.jpg" alt="Visa" />
-                  
+
               </span>
               <span>Carte Bancaire</span>
             </label>
 
             <label className="payment-box">
-              <input 
-                type="radio" 
-                name="methode_paiement" 
+              <input
+                type="radio"
+                name="methode_paiement"
                 value="virement"
                 checked={formData.methode_paiement === 'virement'}
                 onChange={handleChange}
@@ -324,8 +325,8 @@ export default function Register() {
           <div className="upload-grid">
             <div className="upload-item">
               <label>Photo d'identité</label>
-              <input 
-                type="file" 
+              <input
+                type="file"
                 name="photo_identite"
                 onChange={handleChange}
                 accept=".jpg,.jpeg,.png,.pdf"
@@ -336,32 +337,32 @@ export default function Register() {
 
             <div className="upload-item">
               <label>Recto de la carte nationale</label>
-              <input 
-                type="file" 
-                name="recto_carte"
+              <input
+                type="file"
+                name="recto_carte_nationale"
                 onChange={handleChange}
                 accept=".jpg,.jpeg,.png,.pdf"
               />
               <small>Formats: JPG, PNG, PDF (Max: 2MB)</small>
-              {errors.recto_carte && <span className="error-text">{errors.recto_carte[0]}</span>}
+              {errors.recto_carte_nationale && <span className="error-text">{errors.recto_carte_nationale[0]}</span>}
             </div>
 
             <div className="upload-item">
               <label>Verso de la carte nationale</label>
-              <input 
-                type="file" 
-                name="verso_carte"
+              <input
+                type="file"
+                name="verso_carte_nationale"
                 onChange={handleChange}
                 accept=".jpg,.jpeg,.png,.pdf"
               />
               <small>Formats: JPG, PNG, PDF (Max: 2MB)</small>
-              {errors.verso_carte && <span className="error-text">{errors.verso_carte[0]}</span>}
+              {errors.verso_carte_nationale && <span className="error-text">{errors.verso_carte_nationale[0]}</span>}
             </div>
 
             <div className="upload-item">
               <label>Certificat médical</label>
-              <input 
-                type="file" 
+              <input
+                type="file"
                 name="certificat_medical"
                 onChange={handleChange}
                 accept=".jpg,.jpeg,.png,.pdf"
@@ -378,7 +379,7 @@ export default function Register() {
           </div>
 
           <div className="form-group full mt-2">
-            <select 
+            <select
               className={`full-input ${errors.categorie_permis ? 'error' : ''}`}
               name="categorie_permis"
               value={formData.categorie_permis}
@@ -397,8 +398,8 @@ export default function Register() {
           </div>
 
           {/* ─────────────── CTA ─────────────── */}
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="register-btn big"
             disabled={loading}
           >

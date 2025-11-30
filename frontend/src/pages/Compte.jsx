@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "../assets/css/style.scss";
-import {useForm} from "react-hook-form";
-import { Link } from "react-router-dom";
+import { useUser } from "../context/UserContext";
+import api from "../api";
 
 export default function Compte() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: ""
-  });
+  const { loginUser } = useUser();
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,28 +22,22 @@ export default function Compte() {
     setError("");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(formData),
-        mode: "cors"
-      });
+      const response = await api.post("/login", formData);
 
-      const data = await response.json();
+      if (response.data.status) {
+        // Stocker le token et les infos utilisateur
+        loginUser(response.data.user, response.data.token);
 
-      if (response.ok && data.status) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
+        // Redirection vers dashboard
         navigate("/dashboard");
       } else {
-        setError(data.message || "Email ou mot de passe incorrect");
+        setError(response.data.message || "Email ou mot de passe incorrect");
       }
-
     } catch (err) {
-      setError("Connexion echouée.");
+      console.error("Erreur de connexion:", err);
+      setError(
+        err.response?.data?.message || "Connexion échouée. Vérifiez vos identifiants."
+      );
     }
 
     setLoading(false);
@@ -84,7 +77,7 @@ export default function Compte() {
         </form>
 
         <p className="mt-4">
-          Pas de compte ? <a href="/register">Créer un compte</a>
+          Pas de compte ? <Link to="/register">Créer un compte</Link>
         </p>
       </div>
     </div>

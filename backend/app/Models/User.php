@@ -1,35 +1,35 @@
 <?php
-// app/Models/User.php
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'nom',
-        'prenom',
-        'date_naissance',
-        'telephone',
-        'carte_nationale',
-        'adresse',
-        'email',
-        'password',
-        'methode_paiement',
-        'categorie_permis',
-        'photo_identite',
-        'recto_carte_nationale',
-        'verso_carte_nationale',
-        'certificat_medical',
-        'is_active'
-    ];
+    'name',
+    'nom',
+    'prenom',
+    'date_naissance',
+    'telephone',
+    'carte_nationale',
+    'adresse',
+    'email',
+    'password',
+    'methode_paiement',
+    'categorie_permis',
+    'photo_identite',
+    'recto_carte_nationale',
+    'verso_carte_nationale',
+    'certificat_medical',
+    'is_active',
+    'role'
+];
 
     protected $hidden = [
         'password',
@@ -37,8 +37,62 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'date_naissance' => 'date',
-        'is_active' => 'boolean'
+        'email_verified_at' => 'datetime',
+        'is_active' => 'boolean',
     ];
+
+
+    /* =======================================================
+     |  RELATIONS
+     |========================================================*/
+
+    /**
+     * Réservations de l’utilisateur
+     * (Ex : réservation d’heure de conduite)
+     */
+    public function reservations()
+    {
+        return $this->hasMany(\App\Models\Reservation::class);
+    }
+
+    /**
+     * Paiements effectués par l’utilisateur
+     */
+    public function paiements()
+    {
+        return $this->hasMany(\App\Models\Paiement::class);
+    }
+
+    /**
+     * Historique des cours (code + conduite)
+     */
+    public function Permis()
+    {
+        return $this->hasMany(\App\Models\Permis::class);
+    }
+
+    /**
+     * Tentatives / Résultat d’examen
+     */
+    public function examen()
+    {
+        return $this->hasOne(\App\Models\Examen::class);
+    }
+
+    /**
+     * Certificat de réussite (généré après toutes conditions)
+     */
+    public function certificat()
+    {
+        return $this->hasOne(\App\Models\Certificat::class);
+    }
+
+    /**
+     * Fichiers téléchargeables (reçus, documents PDF…)
+     */
+    public function fichiers()
+    {
+        return $this->hasMany(\App\Models\Fichier::class);
+    }
 }

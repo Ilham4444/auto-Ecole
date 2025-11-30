@@ -12,9 +12,13 @@ class UserFactory extends Factory
 
     public function definition()
     {
+        $nom = $this->faker->lastName;
+        $prenom = $this->faker->firstName;
+        
         return [
-            'nom' => $this->faker->lastName,
-            'prenom' => $this->faker->firstName,
+            'nom' => $nom,
+            'prenom' => $prenom,
+            'name' => $prenom . ' ' . $nom,
             'date_naissance' => $this->faker->date('Y-m-d', '2000-01-01'),
             'telephone' => $this->faker->numerify('06########'),
             'carte_nationale' => $this->faker->unique()->numerify('#########'),
