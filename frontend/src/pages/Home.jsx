@@ -53,6 +53,7 @@ export default function Home() {
               </div>
             </Col>
 
+<<<<<<< Updated upstream
             <Col lg={6}>
               <div className="position-relative">
                 <img
@@ -123,5 +124,26 @@ export default function Home() {
       </section>
 
     </>
+=======
+              {/* Carte flottante */}
+              <Card className="position-absolute bottom-0 end-0 m-3 shadow-sm rounded-4 info-card">
+                <Card.Body className="d-flex align-items-center gap-2">
+                  <i className="bi bi-check-circle-fill text-primary fs-4"></i>
+                  <div>
+                    <h6 className="mb-0 fw-bold">Formation complète</h6>
+                    <small className="text-muted">
+                      Code + Conduite inclus
+                    </small>
+                  </div>
+                </Card.Body>
+              </Card>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </section>
+
+   
+>>>>>>> Stashed changes
   );
 }

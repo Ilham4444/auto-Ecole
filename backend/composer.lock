@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< Updated upstream
     "content-hash": "343ecaac4a8b061c5430a046847047e7",
+=======
+    "content-hash": "d3c16cb86c42230c6c023d9a5d9bcf42",
+>>>>>>> Stashed changes
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -1564,6 +1568,7 @@
         },
         {
             "name": "laravel/sanctum",
+<<<<<<< Updated upstream
             "version": "v4.2.1",
             "source": {
                 "type": "git",
@@ -1574,6 +1579,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/sanctum/zipball/f5fb373be39a246c74a060f2cf2ae2c2145b3664",
                 "reference": "f5fb373be39a246c74a060f2cf2ae2c2145b3664",
+=======
+            "version": "v4.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/sanctum.git",
+                "reference": "fd6df4f79f48a72992e8d29a9c0ee25422a0d677"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/sanctum/zipball/fd6df4f79f48a72992e8d29a9c0ee25422a0d677",
+                "reference": "fd6df4f79f48a72992e8d29a9c0ee25422a0d677",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -1587,8 +1604,14 @@
             },
             "require-dev": {
                 "mockery/mockery": "^1.6",
+<<<<<<< Updated upstream
                 "orchestra/testbench": "^9.15|^10.8",
                 "phpstan/phpstan": "^1.10"
+=======
+                "orchestra/testbench": "^9.0|^10.0",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^11.3"
+>>>>>>> Stashed changes
             },
             "type": "library",
             "extra": {
@@ -1623,7 +1646,11 @@
                 "issues": "https://github.com/laravel/sanctum/issues",
                 "source": "https://github.com/laravel/sanctum"
             },
+<<<<<<< Updated upstream
             "time": "2025-11-21T13:59:03+00:00"
+=======
+            "time": "2025-07-09T19:45:24+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "laravel/serializable-closure",

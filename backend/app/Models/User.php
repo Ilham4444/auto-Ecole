@@ -1,17 +1,27 @@
 <?php
+// app/Models/User.php
 
 namespace App\Models;
 
+<<<<<<< Updated upstream
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+=======
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+>>>>>>> Stashed changes
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
+<<<<<<< Updated upstream
     'nom',
     'prenom',
     'date_naissance',
@@ -30,6 +40,24 @@ class User extends Authenticatable
     'role',
     'specialite_permis'
 ];
+=======
+        'nom',
+        'prenom',
+        'date_naissance',
+        'telephone',
+        'carte_nationale',
+        'adresse',
+        'email',
+        'password',
+        'methode_paiement',
+        'categorie_permis',
+        'photo_identite',
+        'recto_carte_nationale',
+        'verso_carte_nationale',
+        'certificat_medical',
+        'is_active'
+    ];
+>>>>>>> Stashed changes
 
     protected $hidden = [
         'password',
@@ -37,6 +65,7 @@ class User extends Authenticatable
     ];
 
     protected $casts = [
+<<<<<<< Updated upstream
         'date_naissance' => 'date',
         'email_verified_at' => 'datetime',
         'is_active' => 'boolean',
@@ -115,4 +144,10 @@ class User extends Authenticatable
             ->withTimestamps()
             ->withPivot('assigned_at');
     }
+=======
+        'email_verified_at' => 'datetime',
+        'date_naissance' => 'date',
+        'is_active' => 'boolean'
+    ];
+>>>>>>> Stashed changes
 }
