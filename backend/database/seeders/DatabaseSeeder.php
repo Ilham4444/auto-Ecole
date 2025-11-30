@@ -21,8 +21,6 @@ class DatabaseSeeder extends Seeder
             MoniteursSeeder::class,
             PermisSeeder::class,
         ]);
-<<<<<<< HEAD
-
         // Create Admin User
         User::updateOrCreate(
             ['email' => 'admin@autoecole.com'],
@@ -87,14 +85,13 @@ class DatabaseSeeder extends Seeder
                 'categorie_permis' => 'C',
             ]
         );
-=======
+
+        // Remote user (Abyad)
         User::factory()->create([
             'name' => 'Abyad',
             'email' => 'ilhamelabyad4@gmail.com',
             'password' => '123456'
         ]);
-        
->>>>>>> 03072afe97ad3e28d47067c6654b4eff43298598
     }
    
 
