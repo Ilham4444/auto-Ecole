@@ -314,67 +314,135 @@
   text-decoration: underline;
 }
 
+/* =========================================
+   MONITEURS SECTION (Figma Style)
+========================================= */
+
+
 .moniteurs-section {
   text-align: center;
   padding: 60px 20px;
+  background-color: #f8faff;
+
+  .title {
+    font-size: 36px;
+    font-weight: 700;
+    color: #0d3b8e;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 50px;
+  }
+
+  .moniteurs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: auto;
+  }
+
+  .moniteur-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 25px 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+    }
+
+    .moniteur-img-wrapper {
+      width: 140px;
+      height: 140px;
+      margin-bottom: 15px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+      .moniteur-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .moniteur-info {
+      text-align: center;
+
+      .moniteur-nom {
+        font-size: 20px;
+        font-weight: 700;
+        color: #161719;
+        margin-bottom: 5px;
+      }
+
+      .moniteur-exp {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 12px;
+      }
+
+      .moniteur-rating {
+        font-size: 14px;
+        color: #141315;
+        margin-bottom: 15px;
+
+        span {
+          color: #555;
+          font-size: 13px;
+        }
+      }
+
+      .moniteur-skills {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+
+        .skill-tag {
+          background-color: #e6f0ff;
+          color: #0d3b8e;
+          font-size: 13px;
+          font-weight: 500;
+          padding: 5px 10px;
+          border-radius: 12px;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background-color: #d0e4ff;
+            transform: scale(1.05);
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 60px 15px;
+
+    .moniteurs-grid {
+      gap: 25px;
+    }
+
+    .moniteur-card {
+      padding: 20px 15px;
+
+      .moniteur-img-wrapper {
+        width: 120px;
+        height: 120px;
+      }
+    }
+  }
 }
-
-.title {
-  font-size: 34px;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.subtitle {
-  font-size: 18px;
-  color: #666;
-  margin-bottom: 40px;
-}
-
-.moniteurs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.moniteur-card {
-  background: white;
-  border-radius: 20px;
-  padding: 30px 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: 0.3s ease;
-}
-
-.moniteur-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.moniteur-img {
-  width: 140px;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-bottom: 15px;
-}
-
-.moniteur-nom {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.moniteur-exp {
-  color: #444;
-  font-size: 15px;
-}
-
-
-
-
-
 
 
 
@@ -719,10 +787,13 @@
         background-color: #0d6efd;
         transform: scale(1.03);
       }
+      
+
     }
   }
 }
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 .dashboard-container {
   /* margin géré par App.jsx */
@@ -976,3 +1047,5 @@
 
 
 >>>>>>> Stashed changes
+=======
+>>>>>>> 03072afe97ad3e28d47067c6654b4eff43298598

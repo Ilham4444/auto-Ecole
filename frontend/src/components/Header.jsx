@@ -50,6 +50,7 @@ const Header = () => {
               <Nav.Link href="#moniteurs">Moniteurs</Nav.Link>
               <Nav.Link href="#apropos">À propos</Nav.Link>
 
+
               {user ? (
                 <Dropdown>
                   <Dropdown.Toggle variant="outline-primary" id="dropdown-basic">

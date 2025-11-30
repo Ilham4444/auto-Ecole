@@ -21,7 +21,11 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+    'name',
+>>>>>>> 03072afe97ad3e28d47067c6654b4eff43298598
     'nom',
     'prenom',
     'date_naissance',

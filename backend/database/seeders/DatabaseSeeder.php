@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             MoniteursSeeder::class,
             PermisSeeder::class,
         ]);
+<<<<<<< HEAD
 
         // Create Admin User
         User::updateOrCreate(
@@ -86,6 +87,14 @@ class DatabaseSeeder extends Seeder
                 'categorie_permis' => 'C',
             ]
         );
+=======
+        User::factory()->create([
+            'name' => 'Abyad',
+            'email' => 'ilhamelabyad4@gmail.com',
+            'password' => '123456'
+        ]);
+        
+>>>>>>> 03072afe97ad3e28d47067c6654b4eff43298598
     }
    
 

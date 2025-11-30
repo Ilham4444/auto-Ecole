@@ -91,27 +91,23 @@
     <table class="info-table">
         <tr>
             <td>Date du Paiement</td>
-            <td>{{ $paiement->created_at->format('d/m/Y') }}</td>
+            <td>{{ \Carbon\Carbon::parse($paiement->date)->format('d/m/Y') }}</td>
         </tr>
         <tr>
             <td>Mode de Paiement</td>
-            <td>{{ ucfirst($paiement->mode_paiement) }}</td>
+            <td>{{ ucfirst($user->methode_paiement ?? 'Non spécifié') }}</td>
         </tr>
         <tr>
             <td>Type de Permis</td>
             <td>{{ $user->categorie_permis }}</td>
         </tr>
         <tr>
-            <td>Montant Payé</td>
-            <td>{{ number_format($paiement->montant_paye, 2) }} MAD</td>
+            <td>Motif</td>
+            <td>{{ $paiement->motif ?? 'Paiement' }}</td>
         </tr>
         <tr>
-            <td>Montant Restant</td>
-            <td>{{ number_format($paiement->montant_restant, 2) }} MAD</td>
-        </tr>
-        <tr>
-            <td class="total">Total</td>
-            <td class="total">{{ number_format($paiement->total, 2) }} MAD</td>
+            <td class="total">Montant Payé</td>
+            <td class="total">{{ number_format($paiement->montant, 2) }} MAD</td>
         </tr>
     </table>
 

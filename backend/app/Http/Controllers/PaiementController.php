@@ -34,7 +34,7 @@ class PaiementController extends Controller
     {
         $paiement = Paiement::findOrFail($id);
         
-        $pdf = Pdf::loadView('paiements.recu', [
+        $pdf = Pdf::loadView('recu_paiement', [
             'paiement' => $paiement,
             'user' => $paiement->user
         ]);

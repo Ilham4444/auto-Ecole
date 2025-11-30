@@ -39,10 +39,17 @@ class DashboardController extends Controller
         }
 
         // 🔹 Historique des réservations (utilise la relation du modèle User)
-        $reservations = $user->reservations()->orderBy('date', 'desc')->get();
+        $reservations = $user->reservations()->with('permis')->orderBy('date', 'desc')->get();
 
         // 🔹 Historique des paiements (utilise la relation du modèle User)
         $paiements = $user->paiements()->orderBy('created_at', 'desc')->get();
+
+        // 🔹 Calcul du total payé (somme de tous les paiements)
+        $total_paye = $paiements->sum('montant');
+
+        // 🔹 Total à payer (exemple: prix du permis B = 8000 DH, ajustez selon vos besoins)
+        // Vous pouvez stocker cette valeur dans la table permis ou users selon votre logique
+        $total_a_payer = 8000; // Valeur par défaut, peut être dynamique selon le permis choisi
 
         // 🔹 Calcul progression (votre logique existante)
         $total_cours = 20;
@@ -56,12 +63,17 @@ class DashboardController extends Controller
             ($user->paiements_completes == 1) &&
             ($user->examen_reussi == 1);
 
+        // 🔹 Enrichir l'objet user avec les totaux calculés
+        $userData = $user->toArray();
+        $userData['total_paye'] = $total_paye;
+        $userData['total_a_payer'] = $total_a_payer;
+
         return response()->json([
             'status' => true,
             'message' => 'Bienvenue sur votre dashboard candidat',
 
-            // 👤 Infos utilisateur
-            'user' => $user,
+            // 👤 Infos utilisateur avec les totaux
+            'user' => $userData,
 
             // 📘 Cours / Conduite
             'progression' => [

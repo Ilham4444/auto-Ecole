@@ -22,6 +22,11 @@ Route::get('/test', function () {
     ]);
 });
 
+Route::get('/test-pdf', function () {
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadHTML('<h1>Test PDF</h1><p>Ceci est un test.</p>');
+    return $pdf->download('test.pdf');
+});
+
 /* ============================
 |  AUTHENTIFICATION
 ============================ */
