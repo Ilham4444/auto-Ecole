@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form } from "react-bootstrap";
 
 export default function Dashboard() {
   const { user: contextUser, logoutUser } = useUser();
@@ -16,31 +16,18 @@ export default function Dashboard() {
     nom: "",
     prenom: "",
     telephone: "",
-    email: ""
+    email: "",
   });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    if (!contextUser) return;
 
-    if (!token) {
-      navigate("/compte");
-      return;
-    }
+    const fetchData = async () => {
+      try {
+        const api = (await import("../api.jsx")).default;
 
-    if (contextUser) {
-      setUser(contextUser);
-      setLoading(false);
-      return;
-    }
+        const res = await api.get("/dashboard");
 
-    axios
-      .get("http://127.0.0.1:8000/api/dashboard", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      })
-      .then((res) => {
         const userData = {
           ...res.data.user,
           reservations: res.data.reservations || [],
@@ -49,12 +36,13 @@ export default function Dashboard() {
           cours_conduite: res.data.progression?.conduite?.fait || 0,
           candidates: res.data.candidates || [],
         };
+
         setUser(userData);
         setLoading(false);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("Erreur chargement dashboard", err);
         setLoading(false);
+
         if (err.response && err.response.status === 401) {
           alert("Session expirée. Veuillez vous reconnecter.");
           logoutUser();
@@ -62,7 +50,10 @@ export default function Dashboard() {
         } else {
           alert("Erreur de chargement des données. Veuillez réessayer.");
         }
-      });
+      }
+    };
+
+    fetchData();
   }, [contextUser, navigate, logoutUser]);
 
   const handleLogout = () => {
@@ -70,30 +61,28 @@ export default function Dashboard() {
     navigate("/compte");
   };
 
-  // Gestion de l'ouverture de la modale
   const handleEditClick = () => {
     setEditFormData({
       nom: user.nom || "",
       prenom: user.prenom || "",
       telephone: user.telephone || "",
-      email: user.email || ""
+      email: user.email || "",
     });
     setShowEditModal(true);
   };
 
-  // Gestion des changements dans le formulaire
   const handleEditChange = (e) => {
     setEditFormData({
       ...editFormData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  // Soumission du formulaire de modification
   const handleEditSubmit = async () => {
     try {
-      const api = (await import('../api.jsx')).default;
-      const response = await api.put('/profil', editFormData);
+      const api = (await import("../api.jsx")).default;
+
+      const response = await api.put("/profil", editFormData);
 
       if (response.data.status) {
         alert("✅ Profil mis à jour avec succès !");
@@ -107,16 +96,37 @@ export default function Dashboard() {
     }
   };
 
-  if (loading) return <div className="text-center mt-5"><div className="spinner-border text-primary" role="status"></div><p>Chargement...</p></div>;
-  if (!user) return <div className="text-center mt-5"><p>Erreur de chargement des données. Veuillez vous reconnecter.</p><button className="btn btn-primary" onClick={() => navigate("/compte")}>Se connecter</button></div>;
+  if (loading)
+    return (
+      <div className="text-center mt-5">
+        <div className="spinner-border text-primary" role="status"></div>
+        <p>Chargement...</p>
+      </div>
+    );
+
+  if (!user)
+    return (
+      <div className="text-center mt-5">
+        <p>Erreur de chargement des données. Veuillez vous reconnecter.</p>
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate("/compte")}
+        >
+          Se connecter
+        </button>
+      </div>
+    );
 
   return (
     <>
       <div className="dashboard-container">
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2>Tableau de Bord {user.role === 'moniteur' ? '(Moniteur)' : ''}</h2>
+          <h2>Tableau de Bord {user.role === "moniteur" ? "(Moniteur)" : ""}</h2>
           <div>
-            <button className="btn btn-outline-primary me-2" onClick={() => navigate("/")}>
+            <button
+              className="btn btn-outline-primary me-2"
+              onClick={() => navigate("/")}
+            >
               🏠 Accueil
             </button>
           </div>
@@ -125,28 +135,40 @@ export default function Dashboard() {
         <h4>Bienvenue {user.nom} {user.prenom}</h4>
 
         {/* ================== VUE CANDIDAT ================== */}
-        {user.role === 'candidate' && (
+        {user.role === "candidate" && (
           <>
             <div className="row mt-4">
               <div className="col-md-4 mb-4">
                 <div className="dashboard-card p-3">
                   <h5>Code de la Route</h5>
-                  <p>Progression : {user.cours_code || 0}/20 heures</p>
+                  <p>Progression : {user.cours_code}/20 heures</p>
                   <div className="progress mb-2">
-                    <div className="progress-bar" style={{ width: `${(user.cours_code || 0) * 5}%` }}></div>
+                    <div
+                      className="progress-bar"
+                      style={{ width: `${user.cours_code * 5}%` }}
+                    ></div>
                   </div>
-                  <small>Examen : {user.examen_code ? "Réussi" : "Non passé"}</small>
+                  <small>
+                    Examen : {user.examen_code ? "Réussi" : "Non passé"}
+                  </small>
                 </div>
               </div>
 
               <div className="col-md-4 mb-4">
                 <div className="dashboard-card p-3">
                   <h5>Conduite Pratique</h5>
-                  <p>Progression : {user.cours_conduite || 0}/30 heures</p>
+                  <p>Progression : {user.cours_conduite}/30 heures</p>
                   <div className="progress mb-2">
-                    <div className="progress-bar" style={{ width: `${((user.cours_conduite || 0) / 30) * 100}%` }}></div>
+                    <div
+                      className="progress-bar"
+                      style={{
+                        width: `${(user.cours_conduite / 30) * 100}%`,
+                      }}
+                    ></div>
                   </div>
-                  <small>Heures restantes : {30 - (user.cours_conduite || 0)}h</small>
+                  <small>
+                    Heures restantes : {30 - user.cours_conduite}h
+                  </small>
                 </div>
               </div>
 
@@ -154,38 +176,71 @@ export default function Dashboard() {
                 <div className="dashboard-card p-3 position-relative">
                   <button
                     className="btn btn-sm btn-primary position-absolute"
+
                     style={{ top: "10px", right: "10px", zIndex: 10 }}
                     onClick={() => {
                       console.log("Navigation vers paiement");
                       navigate("/paiement");
                     }}
+
                   >
                     💳 Payer
                   </button>
                   <h5>Solde Restant</h5>
                   <p>Payé : {user.total_paye || 0} Dh</p>
                   <div className="progress mb-2">
-                    <div className="progress-bar" style={{ width: `${(user.total_paye || 0) / (user.total_a_payer || 1) * 100}%` }}></div>
+                    <div
+                      className="progress-bar"
+                      style={{
+                        width: `${(user.total_paye / (user.total_a_payer || 1)) * 100
+                          }%`,
+                      }}
+                    ></div>
                   </div>
-                  <small>Reste à payer : {(user.total_a_payer || 0) - (user.total_paye || 0)} Dh</small>
+                  <small>
+                    Reste à payer :{" "}
+                    {(user.total_a_payer || 0) - (user.total_paye || 0)} Dh
+                  </small>
                 </div>
               </div>
             </div>
 
+            {/* Onglets */}
             <div className="mt-5">
               <ul className="nav nav-tabs">
                 <li className="nav-item">
-                  <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#reservations">Réservations</button>
+                  <button
+                    className="nav-link active"
+                    data-bs-toggle="tab"
+                    data-bs-target="#reservations"
+                  >
+                    Réservations
+                  </button>
                 </li>
+
                 <li className="nav-item">
-                  <button className="nav-link" data-bs-toggle="tab" data-bs-target="#paiements">Paiements</button>
+                  <button
+                    className="nav-link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#paiements"
+                  >
+                    Paiements
+                  </button>
                 </li>
+
                 <li className="nav-item">
-                  <button className="nav-link" data-bs-toggle="tab" data-bs-target="#profil">Mon Profil</button>
+                  <button
+                    className="nav-link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#profil"
+                  >
+                    Mon Profil
+                  </button>
                 </li>
               </ul>
 
               <div className="tab-content p-3 border border-top-0">
+
                 <div className="tab-pane fade show active" id="reservations">
                   <div className="d-flex justify-content-between align-items-center mb-3">
                     <h4>Mes Réservations</h4>
@@ -201,32 +256,41 @@ export default function Dashboard() {
                       </div>
                     </div>
                   )}
+
+
                   {user.reservations && user.reservations.length > 0 ? (
                     user.reservations.map((r) => (
                       <div className="card p-3 mt-3" key={r.id}>
                         <div className="d-flex justify-content-between align-items-center">
                           <div>
                             <h5>{r.type}</h5>
-                            <span className="badge bg-primary">{r.status}</span>
-                            <p className="mt-2">{r.permis?.title || 'Permis'}</p>
+                            <span className="badge bg-primary">
+                              {r.status}
+                            </span>
+                            <p className="mt-2">
+                              {r.permis?.title || "Permis"}
+                            </p>
                             <small>📅 {r.date} à {r.time}</small>
                           </div>
+
                           <button
                             className="btn btn-outline-danger"
                             onClick={async () => {
-                              if (window.confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) {
+                              if (window.confirm("Êtes-vous sûr de vouloir annuler cette réservation ?")) {
                                 try {
-                                  const api = (await import('../api.jsx')).default;
+                                  const api = (await import("../api.jsx")).default;
                                   await api.delete(`/reservations/${r.id}`);
+
                                   alert('✅ Réservation annulée avec succès');
                                   // Mettre à jour l'état local au lieu de recharger la page
                                   setUser({
                                     ...user,
                                     reservations: user.reservations.filter(res => res.id !== r.id)
                                   });
+
                                 } catch (error) {
                                   console.error('Erreur:', error);
-                                  alert('❌ Erreur lors de l\'annulation');
+                                  alert("❌ Erreur lors de l'annulation");
                                 }
                               }
                             }}
@@ -241,8 +305,10 @@ export default function Dashboard() {
                   )}
                 </div>
 
+                {/* Paiements */}
                 <div className="tab-pane fade" id="paiements">
                   <h4>Historique des Paiements</h4>
+
                   {user.paiements && user.paiements.length > 0 ? (
                     user.paiements.map((p) => (
                       <div className="card p-3 mt-3" key={p.id}>
@@ -290,6 +356,7 @@ export default function Dashboard() {
                   )}
                 </div>
 
+                {/* Profil */}
                 <div className="tab-pane fade" id="profil">
                   <h4>Mon Profil</h4>
                   <p><strong>Nom :</strong> {user.nom} {user.prenom}</p>
@@ -486,11 +553,12 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* MODALE DE MODIFICATION DE PROFIL */}
+      {/* ================== MODAL EDIT PROFIL ================== */}
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Modifier mes informations</Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3">
@@ -502,6 +570,7 @@ export default function Dashboard() {
                 onChange={handleEditChange}
               />
             </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>Prénom</Form.Label>
               <Form.Control
@@ -511,6 +580,7 @@ export default function Dashboard() {
                 onChange={handleEditChange}
               />
             </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -518,12 +588,13 @@ export default function Dashboard() {
                 name="email"
                 value={editFormData.email}
                 onChange={handleEditChange}
-                disabled // L'email est souvent utilisé comme identifiant, à voir si on autorise la modif
+                disabled
               />
               <Form.Text className="text-muted">
                 L'email ne peut pas être modifié pour des raisons de sécurité.
               </Form.Text>
             </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>Téléphone</Form.Label>
               <Form.Control
@@ -535,6 +606,7 @@ export default function Dashboard() {
             </Form.Group>
           </Form>
         </Modal.Body>
+
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowEditModal(false)}>
             Annuler

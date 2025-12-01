@@ -50,11 +50,13 @@ $transition: all 0.3s ease;
   background: #f8faff;
   min-height: 80vh;
   width: 100%;
+
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
 
   h1 {
     font-weight: 800;
@@ -90,14 +92,18 @@ $transition: all 0.3s ease;
     padding: 10px 0;
 
     h6 {
+
       color: $text-dark;
+
     }
   }
 }
 
+
 /* ========================================
    HERO TRAINING / RESSOURCES SECTION
 ======================================== */
+
 .hero-training-section {
   background: linear-gradient(to right, #0d3b8e, #0a2e6e);
   padding: 80px 20px;
@@ -203,6 +209,7 @@ $transition: all 0.3s ease;
 /* ========================================
    À PROPOS SECTION
 ======================================== */
+
 .apropos-container {
   display: flex;
   flex-wrap: wrap;
@@ -311,6 +318,8 @@ $transition: all 0.3s ease;
 /* ========================================
    MONITEURS SECTION
 ======================================== */
+
+
 .moniteurs-section {
   text-align: center;
   padding: 60px 20px;
@@ -417,7 +426,7 @@ $transition: all 0.3s ease;
       }
     }
   }
-}
+
 
 /* ========================================
    EXAMENS SECTION
@@ -1247,4 +1256,7 @@ $transition: all 0.3s ease;
     cursor: not-allowed;
     opacity: 0.7;
   }
-}
+
+
+
+
