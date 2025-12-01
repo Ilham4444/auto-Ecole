@@ -19,7 +19,8 @@ class PaiementController extends Controller
         $data = $request->validate([
             'montant' => 'required|integer',
             'date' => 'required|date',
-            'motif' => 'nullable|string'
+            'motif' => 'nullable|string',
+            'rib' => 'nullable|string|max:24' // RIB peut avoir jusqu'à 24 caractères
         ]);
 
         $paiement = $request->user()->paiements()->create($data);

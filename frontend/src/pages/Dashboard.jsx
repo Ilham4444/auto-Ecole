@@ -152,7 +152,14 @@ export default function Dashboard() {
 
               <div className="col-md-4 mb-4">
                 <div className="dashboard-card p-3 position-relative">
-                  <button className="btn btn-sm btn-primary position-absolute" style={{ top: "10px", right: "10px" }} onClick={() => navigate("/paiement")}>
+                  <button
+                    className="btn btn-sm btn-primary position-absolute"
+                    style={{ top: "10px", right: "10px", zIndex: 10 }}
+                    onClick={() => {
+                      console.log("Navigation vers paiement");
+                      navigate("/paiement");
+                    }}
+                  >
                     💳 Payer
                   </button>
                   <h5>Solde Restant</h5>
@@ -180,7 +187,20 @@ export default function Dashboard() {
 
               <div className="tab-content p-3 border border-top-0">
                 <div className="tab-pane fade show active" id="reservations">
-                  <h4>Mes Réservations</h4>
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h4>Mes Réservations</h4>
+                  </div>
+
+                  {user.moniteur_assigne && (
+                    <div className="alert alert-info d-flex align-items-center">
+                      <i className="bi bi-person-badge me-2 fs-4"></i>
+                      <div>
+                        <strong>Moniteur Assigné :</strong> {user.moniteur_assigne.nom} {user.moniteur_assigne.prenom}
+                        <br />
+                        <small>Tél: {user.moniteur_assigne.telephone}</small>
+                      </div>
+                    </div>
+                  )}
                   {user.reservations && user.reservations.length > 0 ? (
                     user.reservations.map((r) => (
                       <div className="card p-3 mt-3" key={r.id}>
@@ -199,7 +219,11 @@ export default function Dashboard() {
                                   const api = (await import('../api.jsx')).default;
                                   await api.delete(`/reservations/${r.id}`);
                                   alert('✅ Réservation annulée avec succès');
-                                  window.location.reload();
+                                  // Mettre à jour l'état local au lieu de recharger la page
+                                  setUser({
+                                    ...user,
+                                    reservations: user.reservations.filter(res => res.id !== r.id)
+                                  });
                                 } catch (error) {
                                   console.error('Erreur:', error);
                                   alert('❌ Erreur lors de l\'annulation');
@@ -373,14 +397,32 @@ export default function Dashboard() {
                 <div className="dashboard-card p-3">
                   <h5>Mes Élèves</h5>
                   <p>Total : {user.candidates ? user.candidates.length : 0} élèves</p>
-                  <button className="btn btn-primary btn-sm">Voir la liste</button>
+                  <p>Total : {user.candidates ? user.candidates.length : 0} élèves</p>
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => {
+                      const el = document.getElementById('reservations-section');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                  >
+                    Voir les réservations
+                  </button>
                 </div>
               </div>
               <div className="col-md-4 mb-4">
                 <div className="dashboard-card p-3">
                   <h5>Planning Aujourd'hui</h5>
                   <p>{user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0} leçons confirmées</p>
-                  <button className="btn btn-info btn-sm text-white">Voir le planning</button>
+                  <p>{user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0} leçons confirmées</p>
+                  <button
+                    className="btn btn-info btn-sm text-white"
+                    onClick={() => {
+                      const el = document.getElementById('reservations-section');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                  >
+                    Voir le planning
+                  </button>
                 </div>
               </div>
               <div className="col-md-4 mb-4">
@@ -392,7 +434,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="mt-5">
+            <div className="mt-5" id="reservations-section">
               <h4>Gestion des Réservations</h4>
               {user.reservations && user.reservations.length > 0 ? (
                 user.reservations.map((r) => (
@@ -403,7 +445,7 @@ export default function Dashboard() {
                         <span className={`badge ${r.status === 'confirmed' ? 'bg-success' : 'bg-warning'}`}>
                           {r.status === 'confirmed' ? 'Confirmé' : 'En attente'}
                         </span>
-                        <p className="mt-2">{r.permis}</p>
+                        <p className="mt-2">{r.permis?.title || 'Permis'}</p>
                         <small>📅 {r.date} à {r.time}</small>
                       </div>
                       {r.status !== 'confirmed' && (
@@ -411,9 +453,16 @@ export default function Dashboard() {
                           className="btn btn-success"
                           onClick={async () => {
                             try {
+                              const api = (await import('../api.jsx')).default;
                               await api.put(`/reservations/${r.id}/confirm`);
                               alert("Réservation confirmée !");
-                              window.location.reload();
+                              // Mettre à jour l'état local au lieu de recharger la page
+                              setUser({
+                                ...user,
+                                reservations: user.reservations.map(res =>
+                                  res.id === r.id ? { ...res, status: 'confirmed' } : res
+                                )
+                              });
                             } catch (error) {
                               console.error("Erreur confirmation", error);
                               alert("Erreur lors de la confirmation");
@@ -495,6 +544,8 @@ export default function Dashboard() {
           </Button>
         </Modal.Footer>
       </Modal>
+
+
     </>
   );
 }

@@ -67,6 +67,12 @@ class DashboardController extends Controller
         $userData = $user->toArray();
         $userData['total_paye'] = $total_paye;
         $userData['total_a_payer'] = $total_a_payer;
+        
+        // Charger le moniteur assigné
+        $moniteur = $user->moniteur()->first();
+        if ($moniteur) {
+            $userData['moniteur_assigne'] = $moniteur->only('id', 'nom', 'prenom', 'telephone');
+        }
 
         return response()->json([
             'status' => true,
@@ -108,13 +114,24 @@ class DashboardController extends Controller
             return response()->json(['status' => false, 'message' => 'Accès refusé'], 403);
         }
 
-        // 🔹 Liste des candidats assignés au moniteur (et non tous les candidats)
+        // 🔹 Liste des candidats assignés au moniteur
         $candidates = $user->eleves()
             ->select('users.id', 'users.nom', 'users.prenom', 'users.email', 'users.telephone', 'users.categorie_permis', 'monitor_candidat.assigned_at')
             ->get();
 
-        // 🔹 Réservations gérées par le moniteur (utilise la relation du modèle User)
-        $reservations = $user->reservations()->orderBy('date', 'desc')->get();
+        // 🔹 Récupérer les IDs des candidats
+        $candidateIds = $candidates->pluck('id');
+
+        // 🔹 Réservations des candidats assignés
+        $reservations = Reservation::whereIn('user_id', $candidateIds)
+            ->with(['user', 'permis']) // Charger les infos du candidat et du permis
+            ->orderBy('date', 'desc')
+            ->get()
+            ->map(function ($reservation) {
+                // Ajouter le nom de l'élève pour l'affichage
+                $reservation->student_name = $reservation->user ? $reservation->user->nom . ' ' . $reservation->user->prenom : 'Inconnu';
+                return $reservation;
+            });
 
         // 🔹 Statistiques simples (adaptez selon vos besoins)
         $totalCandidates = $candidates->count();

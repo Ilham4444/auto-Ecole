@@ -31,7 +31,12 @@ class User extends Authenticatable
         'certificat_medical',
         'is_active',
         'role',
-        'specialite_permis'
+        'specialite_permis',
+        'cours_completes',
+        'conduite_completes',
+        'paiements_completes',
+        'examen_reussi',
+        'examen_code'
     ];
 
     protected $hidden = [

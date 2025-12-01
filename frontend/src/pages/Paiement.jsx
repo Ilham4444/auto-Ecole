@@ -5,6 +5,7 @@ import axios from "axios";
 export default function Paiement() {
   const [montant, setMontant] = useState(""); // montant à payer
   const [motif, setMotif] = useState(""); // motif du paiement
+  const [rib, setRib] = useState(""); // RIB pour le virement
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -13,6 +14,11 @@ export default function Paiement() {
 
     if (!montant || montant <= 0) {
       alert("Veuillez entrer un montant valide");
+      return;
+    }
+
+    if (!rib || rib.trim() === "") {
+      alert("Veuillez entrer votre RIB (numéro de compte bancaire)");
       return;
     }
 
@@ -30,7 +36,8 @@ export default function Paiement() {
       const res = await axios.post("http://127.0.0.1:8000/api/paiements", {
         montant: parseInt(montant),
         date: new Date().toISOString().split('T')[0], // Date actuelle au format YYYY-MM-DD
-        motif: motif || "Paiement pour formation auto-école"
+        motif: motif || "Paiement pour formation auto-école",
+        rib: rib // Ajout du RIB
       }, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -87,6 +94,20 @@ export default function Paiement() {
                     onChange={e => setMotif(e.target.value)}
                     placeholder="Ex: Inscription Permis B"
                   />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label">RIB (Relevé d'Identité Bancaire)</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={rib}
+                    onChange={e => setRib(e.target.value)}
+                    placeholder="Ex: 1234567890123456789012"
+                    maxLength="24"
+                    required
+                  />
+                  <small className="text-muted">Entrez votre numéro de compte bancaire (RIB) pour le virement</small>
                 </div>
 
                 <button

@@ -97,6 +97,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/certificat', [CertificatController::class, 'download']);
 
     /* ============================
+    |  EXAMENS - RÉSERVATIONS
+    ============================ */
+    Route::get('/examens/disponibles', [App\Http\Controllers\ExamenController::class, 'disponibles']);
+    Route::post('/examens/reserver', [App\Http\Controllers\ExamenController::class, 'reserver']);
+    Route::get('/examens/mes-reservations', [App\Http\Controllers\ExamenController::class, 'mesReservations']);
+    Route::delete('/examens/{id}/annuler', [App\Http\Controllers\ExamenController::class, 'annuler']);
+
+    /* ============================
     |  PDF - REÇUS ET CERTIFICATS
     ============================ */
     Route::get('/pdf/recu-inscription', [PdfController::class, 'recuInscription']);  // Reçu d'inscription

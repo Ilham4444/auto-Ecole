@@ -13,12 +13,8 @@ import Apropos from "./pages/Apropos";
 import Compte from "./pages/Compte";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-<<<<<<< Updated upstream
 import AdminDashboard from "./pages/AdminDashboard";
 import Paiement from "./pages/Paiement";
-=======
-import Paiement from "./pages/Paiement"; 
->>>>>>> Stashed changes
 
 
 function AppContent() {
@@ -56,56 +52,52 @@ function AppContent() {
           <Route path="/examens" element={<Examens />} />
           <Route path="/moniteurs" element={<Moniteurs />} />
           <Route path="/apropos" element={<Apropos />} />
-<<<<<<< Updated upstream
           <Route path="/paiement" element={<Paiement />} />
-          <Route path="/dashboard" element={<PrivateRoute>  <Dashboard /> </PrivateRoute>} />
-          <Route path="/admin" element={<PrivateRoute>  <AdminDashboard /> </PrivateRoute>} />
-=======
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/paiement" element={<Paiement />} />
-
->>>>>>> Stashed changes
+          <Route path="/admin" element={<AdminDashboard />} />
 
           {/* les 2 modals gardent Home derrière */}
           <Route path="/compte" element={<Home />} />
           <Route path="/register" element={<Home />} />
-        </Routes>
-      </main>
+        </Routes >
+      </main >
 
       {/* Overlay global */}
-      {isAuthModal && (
-        <div
-          onClick={handleOverlayClick}
-          style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0,0,0,0.6)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 9999,
-            backdropFilter: "blur(3px)",
-            padding: "20px",
-          }}
-        >
+      {
+        isAuthModal && (
           <div
-            onClick={(e) => e.stopPropagation()}
+            onClick={handleOverlayClick}
             style={{
-              width: "100%",
-              maxWidth: 520,
-              background: "#fff",
-              borderRadius: 12,
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0,0,0,0.6)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 9999,
+              backdropFilter: "blur(3px)",
               padding: "20px",
-              boxShadow: "0 8px 30px rgba(0,0,0,0.35)",
-              overflowY: "auto",
-              maxHeight: "90vh",
             }}
           >
-            {location.pathname === "/compte" && <Compte />}
-            {location.pathname === "/register" && <Register />}
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                width: "100%",
+                maxWidth: 520,
+                background: "#fff",
+                borderRadius: 12,
+                padding: "20px",
+                boxShadow: "0 8px 30px rgba(0,0,0,0.35)",
+                overflowY: "auto",
+                maxHeight: "90vh",
+              }}
+            >
+              {location.pathname === "/compte" && <Compte />}
+              {location.pathname === "/register" && <Register />}
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       <footer className="text-center py-3 bg-light text-muted border-top">
         © 2025 Drive UP — Tous droits réservés.

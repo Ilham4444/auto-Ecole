@@ -59,6 +59,9 @@ const Header = () => {
 
                   <Dropdown.Menu>
                     <Dropdown.Item as={Link} to="/dashboard">Tableau de Bord</Dropdown.Item>
+                    {user.role === 'admin' && (
+                      <Dropdown.Item as={Link} to="/admin">🔧 Administration</Dropdown.Item>
+                    )}
                     <Dropdown.Item onClick={handleLogout} className="text-danger">Se déconnecter</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
