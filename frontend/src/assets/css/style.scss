@@ -1,20 +1,6 @@
-/* ========================================
-   VARIABLES GLOBALES
-======================================== */
-$primary-color: #1e3a8a;
-$hover-color: #0d6efd;
-$text-dark: #0f172a;
-$text-gray: #777;
-$background-light: #f7f9fc;
-$border-radius: 12px;
-$transition: all 0.3s ease;
-
-/* ========================================
-   HEADER & NAVBAR
-======================================== */
 .header {
   .top-bar {
-    background-color: $primary-color;
+    background-color: #1e3a8a; // bleu foncé
     font-size: 0.9rem;
 
     i {
@@ -24,113 +10,234 @@ $transition: all 0.3s ease;
 
   .navbar {
     .nav-link {
-      color: $primary-color !important;
+      color: #1e3a8a !important;
       font-weight: 500;
 
       &:hover {
-        color: $hover-color !important;
+        color: #0d6efd !important;
       }
     }
 
     .btn {
-      background-color: $primary-color;
+      background-color: #1e3a8a;
       border: none;
 
       &:hover {
-        background-color: $hover-color;
+        background-color: #0d6efd;
       }
     }
   }
 }
 
-/* ========================================
-   HERO SECTION
-======================================== */
 .hero-section {
   background: #f8faff;
   min-height: 80vh;
   width: 100%;
 
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+
+
 
 
   h1 {
     font-weight: 800;
-    color: $text-dark;
+    color: #0f172a;
     line-height: 1.2;
   }
 
   .btn {
+
     margin-top: 10px;
-    background-color: $primary-color;
+    background-color: #1e3a8a;
     border: none;
-    color: #fff;
+    color: white;
     padding: 12px 35px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: $transition;
+    transition: all 0.3s ease;
 
     &:hover {
-      background-color: $hover-color;
+      background-color: #0d6efd;
       transform: scale(1.03);
     }
   }
 
-  .stats div {
-    text-align: left;
+  .stats {
+    div {
+      text-align: left;
+    }
   }
 
   .info-card {
     background: #fff;
     border: none;
+    padding: 0rem 0rem;
     width: 80%;
-    padding: 10px 0;
+    padding-top: 10px;
 
     h6 {
-
-      color: $text-dark;
+      color: #0f172a;
 
     }
   }
 }
 
+// Styles pour la section permis
+.permis-section {
+  .permis-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden;
 
-/* ========================================
-   HERO TRAINING / RESSOURCES SECTION
-======================================== */
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+  }
 
+  .card-header {
+    border-bottom: none;
+
+    h4 {
+      font-size: 1.5rem;
+    }
+
+    .badge {
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+    }
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+    color: #1e3a8a;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background-color: #1e3a8a;
+    border-color: #1e3a8a;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #0d6efd;
+      border-color: #0d6efd;
+      transform: scale(1.02);
+    }
+  }
+
+  .list-unstyled {
+    li {
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+  }
+
+  // Styles pour le système de réservation
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
+  .modal-header {
+    .btn-close {
+      filter: invert(1);
+    }
+  }
+
+  .time-slot-btn {
+    min-width: 80px;
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .permis-card {
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+      .d-flex {
+        flex-direction: column;
+        gap: 0.5rem;
+
+        h4,
+        .badge {
+          text-align: center;
+        }
+      }
+    }
+
+    .time-slot-btn {
+      min-width: 70px;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+
+/* Conteneur principal */
+.moncompte-container {
+  display: flex;
+  justify-content: center;
+  padding: 0px 0px;
+  background: #f5f7fb;
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Carte du formulaire */
+.moncompte-card {
+  width: 600px;
+  padding: 60px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  background: #fff;
+  background: #fff;
+}
+
+/* Titres */
+.moncompte-title {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.moncompte-subtitle {
+  text-align: center;
+  color: gray;
+  font-size: 14px;
+  margin-bottom: 0px;
+}
+
+/* Footer */
+.moncompte-footer {
+  text-align: center;
+  margin-top: 0px;
+  font-size: 14px;
+}
+
+
+
+/* SECTION BLEUE : Accédez aux ressources */
 .hero-training-section {
   background: linear-gradient(to right, #0d3b8e, #0a2e6e);
-  padding: 80px 20px;
-  text-align: center;
-  color: #ffffff;
 
   h2 {
     font-size: 2.2rem;
-    font-weight: 700;
-    margin-bottom: 15px;
   }
 
   p {
     font-size: 1.15rem;
     opacity: 0.9;
-    margin-bottom: 30px;
   }
 
   .btn-light {
-    background: #fff;
     color: #0a2e6e;
     font-weight: 600;
-    padding: 12px 30px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
 
     &:hover {
       background-color: #e6edff;
@@ -138,186 +245,66 @@ $transition: all 0.3s ease;
   }
 
   .btn-outline-light {
-    background: transparent;
-    border: 2px solid #fff;
-    color: #fff;
     font-weight: 600;
-    padding: 12px 30px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
 
     &:hover {
       background-color: #ffffff;
       color: #0a2e6e;
     }
   }
-
-  .training-cards {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 30px;
-    margin-top: 40px;
-
-    .card {
-      background: #ffffff;
-      color: #0a2e6e;
-      border-radius: 15px;
-      padding: 25px;
-      width: 280px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-      transition: all 0.3s ease;
-
-      &:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-      }
-
-      h4 {
-        font-size: 1.2rem;
-        font-weight: 700;
-        margin-bottom: 10px;
-      }
-
-      p {
-        font-size: 0.95rem;
-        color: #555;
-        line-height: 1.4;
-      }
-
-      .btn {
-        margin-top: 15px;
-        background-color: $primary-color;
-        color: #fff;
-        border: none;
-        padding: 10px 25px;
-        font-weight: 600;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: $transition;
-
-        &:hover {
-          background-color: $hover-color;
-          transform: scale(1.03);
-        }
-      }
-    }
-  }
 }
 
-/* ========================================
-   À PROPOS SECTION
-======================================== */
 
 .apropos-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  background-color: #0b1c40;
+  background-color: #0b1c40; // bleu foncé
   color: #ffffff;
   padding: 50px;
   gap: 40px;
   font-family: 'Segoe UI', sans-serif;
-
-  .section {
-    flex: 1 1 220px;
-    min-width: 200px;
-
-    h2,
-    h3 {
-      color: #ffffff;
-      font-size: 18px;
-      margin-bottom: 15px;
-    }
-
-    p,
-    ul,
-    li {
-      font-size: 14px;
-      margin-bottom: 10px;
-      color: #cfd3dc;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    a {
-      text-decoration: none;
-      color: #cfd3dc;
-      font-size: 14px;
-
-      &:hover {
-        color: #ffffff;
-        text-decoration: underline;
-      }
-    }
-  }
 }
 
-/* ========================================
-   PERMIS SECTION
-======================================== */
-.permis-section {
-  .permis-card {
-    border-radius: 15px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-    &:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-    }
-
-    .card-header {
-      border-bottom: none;
-
-      h4 {
-        font-size: 1.5rem;
-      }
-
-      .badge {
-        font-size: 0.9rem;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-      }
-    }
-
-    .card-title {
-      font-size: 1.2rem;
-      color: $primary-color;
-      min-height: 3rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-primary {
-      background-color: $primary-color;
-      border-color: $primary-color;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: $transition;
-
-      &:hover {
-        background-color: $hover-color;
-        border-color: $hover-color;
-        transform: scale(1.02);
-      }
-    }
-
-    .list-unstyled li {
-      font-size: 0.9rem;
-      line-height: 1.4;
-    }
-  }
+.section {
+  flex: 1 1 220px;
+  min-width: 200px;
 }
 
-/* ========================================
-   MONITEURS SECTION
-======================================== */
+.section h2,
+.section h3 {
+  color: #ffffff;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.section p,
+.section ul,
+.section li {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #cfd3dc;
+}
+
+.section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.section a {
+  text-decoration: none;
+  color: #cfd3dc;
+  font-size: 14px;
+}
+
+.section a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* =========================================
+   MONITEURS SECTION (Figma Style)
+========================================= */
 
 
 .moniteurs-section {
@@ -347,14 +334,14 @@ $transition: all 0.3s ease;
   }
 
   .moniteur-card {
-    background: #fff;
+    background: #ffffff;
     border-radius: 20px;
     padding: 25px 20px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: $transition;
 
     &:hover {
       transform: translateY(-8px);
@@ -416,7 +403,7 @@ $transition: all 0.3s ease;
           font-weight: 500;
           padding: 5px 10px;
           border-radius: 12px;
-          transition: $transition;
+          transition: all 0.3s ease;
 
           &:hover {
             background-color: #d0e4ff;
@@ -427,14 +414,226 @@ $transition: all 0.3s ease;
     }
   }
 
+  @media (max-width: 768px) {
+    padding: 60px 15px;
 
-/* ========================================
-   EXAMENS SECTION
-======================================== */
+    .moniteurs-grid {
+      gap: 25px;
+    }
+
+    .moniteur-card {
+      padding: 20px 15px;
+
+      .moniteur-img-wrapper {
+        width: 120px;
+        height: 120px;
+      }
+    }
+  }
+}
+
+
+
+.payment-card {
+  display: block;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.subtitle {
+  text-align: center;
+  color: #777;
+  margin-bottom: 30px;
+}
+
+/* ====== Sections numérotées ====== */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 25px 0;
+
+  .number {
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    background: #005bff;
+    color: white;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h3 {
+    font-size: 18px;
+
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+/* ====== Formulaire en grille ====== */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 25px;
+
+  .full {
+    grid-column: span 2;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    input,
+    select {
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid #dcdcdc;
+      background: #f9fafb;
+      transition: 0.2s ease;
+
+      &:focus {
+        border-color: #005bff;
+        background: white;
+      }
+    }
+  }
+}
+
+/* ====== Paiement ====== */
+.payment-box {
+  padding: 15px;
+  border: 1px solid #dcdcdc;
+  border-radius: 12px;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  img {
+    width: 35px;
+  }
+}
+
+/* ====== Bouton ====== */
+.register-btn {
+  margin-top: 25px;
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  background: #005bff;
+  color: white;
+  font-size: 17px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    background: #0041c7;
+  }
+}
+
+/* ====== Pied ====== */
+.login-text {
+  text-align: center;
+  margin-top: 20px;
+
+  a {
+    color: #005bff;
+    font-weight: 600;
+  }
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.payment-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 15px;
+  background: #fafafa;
+  border: 1px solid #e2e2e2;
+  cursor: pointer;
+
+  input {
+    transform: scale(1.3);
+    margin-right: 8px;
+  }
+
+  .logos img {
+    width: 32px;
+  }
+
+  .bank-icon {
+    font-size: 26px;
+  }
+}
+
+/* Uploads */
+.upload-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.upload-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  input[type="file"] {
+    padding: 12px;
+    border-radius: 12px;
+    background: #f8f9fc;
+    border: 1px solid #dcdcdc;
+  }
+}
+
+/* Gros bouton */
+.register-btn.big {
+  margin-top: 30px;
+  padding: 15px;
+  background: #005bff;
+  color: #fff;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  width: 100%;
+}
+
+.return-login {
+  text-align: center;
+  margin-top: 20px;
+
+  a {
+    color: #005bff;
+    font-weight: 600;
+  }
+}
+
 .examens-page {
-  background: $background-light;
   padding: 50px 0;
   text-align: center;
+  background: #f7f9fc;
 
   .title {
     font-size: 36px;
@@ -451,28 +650,29 @@ $transition: all 0.3s ease;
 
   .examens-container {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 35px;
   }
 
   .examen-card {
     width: 380px;
-    background: #fff;
+    background: white;
     border-radius: 15px;
     padding-bottom: 25px;
     overflow: hidden;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: $transition;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease;
 
     &:hover {
       transform: translateY(-6px);
-      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.18);
+      box-shadow: 0px 6px 22px rgba(0, 0, 0, 0.18);
     }
 
+    /* --- HEADER BLEU AVEC LE PRIX ET LA DURATION --- */
     .price-box {
-      background: $hover-color;
-      color: #fff;
+      background: #0d6efd;
+      color: white;
       padding: 22px 25px;
       display: flex;
       justify-content: space-between;
@@ -492,21 +692,21 @@ $transition: all 0.3s ease;
     }
 
     .card-title {
+      margin-top: 25px;
       font-size: 24px;
       font-weight: 700;
       color: #0a3d91;
-      margin-top: 25px;
     }
 
     .description {
-      font-size: 16px;
       color: #666;
+      font-size: 16px;
       margin: 10px auto 25px;
       width: 80%;
       line-height: 1.5;
-      text-align: center;
     }
 
+    /* --- LISTE DES CONDITIONS --- */
     .pre-requis {
       text-align: left;
       width: 80%;
@@ -525,8 +725,8 @@ $transition: all 0.3s ease;
 
         li {
           margin: 8px 0;
-          padding-left: 28px;
           position: relative;
+          padding-left: 28px;
           font-size: 15px;
           color: #444;
 
@@ -543,720 +743,295 @@ $transition: all 0.3s ease;
       }
     }
 
+    /* --- BUTTON --- */
     .btn-reserver {
       margin-top: 10px;
-      background-color: $primary-color;
+      background-color: #1e3a8a;
       border: none;
-      color: #fff;
+      color: white;
+      padding: 12px 100px;
+      margin-top: 10px;
+      background-color: #1e3a8a;
+      border: none;
+      color: white;
       padding: 12px 100px;
       border-radius: 8px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: $transition;
+      transition: all 0.3s ease;
 
       &:hover {
-        background-color: $hover-color;
+        background-color: #0d6efd;
         transform: scale(1.03);
       }
+
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #0d6efd;
+        transform: scale(1.03);
+      }
+
+
     }
   }
 }
 
-/* ========================================
-   DASHBOARD SECTION
-======================================== */
 .dashboard-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 30px 20px;
-  background: $background-light;
-  min-height: 100vh;
-}
-
-.dashboard-header {
-  background: linear-gradient(135deg, $primary-color, $hover-color);
-  color: #fff;
-  padding: 25px 30px;
-  border-radius: $border-radius;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-  h4 {
-    margin: 0;
-    font-size: 1.8rem;
-    font-weight: 700;
+  <<<<<<< HEAD <<<<<<< Updated upstream=======>>>>>>>Stashed changes .dashboard-container {
+    /* margin géré par App.jsx */
   }
 
-  .btn-group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-
-    .btn {
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: $transition;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.3);
-        transform: translateY(-2px);
-      }
-    }
-  }
-}
-
-.dashboard-card {
-  background: #fff;
-  border-radius: $border-radius;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 20px;
-  transition: $transition;
-  border: 1px solid #e8e8e8;
-
-  &:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-    transform: translateY(-3px);
-  }
-
-  h5 {
-    color: $primary-color;
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  p {
-    color: $text-gray;
-    font-size: 0.95rem;
+  =======.payment-card {
+    display: block;
+    padding: 12px;
     margin-bottom: 10px;
-  }
-
-  small {
-    color: #999;
-    font-size: 0.85rem;
-  }
-
-  .progress {
-    height: 10px;
-    border-radius: 5px;
-    background: #e9ecef;
-    overflow: hidden;
-
-    .progress-bar {
-      background: linear-gradient(90deg, $primary-color, $hover-color);
-      transition: width 0.6s ease;
-    }
-  }
-
-  .btn {
-    font-size: 0.85rem;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-weight: 600;
-    transition: $transition;
-
-    &.btn-primary {
-      background: $primary-color;
-      border: none;
-
-      &:hover {
-        background: $hover-color;
-      }
-    }
-
-    &.btn-outline-danger {
-      border-color: #dc3545;
-      color: #dc3545;
-
-      &:hover {
-        background: #dc3545;
-        color: #fff;
-      }
-    }
-
-    &.btn-secondary {
-      background: #6c757d;
-      border: none;
-
-      &:hover {
-        background: #5a6268;
-      }
-    }
-  }
-}
-
-.nav-tabs {
-  border-bottom: 2px solid #dee2e6;
-  margin-bottom: 0;
-
-  .nav-item {
-    margin-bottom: -2px;
-
-    .nav-link {
-      border: none;
-      background: transparent;
-      color: $text-gray;
-      font-weight: 600;
-      padding: 12px 24px;
-      border-bottom: 3px solid transparent;
-      transition: $transition;
-
-      &:hover {
-        color: $primary-color;
-        border-bottom-color: scale-color($primary-color, $lightness: 30%);
-      }
-
-      &.active {
-        color: $primary-color;
-        border-bottom-color: $primary-color;
-        background: transparent;
-      }
-    }
-  }
-}
-
-.tab-content {
-  background: #fff;
-  padding: 25px;
-  border-radius: 0 0 $border-radius $border-radius;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-
-  h4 {
-    color: $primary-color;
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #e8e8e8;
-  }
-
-  .card {
-    border: 1px solid #e8e8e8;
+    border: 1px solid #dcdcdc;
     border-radius: 10px;
-    padding: 18px;
-    margin-bottom: 15px;
-    transition: $transition;
-
-    &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      border-color: $primary-color;
-    }
-
-    h5 {
-      color: $text-dark;
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    p {
-      color: $text-gray;
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-    }
-
-    .badge {
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 0.85rem;
-
-      &.bg-primary {
-        background: $primary-color !important;
-      }
-
-      &.bg-success {
-        background: #28a745 !important;
-      }
-
-      &.bg-warning {
-        background: #ffc107 !important;
-        color: #333;
-      }
-
-      &.bg-danger {
-        background: #dc3545 !important;
-      }
-    }
+    cursor: pointer;
+    transition: 0.3s;
   }
-}
 
-.moncompte-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: $background-light;
-  padding: 40px 20px;
-}
+  .payment-card:hover {
+    background: #f3f3f3;
+  }
 
-.moncompte-card {
-  background: #fff;
-  border-radius: $border-radius;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  padding: 50px 40px;
-  max-width: 500px;
-  width: 100%;
+  .dashboard-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 1200px;
+    /* Augmente ici */
+    max-width: 95%;
+  }
 
-  .moncompte-title {
+  /* ====== Layout général ====== */
+  /* LE CONTENEUR DE LA MODAL */
+  .register-container {
+    position: fixed;
+    top: 0;
+    left: 150px;
+    right: 0px;
+    width: 80vw;
+    height: 100vh;
+
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 20px;
+    background: rgba(0, 0, 0, 0.45);
+    overflow-y: auto;
+
+
+  }
+
+  .register-card {
+    width: 90%;
+    max-width: 1300px;
+    background: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    max-height: none;
+    margin: 0;
+
+
+  }
+
+
+  /* ====== Titres ====== */
+  .title {
     text-align: center;
-    color: $primary-color;
-    font-size: 2rem;
+    font-size: 28px;
     font-weight: 700;
-    margin-bottom: 10px;
   }
 
-  .moncompte-subtitle {
+  .subtitle {
     text-align: center;
-    color: $text-gray;
-    font-size: 0.95rem;
+    color: #777;
     margin-bottom: 30px;
   }
 
-  .form-group {
-    margin-bottom: 20px;
+  /* ====== Sections numérotées ====== */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 25px 0;
 
-    label {
-      font-weight: 600;
-      color: $text-dark;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      transition: $transition;
-
-      &:focus {
-        outline: none;
-        border-color: $primary-color;
-        box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
-      }
-    }
-  }
-
-  .btn {
-    width: 100%;
-    padding: 14px;
-    background: $primary-color;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: 700;
-    font-size: 1rem;
-    transition: $transition;
-    cursor: pointer;
-
-    &:hover {
-      background: $hover-color;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
-    }
-  }
-
-  .moncompte-footer {
-    text-align: center;
-    margin-top: 20px;
-    color: $text-gray;
-    font-size: 0.9rem;
-
-    a {
-      color: $primary-color;
-      font-weight: 600;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-}
-
-.register-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 40px 20px;
-  overflow-y: auto;
-  z-index: 1000;
-
-  .register-card {
-    background: #fff;
-    border-radius: $border-radius;
-    padding: 40px;
-    max-width: 900px;
-    width: 100%;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-
-    .title {
-      text-align: center;
-      color: $primary-color;
-      font-size: 1.8rem;
+    .number {
+      width: 33px;
+      height: 33px;
+      border-radius: 50%;
+      background: #005bff;
+      color: white;
       font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: $text-gray;
-      margin-bottom: 30px;
-    }
-
-    .section-header {
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 12px;
-      margin: 30px 0 20px;
-
-      .number {
-        width: 36px;
-        height: 36px;
-        background: $primary-color;
-        color: #fff;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 1.1rem;
-      }
-
-      h3 {
-        color: $text-dark;
-        font-size: 1.2rem;
-        font-weight: 700;
-        margin: 0;
-      }
     }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
 
-      .full {
-        grid-column: span 2;
-      }
+  /* ====== Formulaire en grille ====== */
+  .form-grid {
+    display: flexbox;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 25px;
 
-      .form-group {
-        display: flex;
-        flex-direction: column;
-
-        label {
-          font-weight: 600;
-          color: $text-dark;
-          margin-bottom: 8px;
-        }
-
-        input,
-        select {
-          padding: 12px 16px;
-          border: 1px solid #ddd;
-          border-radius: 8px;
-          font-size: 0.95rem;
-          transition: $transition;
-
-          &:focus {
-            outline: none;
-            border-color: $primary-color;
-            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
-          }
-
-          &.error {
-            border-color: #dc3545;
-          }
-        }
-
-        .error-text {
-          color: #dc3545;
-          font-size: 0.85rem;
-          margin-top: 5px;
-        }
-      }
+    .full {
+      grid-column: span 2;
     }
 
-    .payment-options {
+    .form-group {
       display: flex;
       flex-direction: column;
-      gap: 15px;
 
-      .payment-box {
-        border: 2px solid #e8e8e8;
-        border-radius: 10px;
-        padding: 16px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        cursor: pointer;
-        transition: $transition;
-
-        &:hover {
-          border-color: $primary-color;
-          background: rgba(30, 58, 138, 0.05);
-        }
-
-        input[type="radio"] {
-          width: 20px;
-          height: 20px;
-          cursor: pointer;
-        }
-      }
-    }
-
-    .upload-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-
-      .upload-item {
-        display: flex;
-        flex-direction: column;
-
-        label {
-          font-weight: 600;
-          color: $text-dark;
-          margin-bottom: 8px;
-        }
-
-        input[type="file"] {
-          padding: 10px;
-          border: 2px dashed #ddd;
-          border-radius: 8px;
-          cursor: pointer;
-          transition: $transition;
-
-          &:hover {
-            border-color: $primary-color;
-          }
-        }
-      }
-    }
-
-    .register-btn {
-      width: 100%;
-      padding: 16px;
-      background: $primary-color;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-top: 30px;
-      cursor: pointer;
-      transition: $transition;
-
-      &:hover {
-        background: $hover-color;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(30, 58, 138, 0.3);
-      }
-
-      &:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-        transform: none;
-      }
-    }
-
-    .return-login {
-      text-align: center;
-      margin-top: 20px;
-
-      a {
-        color: $primary-color;
+      label {
         font-weight: 600;
-        text-decoration: none;
+        margin-bottom: 5px;
+      }
 
-        &:hover {
-          text-decoration: underline;
+      input,
+      select {
+        padding: 11px 14px;
+        border-radius: 10px;
+        border: 1px solid #dcdcdc;
+        background: #f9fafb;
+        transition: 0.2s ease;
+
+        &:focus {
+          border-color: #005bff;
+          background: white;
         }
       }
     }
   }
-}
 
-/* ========================================
-   RESPONSIVE
-======================================== */
-@media (max-width: 768px) {
+  /* ====== Paiement ====== */
+  .payment-box {
+    padding: 15px;
+    border: 1px solid #dcdcdc;
+    border-radius: 12px;
+    background: #f9fafb;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
-  .apropos-container,
-  .training-cards {
+    img {
+      width: 35px;
+    }
+  }
+
+  /* ====== Bouton ====== */
+  .register-btn {
+    margin-top: 25px;
+    width: 100%;
+    padding: 13px;
+    border-radius: 10px;
+    background: #005bff;
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      background: #0041c7;
+    }
+  }
+
+  /* ====== Pied ====== */
+  .login-text {
+    text-align: center;
+    margin-top: 20px;
+
+    a {
+      color: #005bff;
+      font-weight: 600;
+    }
+  }
+
+  .payment-options {
+    display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 12px;
   }
 
-  .examens-container,
-  .moniteurs-grid {
-    gap: 25px;
+  .payment-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px;
+    border-radius: 15px;
+    background: #fafafa;
+    border: 1px solid #e2e2e2;
+    cursor: pointer;
+
+    input {
+      transform: scale(1.3);
+      margin-right: 8px;
+    }
+
+    .logos img {
+      width: 32px;
+    }
+
+    .bank-icon {
+      font-size: 26px;
+    }
   }
 
-  .examen-card,
-  .moniteur-card,
-  .training-cards .card {
+  /* Uploads */
+  .upload-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .upload-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    input[type="file"] {
+      padding: 12px;
+      border-radius: 12px;
+      background: #f8f9fc;
+      border: 1px solid #dcdcdc;
+    }
+  }
+
+  /* Gros bouton */
+  .register-btn.big {
+    margin-top: 30px;
+    padding: 15px;
+    background: #005bff;
+    color: #fff;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    border: none;
     width: 100%;
   }
 
-  .hero-training-section h2 {
-    font-size: 1.8rem;
-  }
+  .return-login {
+    text-align: center;
+    margin-top: 20px;
 
-  .hero-training-section p {
-    font-size: 1rem;
-  }
-}
-
-/* =============================
-   EXAMEN PAGE STYLES
-   ============================= */
-
-.examens-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 30px 20px;
-  background: $background-light;
-  border-radius: $border-radius;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.examens-page .title {
-  font-size: 2rem;
-  color: $primary-color;
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: 700;
-}
-
-.examens-header {
-  text-align: center;
-  margin-bottom: 30px;
-
-  p {
-    color: $text-gray;
-    font-size: 1rem;
-  }
-}
-
-.type-switch {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 15px;
-
-  button {
-    background: rgba(30, 58, 138, 0.1);
-    border: 2px solid $primary-color;
-    color: $primary-color;
-    padding: 8px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: $transition;
-
-    &.active {
-      background: $primary-color;
-      color: #fff;
-    }
-
-    &:hover {
-      background: $hover-color;
-      color: #fff;
+    a {
+      color: #005bff;
+      font-weight: 600;
     }
   }
-}
-
-.examens-container .alert {
-  background: #ffefef;
-  color: #d9534f;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  text-align: center;
-  font-weight: 600;
-}
-
-.slot-day h5 {
-  font-size: 1.2rem;
-  color: $primary-color;
-  margin-bottom: 10px;
-}
-
-.slot-times {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.slot-btn {
-  background: $primary-color;
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: $transition;
-
-  &:hover {
-    background: $hover-color;
-  }
-
-  &.disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-
-  &.selected {
-    background-color: $hover-color;
-    outline: 3px solid #fbbf24;
-    /* Yellow outline to highlight selection */
-    transform: scale(1.05);
-  }
-}
-
-.btn-reserver {
-  display: block;
-  width: 100%;
-  max-width: 250px;
-  margin: 30px auto 0;
-  background: $primary-color;
-  color: #fff;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: $transition;
-
-  &:hover {
-    background: $hover-color;
-  }
-
-  &:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-
 
 
 
