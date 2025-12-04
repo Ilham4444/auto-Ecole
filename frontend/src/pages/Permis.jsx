@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Card, Button, Modal, Form, Badge } from "react-bootstrap";
+import { toast}from "react-toastify";
 import { useUser } from "../context/UserContext"; // Import du contexte
 
 export default function Permis() {
@@ -167,7 +168,7 @@ export default function Permis() {
       };
       const response = await api.post('/reservations', reservationData);
       if (response.data.status) {
-        alert(`✅ Réservation confirmée avec succès!\n\nFormation: ${selectedPermis.title}\nType: ${selectedType === 'code' ? 'Séance de Code' : 'Séance de Conduite'}\nDate: ${selectedDayObj?.day}\nHeure: ${selectedTime}`);
+       toast.success (`✅ Réservation confirmée avec succès!\n\nFormation: ${selectedPermis.title}\nType: ${selectedType === 'code' ? 'Séance de Code' : 'Séance de Conduite'}\nDate: ${selectedDayObj?.day}\nHeure: ${selectedTime}`);
         
         setSelectedPermis(null);
         setReservationStep(0);
@@ -176,12 +177,14 @@ export default function Permis() {
         setSelectedDate("");
         setSelectedTime("");
         
+       setTimeout(() => {
         window.location.href = "/dashboard";
+      }, 2000);
       }
     } catch (error) {
       console.error("Erreur lors de la réservation:", error);
       const errorMessage = error.response?.data?.message || error.response?.data?.errors || "Une erreur est survenue";
-      alert(`❌ Erreur: ${typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage}`);
+      toast.error(` Erreur: ${typeof errorMessage === 'object' ? JSON.stringify(errorMessage) : errorMessage}`);
     }
   };
 

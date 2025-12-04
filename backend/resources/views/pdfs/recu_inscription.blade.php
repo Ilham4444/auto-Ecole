@@ -10,18 +10,18 @@
             color: #333;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
         }
         .header-table {
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             border-bottom: 2px solid #0d6efd;
             padding-bottom: 20px;
         }
         .logo-section h1 {
             color: #0d6efd;
             margin: 0;
-            font-size: 28px;
+            font-size: 20px;
             text-transform: uppercase;
         }
         .logo-section p {
@@ -34,8 +34,8 @@
             vertical-align: top;
         }
         .photo-frame {
-            width: 120px;
-            height: 150px;
+            width: 80px;
+            height: 100px;
             border: 1px solid #ddd;
             padding: 5px;
             background: #fff;
@@ -49,21 +49,21 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            font-size: 10px;
+            font-size: 7px;
             color: #aaa;
             line-height: 140px; /* Vertical center hack for dompdf */
         }
         .document-title {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
         }
         .document-title h2 {
             background-color: #0d6efd;
             color: #fff;
             display: inline-block;
-            padding: 10px 30px;
+            padding: 5px 15px;
             border-radius: 20px;
-            font-size: 18px;
+            font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -78,11 +78,11 @@
         }
         .info-table {
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             border-collapse: collapse;
         }
         .info-table td {
-            padding: 10px;
+            padding: 5px;
             border-bottom: 1px solid #eee;
             vertical-align: top;
         }

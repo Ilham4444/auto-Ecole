@@ -17,7 +17,7 @@ export default function Home() {
             <Col lg={6} className="mb-4 mb-lg-0">
               <h1 className="fw-bold display-5 mb-3">
                 Obtenez Votre <br />
-                Permis en Toute <span className="text-primary">Confiance</span>
+                Permis en Toute <span className="highlight">Confiance</span>
               </h1>
               <p className="text-secondary mb-4">
                 Réservez vos heures de conduite et votre examen de permis en ligne.
@@ -30,7 +30,7 @@ export default function Home() {
                 </Button>
                 <Button
                   variant="outline-primary"
-                  className="rounded-pill px-4 py-2"
+                  className="rounded-pill px-4 py-2 btn-white-bg"
                   href="#examens"
                 >
                   Passer l'examen

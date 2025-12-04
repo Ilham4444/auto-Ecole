@@ -1,0 +1,197 @@
+/* ========================================
+   REGISTRATION FORM
+======================================== */
+.register-container {
+    width: 100%;
+}
+
+.register-card {
+    width: 100%;
+
+    .title {
+        text-align: center;
+        color: $primary-color;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: $text-gray;
+        margin-bottom: 30px;
+    }
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+
+        &.full {
+            grid-column: span 2;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: $text-dark;
+        }
+
+        input,
+        select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: $transition;
+
+            &:focus {
+                border-color: $primary-color;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+            }
+
+            &.error {
+                border-color: #ef4444;
+            }
+        }
+
+        .error-text {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+    }
+
+    .section-header {
+        grid-column: span 2;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+        margin-top: 10px;
+        border-bottom: 2px solid #f1f5f9;
+        padding-bottom: 10px;
+
+        .number {
+            background: $primary-color;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0;
+            color: $text-dark;
+        }
+    }
+
+    .payment-options,
+    .upload-grid {
+        grid-column: span 2;
+    }
+
+    .payment-options {
+        display: flex;
+        gap: 20px;
+
+        .payment-box {
+            flex: 1;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: $transition;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            &:has(input:checked) {
+                border-color: $primary-color;
+                background-color: rgba($primary-color, 0.05);
+            }
+
+            input {
+                width: auto;
+            }
+        }
+    }
+
+    .upload-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+
+        .upload-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            label {
+                font-weight: 600;
+                font-size: 0.9rem;
+            }
+
+            input[type="file"] {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+        }
+    }
+
+    .register-btn {
+        grid-column: span 2;
+        justify-self: center;
+        background-color: $primary-color;
+        color: #fff;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: $transition;
+        margin-top: 20px;
+        width: auto;
+        min-width: 300px;
+
+        &:hover {
+            background-color: $hover-color;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba($primary-color, 0.3);
+        }
+
+        &:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+    }
+}
+
+.return-login {
+    text-align: center;
+    margin-top: 20px;
+
+    a {
+        color: $text-gray;
+        text-decoration: none;
+        font-weight: 600;
+
+        &:hover {
+            color: $primary-color;
+        }
+    }
+}

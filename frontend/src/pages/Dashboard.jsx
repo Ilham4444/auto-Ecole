@@ -95,6 +95,26 @@ export default function Dashboard() {
       alert("❌ Erreur lors de la mise à jour du profil.");
     }
   };
+  const handleReservationStatus = async (id, status) => {
+    try {
+      const api = (await import("../api.jsx")).default;
+      const endpoint = status === 'confirmed' ? 'confirm' : 'cancel';
+      await api.put(`/reservations/${id}/${endpoint}`);
+
+      alert(`Réservation ${status === 'confirmed' ? 'confirmée' : 'refusée'} avec succès !`);
+
+      // Mettre à jour l'état local
+      setUser(prevUser => ({
+        ...prevUser,
+        reservations: prevUser.reservations.map(r =>
+          r.id === id ? { ...r, status: status } : r
+        )
+      }));
+    } catch (error) {
+      console.error("Erreur mise à jour réservation", error);
+      alert("Erreur lors de la mise à jour de la réservation.");
+    }
+  };
 
   if (loading)
     return (
