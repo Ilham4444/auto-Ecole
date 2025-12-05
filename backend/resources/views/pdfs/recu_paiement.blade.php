@@ -3,297 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reçu de Paiement - Auto-École Drive Up</title>
+    <title>Reçu de Paiement - Drive UP</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            padding: 40px 20px;
+            font-family: 'Helvetica', 'Arial', sans-serif;
             color: #333;
             line-height: 1.6;
+            margin: 0;
+            padding: 20px;
         }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        .header-table {
+            width: 100%;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 20px;
         }
-
-        .header {
-            background: linear-gradient(135deg, #1e3a8a 0%, #0d6efd 100%);
-            color: #ffffff;
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-        }
-
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #ffc107, #ff9800, #ffc107);
-        }
-
-        .header h1 {
+        .logo-section h1 {
+            color: #0d6efd;
+            margin: 0;
             font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
-
-        .header .subtitle {
-            font-size: 14px;
-            opacity: 0.9;
-            font-weight: 400;
+        .logo-section p {
+            margin: 5px 0;
+            font-size: 12px;
+            color: #666;
         }
-
-        .receipt-number {
-            background: rgba(255, 255, 255, 0.15);
+        .document-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .document-title h2 {
+            background-color: #0d6efd;
+            color: #fff;
             display: inline-block;
-            padding: 8px 20px;
+            padding: 10px 30px;
             border-radius: 20px;
-            margin-top: 15px;
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 18px;
+            text-transform: uppercase;
             letter-spacing: 1px;
         }
-
-        .content {
-            padding: 35px 40px;
-        }
-
-        .section {
-            margin-bottom: 30px;
-        }
-
         .section-title {
-            color: #1e3a8a;
-            font-size: 18px;
-            font-weight: 700;
+            color: #0d6efd;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
             margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #e8eaf0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
         }
-
-        .section-title .icon {
-            font-size: 20px;
-        }
-
-        table {
+        .info-table {
             width: 100%;
+            margin-bottom: 30px;
             border-collapse: collapse;
-            margin-top: 12px;
         }
-
-        table tr {
-            border-bottom: 1px solid #f0f2f5;
+        .info-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
         }
-
-        table tr:last-child {
-            border-bottom: none;
-        }
-
-        table td {
-            padding: 12px 0;
-            font-size: 14px;
-        }
-
-        table td:first-child {
-            font-weight: 600;
+        .label {
+            font-weight: bold;
             color: #555;
             width: 40%;
         }
-
-        table td:last-child {
-            color: #333;
+        .value {
+            color: #000;
+            font-weight: 500;
         }
-
-        .total-amount {
-            background: linear-gradient(135deg, #1e3a8a 0%, #0d6efd 100%);
-            color: #ffffff;
-            padding: 20px;
+        .total-amount-box {
+            background-color: #f8f9fa;
+            border: 2px solid #0d6efd;
             border-radius: 10px;
+            padding: 20px;
             text-align: center;
-            margin: 25px 0;
+            margin: 30px 0;
         }
-
-        .total-amount .label {
+        .total-amount-box .label {
+            color: #666;
             font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
-
-        .total-amount .amount {
+        .total-amount-box .amount {
+            color: #0d6efd;
             font-size: 36px;
-            font-weight: 700;
-            letter-spacing: 1px;
+            font-weight: bold;
         }
-
-        .signature-section {
-            display: flex;
-            justify-content: space-between;
+        .footer-section {
             margin-top: 50px;
-            padding-top: 30px;
-            border-top: 2px dashed #e0e0e0;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
         }
-
+        .signature-table {
+            width: 100%;
+        }
         .signature-box {
             text-align: center;
-            width: 45%;
+            padding-top: 10px;
         }
-
-        .signature-box .label {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 40px;
+        .signature-line {
+            margin-top: 60px;
+            border-top: 1px dashed #ccc;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
         }
-
-        .signature-box .line {
-            border-top: 2px solid #333;
-            margin-top: 10px;
-            padding-top: 8px;
-            font-size: 12px;
-            color: #888;
-        }
-
-        .footer {
-            background: #f8f9fa;
-            padding: 25px 30px;
+        .legal-text {
+            font-size: 10px;
+            color: #999;
             text-align: center;
-            color: #666;
-            font-size: 13px;
-            border-top: 1px solid #e0e0e0;
+            margin-top: 40px;
         }
-
-        .footer .company-info {
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #1e3a8a;
-        }
-
-        .footer .thank-you {
-            margin-top: 12px;
-            font-size: 14px;
-            color: #0d6efd;
-            font-weight: 600;
-        }
-
         .badge {
-            display: inline-block;
+            background-color: #28a745;
+            color: #fff;
             padding: 4px 12px;
-            background: #28a745;
-            color: #ffffff;
             border-radius: 12px;
             font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>🚗 AUTO-ÉCOLE DRIVE UP</h1>
-        <div class="subtitle">Reçu de Paiement Officiel</div>
-        <div class="receipt-number">N° {{ str_pad($paiement->id, 6, '0', STR_PAD_LEFT) }}</div>
+    <!-- En-tête avec Logo -->
+    <table class="header-table">
+        <tr>
+            <td class="logo-section">
+                <h1>Drive UP</h1>
+                <p>Auto-École d'Excellence</p>
+                <p>📍 Rue de Hassan 2, Agadir</p>
+                <p>📞 0631212766 | 📧 contact@driveup.ma</p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Titre du Document -->
+    <div class="document-title">
+        <h2>Reçu de Paiement N° {{ str_pad($paiement->id, 6, '0', STR_PAD_LEFT) }}</h2>
     </div>
 
-    <div class="content">
-        <div class="section">
-            <div class="section-title">
-                <span class="icon">👤</span>
-                Informations du Candidat
-            </div>
-            <table>
-                <tr>
-                    <td>Nom et Prénom</td>
-                    <td><strong>{{ $user->nom }} {{ $user->prenom }}</strong></td>
-                </tr>
-                <tr>
-                    <td>Carte Nationale (CIN)</td>
-                    <td>{{ $user->carte_nationale }}</td>
-                </tr>
-                <tr>
-                    <td>Téléphone</td>
-                    <td>{{ $user->telephone }}</td>
-                </tr>
-                <tr>
-                    <td>Adresse</td>
-                    <td>{{ $user->adresse }}</td>
-                </tr>
-                <tr>
-                    <td>Catégorie de Permis</td>
-                    <td><strong>Permis {{ $user->categorie_permis }}</strong></td>
-                </tr>
-            </table>
-        </div>
+    <!-- Informations Candidat -->
+    <div class="section-title">👤 Informations du Candidat</div>
+    <table class="info-table">
+        <tr>
+            <td class="label">Nom & Prénom</td>
+            <td class="value">{{ strtoupper($user->nom) }} {{ ucfirst($user->prenom) }}</td>
+        </tr>
+        <tr>
+            <td class="label">Numéro CIN</td>
+            <td class="value">{{ $user->carte_nationale }}</td>
+        </tr>
+        <tr>
+            <td class="label">Téléphone</td>
+            <td class="value">{{ $user->telephone }}</td>
+        </tr>
+        <tr>
+            <td class="label">Adresse</td>
+            <td class="value">{{ $user->adresse }}</td>
+        </tr>
+        <tr>
+            <td class="label">Catégorie de Permis</td>
+            <td class="value" style="font-weight: bold; color: #0d6efd;">Permis {{ $user->categorie_permis }}</td>
+        </tr>
+    </table>
 
-        <div class="section">
-            <div class="section-title">
-                <span class="icon">💳</span>
-                Détails du Paiement
-            </div>
-            <table>
-                <tr>
-                    <td>Date du Paiement</td>
-                    <td>{{ \Carbon\Carbon::parse($paiement->date)->format('d/m/Y à H:i') }}</td>
-                </tr>
-                <tr>
-                    <td>Méthode de Paiement</td>
-                    <td>{{ ucfirst($user->methode_paiement ?? 'Espèces') }}</td>
-                </tr>
-                <tr>
-                    <td>Motif</td>
-                    <td>{{ $paiement->motif ?? 'Frais de formation' }}</td>
-                </tr>
-                <tr>
-                    <td>Statut</td>
-                    <td><span class="badge">✓ PAYÉ</span></td>
-                </tr>
-            </table>
-        </div>
+    <!-- Détails du Paiement -->
+    <div class="section-title">💳 Détails du Paiement</div>
+    <table class="info-table">
+        <tr>
+            <td class="label">Date du Paiement</td>
+            <td class="value">{{ \Carbon\Carbon::parse($paiement->date)->format('d/m/Y à H:i') }}</td>
+        </tr>
+        <tr>
+            <td class="label">Méthode de Paiement</td>
+            <td class="value">{{ ucfirst($user->methode_paiement ?? 'Espèces') }}</td>
+        </tr>
+        <tr>
+            <td class="label">Motif</td>
+            <td class="value">{{ $paiement->motif ?? 'Frais de formation' }}</td>
+        </tr>
+        <tr>
+            <td class="label">Statut</td>
+            <td class="value"><span class="badge">✓ PAYÉ</span></td>
+        </tr>
+    </table>
 
-        <div class="total-amount">
-            <div class="label">Montant Total Payé</div>
-            <div class="amount">{{ number_format($paiement->montant, 2, ',', ' ') }} DH</div>
-        </div>
-
-        <div class="signature-section">
-            <div class="signature-box">
-                <div class="label">Signature du Candidat</div>
-                <div class="line">{{ $user->nom }} {{ $user->prenom }}</div>
-            </div>
-            <div class="signature-box">
-                <div class="label">Cachet et Signature Drive Up</div>
-                <div class="line">Auto-École Drive Up</div>
-            </div>
-        </div>
+    <!-- Montant Total -->
+    <div class="total-amount-box">
+        <div class="label">Montant Total Payé</div>
+        <div class="amount">{{ number_format($paiement->montant, 2, ',', ' ') }} DH</div>
     </div>
 
-    <div class="footer">
-        <div class="company-info">AUTO-ÉCOLE DRIVE UP</div>
-        <div>Reçu généré automatiquement le {{ \Carbon\Carbon::now()->format('d/m/Y à H:i') }}</div>
-        <div class="thank-you">✨ Merci pour votre confiance ! Bonne route avec Drive Up 🚗</div>
+    <!-- Signatures -->
+    <div class="footer-section">
+        <table class="signature-table">
+            <tr>
+                <td class="signature-box">
+                    <strong>Signature du Candidat</strong>
+                    <div class="signature-line"></div>
+                </td>
+                <td class="signature-box">
+                    <strong>Cachet de l'Établissement</strong>
+                    <div class="signature-line"></div>
+                </td>
+            </tr>
+        </table>
     </div>
-</div>
+
+    <div class="legal-text">
+        <p>Ce document atteste du paiement effectué au sein de l'auto-école Drive UP.</p>
+        <p>Généré le {{ \Carbon\Carbon::now()->format('d/m/Y à H:i') }}</p>
+    </div>
 
 </body>
 </html>
-

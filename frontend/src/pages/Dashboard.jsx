@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
 import { Modal, Button, Form } from "react-bootstrap";
+import { toast } from "react-toastify";
 import "../assets/css/UnifiedDashboard.css";
 
 export default function Dashboard() {
@@ -45,11 +46,11 @@ export default function Dashboard() {
         setLoading(false);
 
         if (err.response && err.response.status === 401) {
-          alert("Session expirée. Veuillez vous reconnecter.");
+          toast.error("Session expirée. Veuillez vous reconnecter.");
           logoutUser();
           navigate("/compte");
         } else {
-          alert("Erreur de chargement des données. Veuillez réessayer.");
+          toast.error("Erreur de chargement des données. Veuillez réessayer.");
         }
       }
     };
@@ -86,14 +87,14 @@ export default function Dashboard() {
       const response = await api.put("/profil", editFormData);
 
       if (response.data.status) {
-        alert("✅ Profil mis à jour avec succès !");
+        toast.success("Profil mis à jour avec succès !");
         // Mettre à jour l'utilisateur localement avec les nouvelles données
         setUser({ ...user, ...response.data.user });
         setShowEditModal(false);
       }
     } catch (error) {
       console.error("Erreur mise à jour profil", error);
-      alert("❌ Erreur lors de la mise à jour du profil.");
+      toast.error("Erreur lors de la mise à jour du profil.");
     }
   };
   const handleReservationStatus = async (id, status) => {
@@ -102,7 +103,7 @@ export default function Dashboard() {
       const endpoint = status === 'confirmed' ? 'confirm' : 'cancel';
       await api.put(`/reservations/${id}/${endpoint}`);
 
-      alert(`Réservation ${status === 'confirmed' ? 'confirmée' : 'refusée'} avec succès !`);
+      toast.success(`Réservation ${status === 'confirmed' ? 'confirmée' : 'refusée'} avec succès !`);
 
       // Mettre à jour l'état local
       setUser(prevUser => ({
@@ -113,7 +114,7 @@ export default function Dashboard() {
       }));
     } catch (error) {
       console.error("Erreur mise à jour réservation", error);
-      alert("Erreur lors de la mise à jour de la réservation.");
+      toast.error("Erreur lors de la mise à jour de la réservation.");
     }
   };
 
@@ -302,7 +303,7 @@ export default function Dashboard() {
                                   const api = (await import("../api.jsx")).default;
                                   await api.delete(`/reservations/${r.id}`);
 
-                                  alert('✅ Réservation annulée avec succès');
+                                  toast.success('Réservation annulée avec succès');
                                   // Mettre à jour l'état local au lieu de recharger la page
                                   setUser({
                                     ...user,
@@ -311,7 +312,7 @@ export default function Dashboard() {
 
                                 } catch (error) {
                                   console.error('Erreur:', error);
-                                  alert("❌ Erreur lors de l'annulation");
+                                  toast.error("Erreur lors de l'annulation");
                                 }
                               }
                             }}
@@ -342,7 +343,7 @@ export default function Dashboard() {
                             try {
                               const token = localStorage.getItem("token");
                               if (!token) {
-                                alert("Vous devez être connecté pour télécharger ce document.");
+                                toast.warning("Vous devez être connecté pour télécharger ce document.");
                                 return;
                               }
 
@@ -364,7 +365,7 @@ export default function Dashboard() {
                               window.URL.revokeObjectURL(url);
                             } catch (error) {
                               console.error("Erreur téléchargement:", error);
-                              alert(`Erreur lors du téléchargement: ${error.message}`);
+                              toast.error(`Erreur lors du téléchargement: ${error.message}`);
                             }
                           }}
                         >
@@ -380,10 +381,29 @@ export default function Dashboard() {
                 {/* Profil */}
                 <div className="tab-pane fade" id="profil">
                   <h4>Mon Profil</h4>
-                  <p><strong>Nom :</strong> {user.nom} {user.prenom}</p>
-                  <p><strong>Email :</strong> {user.email}</p>
-                  <p><strong>Téléphone :</strong> {user.telephone}</p>
-                  <p><strong>Catégorie du permis :</strong> {user.categorie_permis}</p>
+
+                  <div className="card p-3 mb-3">
+                    <h5 className="text-primary mb-3">👤 Informations Personnelles</h5>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <p><strong>Nom :</strong> {user.nom}</p>
+                        <p><strong>Prénom :</strong> {user.prenom}</p>
+                        <p><strong>Email :</strong> {user.email}</p>
+                        <p><strong>Téléphone :</strong> {user.telephone}</p>
+                      </div>
+                      <div className="col-md-6">
+                        <p><strong>Date de naissance :</strong> {user.date_naissance ? new Date(user.date_naissance).toLocaleDateString('fr-FR') : 'Non renseignée'}</p>
+                        <p><strong>Carte Nationale (CIN) :</strong> {user.carte_nationale || 'Non renseignée'}</p>
+                        <p><strong>Adresse :</strong> {user.adresse || 'Non renseignée'}</p>
+                        <p><strong>Méthode de paiement :</strong> {user.methode_paiement ? user.methode_paiement.charAt(0).toUpperCase() + user.methode_paiement.slice(1) : 'Non renseignée'}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="card p-3 mb-3">
+                    <h5 className="text-primary mb-3">🚗 Formation</h5>
+                    <p><strong>Catégorie du permis :</strong> Permis {user.categorie_permis}</p>
+                  </div>
 
                   <button className="btn btn-primary mt-2" onClick={handleEditClick}>
                     ✏ Modifier les informations
