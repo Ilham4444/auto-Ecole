@@ -559,7 +559,7 @@ export default function Dashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {user.candidates.map((candidate) => (
+                      {filteredStudents.map((candidate) => (
                         <tr key={candidate.id}>
                           <td>{candidate.nom} {candidate.prenom}</td>
                           <td>{candidate.email}</td>
