@@ -28,7 +28,7 @@ export default function Home() {
                 <Button variant="primary" href="#permis">
                   Réserver une leçon
                 </Button>
-                <Button variant="primary" href="#examens">
+                <Button variant="outline-primary" href="#examens">
                   Passer l'examen
                 </Button>
               </div>
@@ -95,7 +95,7 @@ export default function Home() {
               href="https://wa.me/212620958131"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-primary fw-bold"
+              className="btn btn-outline-primary fw-bold"
             >
               Nous Contacter
             </a>
