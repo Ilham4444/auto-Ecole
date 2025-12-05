@@ -498,9 +498,9 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-          </>
-        );
-        })()}
+          </> >
+        )}
+
 
         {/* ================== VUE MONITEUR ================== */}
         {user.role === 'moniteur' && (() => {
