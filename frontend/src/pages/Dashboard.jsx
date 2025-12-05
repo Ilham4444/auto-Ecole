@@ -21,6 +21,10 @@ export default function Dashboard() {
     email: "",
   });
 
+  // États de recherche pour moniteur
+  const [searchStudent, setSearchStudent] = useState("");
+  const [searchReservation, setSearchReservation] = useState("");
+
   useEffect(() => {
     if (!contextUser) return;
 
@@ -495,152 +499,169 @@ export default function Dashboard() {
               </div>
             </div>
           </>
-        )}
+        );
+        })()}
 
         {/* ================== VUE MONITEUR ================== */}
-        {user.role === 'moniteur' && (
-          <>
-            {/* Cartes de statistiques colorées */}
-            <div className="stats-grid">
-              <div className="stat-card primary">
-                <div className="stat-icon">👥</div>
-                <div className="stat-label">Mes Élèves</div>
-                <div className="stat-value">{user.candidates ? user.candidates.length : 0}</div>
-              </div>
-              <div className="stat-card success">
-                <div className="stat-icon">✅</div>
-                <div className="stat-label">Réservations Confirmées</div>
-                <div className="stat-value">
-                  {user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0}
-                </div>
-              </div>
-              <div className="stat-card warning">
-                <div className="stat-icon">⏳</div>
-                <div className="stat-label">Réservations en Attente</div>
-                <div className="stat-value">
-                  {user.reservations ? user.reservations.filter(r => r.status === 'pending').length : 0}
-                </div>
-              </div>
-            </div>
+        {user.role === 'moniteur' && (() => {
+          // Fonctions de filtrage pour moniteur
+          const filteredStudents = (user.candidates || []).filter(c =>
+            (c.nom && c.nom.toLowerCase().includes(searchStudent.toLowerCase())) ||
+            (c.prenom && c.prenom.toLowerCase().includes(searchStudent.toLowerCase())) ||
+            (c.email && c.email.toLowerCase().includes(searchStudent.toLowerCase())) ||
+            (c.categorie_permis && c.categorie_permis.toLowerCase().includes(searchStudent.toLowerCase()))
+          );
 
-            {/* Section: Mes Élèves - Tableau */}
-            <div className="dashboard-section mt-4">
-              <h3>👥 Mes Élèves Assignés</h3>
-              {user.candidates && user.candidates.length > 0 ? (
-                <table className="dashboard-table">
-                  <thead>
-                    <tr>
-                      <th>Nom</th>
-                      <th>Email</th>
-                      <th>Téléphone</th>
-                      <th>Permis</th>
-                      <th>Adresse</th>
-                      <th>Statut</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {user.candidates.map((candidate) => (
-                      <tr key={candidate.id}>
-                        <td>{candidate.nom} {candidate.prenom}</td>
-                        <td>{candidate.email}</td>
-                        <td>{candidate.telephone}</td>
-                        <td>
-                          <span className="status-badge completed">{candidate.categorie_permis}</span>
-                        </td>
-                        <td>{candidate.adresse}</td>
-                        <td>
-                          <span className="status-badge confirmed">Assigné</span>
-                        </td>
+          const filteredReservations = (user.reservations || []).filter(r =>
+            (r.student_name && r.student_name.toLowerCase().includes(searchReservation.toLowerCase())) ||
+            (r.type && r.type.toLowerCase().includes(searchReservation.toLowerCase()))
+          );
+
+          return (
+            <>
+
+              {/* Cartes de statistiques colorées */}
+              <div className="stats-grid">
+                <div className="stat-card primary">
+                  <div className="stat-icon">👥</div>
+                  <div className="stat-label">Mes Élèves</div>
+                  <div className="stat-value">{user.candidates ? user.candidates.length : 0}</div>
+                </div>
+                <div className="stat-card success">
+                  <div className="stat-icon">✅</div>
+                  <div className="stat-label">Réservations Confirmées</div>
+                  <div className="stat-value">
+                    {user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0}
+                  </div>
+                </div>
+                <div className="stat-card warning">
+                  <div className="stat-icon">⏳</div>
+                  <div className="stat-label">Réservations en Attente</div>
+                  <div className="stat-value">
+                    {user.reservations ? user.reservations.filter(r => r.status === 'pending').length : 0}
+                  </div>
+                </div>
+              </div>
+
+              {/* Section: Mes Élèves - Tableau */}
+              <div className="dashboard-section mt-4">
+                <h3>👥 Mes Élèves Assignés</h3>
+                {user.candidates && user.candidates.length > 0 ? (
+                  <table className="dashboard-table">
+                    <thead>
+                      <tr>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Permis</th>
+                        <th>Adresse</th>
+                        <th>Statut</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <div className="alert alert-info">
-                  <h4>Aucun élève assigné</h4>
-                  <p>Vous n'avez pas encore d'élèves assignés par l'administrateur.</p>
-                </div>
-              )}
-            </div>
+                    </thead>
+                    <tbody>
+                      {user.candidates.map((candidate) => (
+                        <tr key={candidate.id}>
+                          <td>{candidate.nom} {candidate.prenom}</td>
+                          <td>{candidate.email}</td>
+                          <td>{candidate.telephone}</td>
+                          <td>
+                            <span className="status-badge completed">{candidate.categorie_permis}</span>
+                          </td>
+                          <td>{candidate.adresse}</td>
+                          <td>
+                            <span className="status-badge confirmed">Assigné</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="alert alert-info">
+                    <h4>Aucun élève assigné</h4>
+                    <p>Vous n'avez pas encore d'élèves assignés par l'administrateur.</p>
+                  </div>
+                )}
+              </div>
 
-            {/* Section: Gestion des Réservations - Tableau */}
-            <div className="dashboard-section mt-4">
-              <h3>📅 Gestion des Réservations</h3>
-              {user.reservations && user.reservations.length > 0 ? (
-                <table className="dashboard-table">
-                  <thead>
-                    <tr>
-                      <th>Type</th>
-                      <th>Élève</th>
-                      <th>Permis</th>
-                      <th>Date</th>
-                      <th>Heure</th>
-                      <th>Statut</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {user.reservations.map((r) => (
-                      <tr key={r.id}>
-                        <td>{r.type}</td>
-                        <td>{r.student_name || "Élève"}</td>
-                        <td>{r.permis?.title || 'Permis'}</td>
-                        <td><small>{r.date}</small></td>
-                        <td>{r.time}</td>
-                        <td>
-                          <span className={`status-badge ${r.status === 'confirmed' ? 'confirmed' :
+              {/* Section: Gestion des Réservations - Tableau */}
+              <div className="dashboard-section mt-4">
+                <h3>📅 Gestion des Réservations</h3>
+                {user.reservations && user.reservations.length > 0 ? (
+                  <table className="dashboard-table">
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th>Élève</th>
+                        <th>Permis</th>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {user.reservations.map((r) => (
+                        <tr key={r.id}>
+                          <td>{r.type}</td>
+                          <td>{r.student_name || "Élève"}</td>
+                          <td>{r.permis?.title || 'Permis'}</td>
+                          <td><small>{r.date}</small></td>
+                          <td>{r.time}</td>
+                          <td>
+                            <span className={`status-badge ${r.status === 'confirmed' ? 'confirmed' :
                               r.status === 'rejected' ? 'cancelled' :
                                 'pending'
-                            }`}>
-                            {r.status === 'confirmed' ? 'Confirmé' :
-                              r.status === 'rejected' ? 'Refusé' :
-                                'En attente'}
-                          </span>
-                        </td>
-                        <td>
-                          {r.status === 'pending' && (
-                            <>
-                              <button
-                                className="action-btn success"
-                                onClick={() => handleReservationStatus(r.id, 'confirmed')}
-                              >
-                                ✅ Confirmer
-                              </button>
+                              }`}>
+                              {r.status === 'confirmed' ? 'Confirmé' :
+                                r.status === 'rejected' ? 'Refusé' :
+                                  'En attente'}
+                            </span>
+                          </td>
+                          <td>
+                            {r.status === 'pending' && (
+                              <>
+                                <button
+                                  className="action-btn success"
+                                  onClick={() => handleReservationStatus(r.id, 'confirmed')}
+                                >
+                                  ✅ Confirmer
+                                </button>
+                                <button
+                                  className="action-btn danger"
+                                  onClick={() => handleReservationStatus(r.id, 'rejected')}
+                                >
+                                  ❌ Annuler
+                                </button>
+                              </>
+                            )}
+                            {r.status === 'confirmed' && (
                               <button
                                 className="action-btn danger"
                                 onClick={() => handleReservationStatus(r.id, 'rejected')}
                               >
-                                ❌ Annuler
+                                Annuler confirmation
                               </button>
-                            </>
-                          )}
-                          {r.status === 'confirmed' && (
-                            <button
-                              className="action-btn danger"
-                              onClick={() => handleReservationStatus(r.id, 'rejected')}
-                            >
-                              Annuler confirmation
-                            </button>
-                          )}
-                          {r.status === 'rejected' && (
-                            <button
-                              className="action-btn success"
-                              onClick={() => handleReservationStatus(r.id, 'confirmed')}
-                            >
-                              Rétablir
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <p>Aucune réservation trouvée.</p>
-              )}
-            </div>
-          </>
-        )}
+                            )}
+                            {r.status === 'rejected' && (
+                              <button
+                                className="action-btn success"
+                                onClick={() => handleReservationStatus(r.id, 'confirmed')}
+                              >
+                                Rétablir
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p>Aucune réservation trouvée.</p>
+                )}
+              </div>
+            </>
+          );
+        })()}
       </div>
 
       {/* ================== MODAL EDIT PROFIL ================== */}
