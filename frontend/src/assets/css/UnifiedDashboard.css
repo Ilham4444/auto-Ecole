@@ -13,22 +13,6 @@
     --text-dark: #1e293b;
     --text-gray: #64748b;
     --border-color: #e2e8f0;
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-    --transition: all 0.3s ease;
-}
-
-/* Container principal */
-.unified-dashboard-container {
-    min-height: calc(100vh - 200px);
-    background: var(--bg-light);
-    padding: 30px 20px;
-}
-
-/* En-tête du dashboard */
-.unified-dashboard-header {
-    background: white;
     padding: 25px 30px;
     border-radius: 12px;
     box-shadow: var(--shadow-md);
