@@ -5,6 +5,7 @@ import { useUser } from "../context/UserContext";
 import { Modal, Button, Form } from "react-bootstrap";
 import { toast } from "react-toastify";
 import "../assets/css/UnifiedDashboard.css";
+import "../assets/css/CandidateDashboard.css";
 
 export default function Dashboard() {
   const { user: contextUser, logoutUser } = useUser();
@@ -24,6 +25,9 @@ export default function Dashboard() {
   // États de recherche pour moniteur
   const [searchStudent, setSearchStudent] = useState("");
   const [searchReservation, setSearchReservation] = useState("");
+
+  // État pour l'onglet actif (pour les candidats)
+  const [activeTab, setActiveTab] = useState("reservations");
 
   useEffect(() => {
     if (!contextUser) return;
@@ -163,144 +167,144 @@ export default function Dashboard() {
         {/* ================== VUE CANDIDAT ================== */}
         {user.role === "candidate" && (
           <>
-            <div className="row mt-4">
-              <div className="col-md-4 mb-4">
-                <div className="dashboard-card p-3">
-                  <h5>Code de la Route</h5>
-                  <p>Progression : {user.cours_code}/20 heures</p>
-                  <div className="progress mb-2">
+            {/* Stats Cards */}
+            <div className="candidate-stats-grid">
+              {/* Code de la Route Card */}
+              <div className="candidate-stat-card">
+                <div className="candidate-stat-header">
+                  <h3 className="candidate-stat-title">Code de la Route</h3>
+                  <div className="candidate-stat-icon">📘</div>
+                </div>
+                <div className="candidate-stat-content">
+                  <p className="candidate-stat-label">Progression : {user.cours_code}/20 heures</p>
+                  <div className="candidate-progress-bar">
                     <div
-                      className="progress-bar"
+                      className="candidate-progress-fill"
                       style={{ width: `${user.cours_code * 5}%` }}
                     ></div>
                   </div>
-                  <small>
-                    Examen : {user.examen_code ? "Réussi" : "Non passé"}
+                  <small className="candidate-stat-footer">
+                    Examen : {user.examen_code ? "✅ Réussi" : "❌ Non passé"}
                   </small>
                 </div>
               </div>
 
-              <div className="col-md-4 mb-4">
-                <div className="dashboard-card p-3">
-                  <h5>Conduite Pratique</h5>
-                  <p>Progression : {user.cours_conduite}/30 heures</p>
-                  <div className="progress mb-2">
+              {/* Conduite Pratique Card */}
+              <div className="candidate-stat-card">
+                <div className="candidate-stat-header">
+                  <h3 className="candidate-stat-title">Conduite Pratique</h3>
+                  <div className="candidate-stat-icon">🚗</div>
+                </div>
+                <div className="candidate-stat-content">
+                  <p className="candidate-stat-label">Progression : {user.cours_conduite}/30 heures</p>
+                  <div className="candidate-progress-bar">
                     <div
-                      className="progress-bar"
+                      className="candidate-progress-fill"
                       style={{
                         width: `${(user.cours_conduite / 30) * 100}%`,
                       }}
                     ></div>
                   </div>
-                  <small>
+                  <small className="candidate-stat-footer">
                     Heures restantes : {30 - user.cours_conduite}h
                   </small>
                 </div>
               </div>
 
-              <div className="col-md-4 mb-4">
-                <div className="dashboard-card p-3 position-relative">
-                  <button
-                    className="btn btn-sm btn-primary position-absolute"
-
-                    style={{ top: "10px", right: "10px", zIndex: 10 }}
-                    onClick={() => {
-                      console.log("Navigation vers paiement");
-                      navigate("/paiement");
-                    }}
-
-                  >
-                    💳 Payer
-                  </button>
-                  <h5>Solde Restant</h5>
-                  <p>Payé : {user.total_paye || 0} Dh</p>
-                  <div className="progress mb-2">
+              {/* Solde Restant Card */}
+              <div className="candidate-stat-card">
+                <button
+                  className="candidate-pay-button"
+                  onClick={() => {
+                    console.log("Navigation vers paiement");
+                    navigate("/paiement");
+                  }}
+                >
+                  💳 Payer
+                </button>
+                <div className="candidate-stat-header">
+                  <h3 className="candidate-stat-title">Solde Restant</h3>
+                  <div className="candidate-stat-icon">💰</div>
+                </div>
+                <div className="candidate-stat-content">
+                  <p className="candidate-stat-label">Payé : {user.total_paye || 0} Dh</p>
+                  <div className="candidate-progress-bar">
                     <div
-                      className="progress-bar"
+                      className="candidate-progress-fill"
                       style={{
-                        width: `${(user.total_paye / (user.total_a_payer || 1)) * 100
-                          }%`,
+                        width: `${(user.total_paye / (user.total_a_payer || 1)) * 100}%`,
                       }}
                     ></div>
                   </div>
-                  <small>
-                    Reste à payer :{" "}
-                    {(user.total_a_payer || 0) - (user.total_paye || 0)} Dh
+                  <small className="candidate-stat-footer">
+                    Reste à payer : {(user.total_a_payer || 0) - (user.total_paye || 0)} Dh
                   </small>
                 </div>
               </div>
             </div>
 
             {/* Onglets */}
-            <div className="mt-5">
-              <ul className="nav nav-tabs">
-                <li className="nav-item">
-                  <button
-                    className="nav-link active"
-                    data-bs-toggle="tab"
-                    data-bs-target="#reservations"
-                  >
-                    Réservations
-                  </button>
-                </li>
+            <div className="candidate-tabs-container mt-5">
+              <div className="candidate-tabs-nav">
+                <button
+                  className={`candidate-tab-button ${activeTab === 'reservations' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('reservations')}
+                >
+                  📅 Réservations
+                </button>
+                <button
+                  className={`candidate-tab-button ${activeTab === 'paiements' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('paiements')}
+                >
+                  💳 Paiements
+                </button>
+                <button
+                  className={`candidate-tab-button ${activeTab === 'profil' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('profil')}
+                >
+                  👤 Mon Profil
+                </button>
+              </div>
 
-                <li className="nav-item">
-                  <button
-                    className="nav-link"
-                    data-bs-toggle="tab"
-                    data-bs-target="#paiements"
-                  >
-                    Paiements
-                  </button>
-                </li>
-
-                <li className="nav-item">
-                  <button
-                    className="nav-link"
-                    data-bs-toggle="tab"
-                    data-bs-target="#profil"
-                  >
-                    Mon Profil
-                  </button>
-                </li>
-              </ul>
-
-              <div className="tab-content p-3 border border-top-0">
-
-                <div className="tab-pane fade show active" id="reservations">
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h4>Mes Réservations</h4>
+              <div className="tab-content candidate-tab-content">
+                {/* TAB RÉSERVATIONS */}
+                <div className={`candidate-tab-pane ${activeTab === 'reservations' ? 'active' : ''}`}>
+                  <div className="reservations-header">
+                    <h4 className="reservations-title">Mes Réservations</h4>
                   </div>
 
                   {user.moniteur_assigne && (
-                    <div className="alert alert-info d-flex align-items-center">
-                      <i className="bi bi-person-badge me-2 fs-4"></i>
-                      <div>
-                        <strong>Moniteur Assigné :</strong> {user.moniteur_assigne.nom} {user.moniteur_assigne.prenom}
-                        <br />
-                        <small>Tél: {user.moniteur_assigne.telephone}</small>
+                    <div className="assigned-monitor-card">
+                      <div className="assigned-monitor-icon">👨‍🏫</div>
+                      <div className="assigned-monitor-info">
+                        <strong>Moniteur Assigné : {user.moniteur_assigne.nom} {user.moniteur_assigne.prenom}</strong>
+                        <p>📞 Tél: {user.moniteur_assigne.telephone}</p>
+                        <span className="assigned-monitor-status">Statut: Accepté</span>
                       </div>
                     </div>
                   )}
 
-
                   {user.reservations && user.reservations.length > 0 ? (
                     user.reservations.map((r) => (
-                      <div className="card p-3 mt-3" key={r.id}>
-                        <div className="d-flex justify-content-between align-items-center">
+                      <div className="reservation-card" key={r.id}>
+                        <div className="reservation-header">
                           <div>
-                            <h5>{r.type}</h5>
-                            <span className="badge bg-primary">
-                              {r.status}
+                            <h5 className="reservation-type">{r.type}</h5>
+                            <span className={`reservation-badge ${r.status}`}>
+                              {r.status === 'confirmed' ? '✅ Confirmé' :
+                                r.status === 'pending' ? '⏳ En attente' : '❌ Annulé'}
                             </span>
-                            <p className="mt-2">
-                              {r.permis?.title || "Permis"}
-                            </p>
-                            <small>📅 {r.date} à {r.time}</small>
                           </div>
-
+                        </div>
+                        <p className="reservation-details">
+                          <strong>Permis:</strong> {r.permis?.title || "Permis"}
+                        </p>
+                        <div className="reservation-date">
+                          📅 {r.date} à {r.time}
+                        </div>
+                        <div className="reservation-actions">
                           <button
-                            className="btn btn-outline-danger"
+                            className="reservation-cancel-btn"
                             onClick={async () => {
                               if (window.confirm("Êtes-vous sûr de vouloir annuler cette réservation ?")) {
                                 try {
@@ -308,12 +312,10 @@ export default function Dashboard() {
                                   await api.delete(`/reservations/${r.id}`);
 
                                   toast.success('Réservation annulée avec succès');
-                                  // Mettre à jour l'état local au lieu de recharger la page
                                   setUser({
                                     ...user,
                                     reservations: user.reservations.filter(res => res.id !== r.id)
                                   });
-
                                 } catch (error) {
                                   console.error('Erreur:', error);
                                   toast.error("Erreur lors de l'annulation");
@@ -327,22 +329,30 @@ export default function Dashboard() {
                       </div>
                     ))
                   ) : (
-                    <p>Aucune réservation</p>
+                    <div className="empty-state">
+                      <div className="empty-state-icon">📅</div>
+                      <h4>Aucune réservation</h4>
+                      <p>Vous n'avez pas encore de réservations</p>
+                    </div>
                   )}
                 </div>
 
                 {/* Paiements */}
-                <div className="tab-pane fade" id="paiements">
-                  <h4>Historique des Paiements</h4>
+                <div className={`candidate-tab-pane ${activeTab === 'paiements' ? 'active' : ''}`}>
+                  <h4 className="profile-section-title">Historique des Paiements</h4>
 
                   {user.paiements && user.paiements.length > 0 ? (
                     user.paiements.map((p) => (
-                      <div className="card p-3 mt-3" key={p.id}>
-                        <h5>{p.montant} Dh</h5>
-                        <p>📅 {p.date}</p>
-                        <span className="badge bg-success">{p.status}</span>
+                      <div className="payment-card" key={p.id}>
+                        <div className="payment-info">
+                          <h5 className="payment-amount">{p.montant} Dh</h5>
+                          <div className="payment-date">
+                            📅 {p.date}
+                          </div>
+                          <span className="payment-status">{p.status}</span>
+                        </div>
                         <button
-                          className="btn btn-sm btn-secondary mt-2"
+                          className="payment-download-btn"
                           onClick={async () => {
                             try {
                               const token = localStorage.getItem("token");
@@ -378,88 +388,76 @@ export default function Dashboard() {
                       </div>
                     ))
                   ) : (
-                    <p>Aucun paiement trouvé.</p>
+                    <div className="empty-state">
+                      <div className="empty-state-icon">💳</div>
+                      <h4>Aucun paiement</h4>
+                      <p>Vous n'avez effectué aucun paiement pour le moment</p>
+                    </div>
                   )}
                 </div>
 
                 {/* Profil */}
-                <div className="tab-pane fade" id="profil">
-                  <h4>Mon Profil</h4>
+                <div className={`candidate-tab-pane ${activeTab === 'profil' ? 'active' : ''}`}>
+                  <h4 className="profile-section-title">Mon Profil</h4>
 
-                  <div className="card p-3 mb-3">
-                    <h5 className="text-primary mb-3">👤 Informations Personnelles</h5>
-                    <div className="row">
-                      <div className="col-md-6">
-                        <p><strong>Nom :</strong> {user.nom}</p>
-                        <p><strong>Prénom :</strong> {user.prenom}</p>
-                        <p><strong>Email :</strong> {user.email}</p>
-                        <p><strong>Téléphone :</strong> {user.telephone}</p>
+                  <div className="profile-info-card">
+                    <div className="profile-card-header">
+                      <span>👤</span> Informations Personnelles
+                    </div>
+                    <div className="profile-info-grid">
+                      <div className="profile-info-item">
+                        <strong>Nom :</strong>
+                        <span> {user.nom}</span>
                       </div>
-                      <div className="col-md-6">
-                        <p><strong>Date de naissance :</strong> {user.date_naissance ? new Date(user.date_naissance).toLocaleDateString('fr-FR') : 'Non renseignée'}</p>
-                        <p><strong>Carte Nationale (CIN) :</strong> {user.carte_nationale || 'Non renseignée'}</p>
-                        <p><strong>Adresse :</strong> {user.adresse || 'Non renseignée'}</p>
-                        <p><strong>Méthode de paiement :</strong> {user.methode_paiement ? user.methode_paiement.charAt(0).toUpperCase() + user.methode_paiement.slice(1) : 'Non renseignée'}</p>
+                      <div className="profile-info-item">
+                        <strong>Prénom :</strong>
+                        <span> {user.prenom}</span>
+                      </div>
+                      <div className="profile-info-item">
+                        <strong>Email :</strong>
+                        <span> {user.email}</span>
+                      </div>
+                      <div className="profile-info-item">
+                        <strong>Téléphone :</strong>
+                        <span> {user.telephone}</span>
+                      </div>
+                      <div className="profile-info-item">
+                        <strong>Date de naissance :</strong>
+                        <span> {user.date_naissance ? new Date(user.date_naissance).toLocaleDateString('fr-FR') : 'Non renseignée'}</span>
+                      </div>
+                      <div className="profile-info-item">
+                        <strong>Carte Nationale (CIN) :</strong>
+                        <span> {user.carte_nationale || 'Non renseignée'}</span>
+                      </div>
+                      <div className="profile-info-item">
+                        <strong>Adresse :</strong>
+                        <span> {user.adresse || 'Non renseignée'}</span>
+                      </div>
+                      <div className="profile-info-item">
+                        <strong>Méthode de paiement :</strong>
+                        <span> {user.methode_paiement ? user.methode_paiement.charAt(0).toUpperCase() + user.methode_paiement.slice(1) : 'Non renseignée'}</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="card p-3 mb-3">
-                    <h5 className="text-primary mb-3">🚗 Formation</h5>
-                    <p><strong>Catégorie du permis :</strong> Permis {user.categorie_permis}</p>
+                  <div className="profile-info-card">
+                    <div className="profile-card-header">
+                      <span>🚗</span> Formation
+                    </div>
+                    <div className="profile-info-item">
+                      <strong>Catégorie du permis :</strong>
+                      <span> Permis {user.categorie_permis}</span>
+                    </div>
                   </div>
 
-                  <button className="btn btn-primary mt-2" onClick={handleEditClick}>
+                  <button className="profile-edit-btn" onClick={handleEditClick}>
                     ✏ Modifier les informations
                   </button>
 
-                  <h5 className="mt-4">Téléchargements</h5>
-                  <button
-                    className="btn btn-outline-secondary w-100 mt-2"
-                    onClick={async () => {
-                      try {
-                        const token = localStorage.getItem("token");
-                        if (!token) {
-                          alert("Vous devez être connecté pour télécharger ce document.");
-                          return;
-                        }
-
-                        const response = await axios.get("http://127.0.0.1:8000/api/pdf/recu-inscription", {
-                          headers: {
-                            Authorization: `Bearer ${token}`,
-                            Accept: "application/pdf",
-                          },
-                          responseType: 'blob',
-                        });
-
-                        const url = window.URL.createObjectURL(new Blob([response.data]));
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.setAttribute('download', 'recu_inscription.pdf');
-                        document.body.appendChild(link);
-                        link.click();
-                        link.remove();
-                        window.URL.revokeObjectURL(url);
-                      } catch (error) {
-                        console.error("Erreur téléchargement:", error);
-                        alert(`Erreur lors du téléchargement: ${error.message}`);
-                      }
-                    }}
-                  >
-                    📄 Reçu d'inscription
-                  </button>
-                  <button
-                    className="btn btn-outline-secondary w-100 mt-2"
-                    onClick={() => {
-                      const tabButton = document.querySelector('button[data-bs-target="#paiements"]');
-                      if (tabButton) tabButton.click();
-                    }}
-                  >
-                    🧾 Reçu des paiements
-                  </button>
-                  {user.cours_completes && user.paiements_completes && user.examen_reussi ? (
+                  <div className="download-section">
+                    <h5 className="download-section-title">Téléchargements</h5>
                     <button
-                      className="btn btn-success w-100 mt-3"
+                      className="download-btn"
                       onClick={async () => {
                         try {
                           const token = localStorage.getItem("token");
@@ -468,7 +466,7 @@ export default function Dashboard() {
                             return;
                           }
 
-                          const response = await axios.get("http://127.0.0.1:8000/api/pdf/certificat", {
+                          const response = await axios.get("http://127.0.0.1:8000/api/pdf/recu-inscription", {
                             headers: {
                               Authorization: `Bearer ${token}`,
                               Accept: "application/pdf",
@@ -479,7 +477,7 @@ export default function Dashboard() {
                           const url = window.URL.createObjectURL(new Blob([response.data]));
                           const link = document.createElement('a');
                           link.href = url;
-                          link.setAttribute('download', 'certificat_reussite.pdf');
+                          link.setAttribute('download', 'recu_inscription.pdf');
                           document.body.appendChild(link);
                           link.click();
                           link.remove();
@@ -490,11 +488,53 @@ export default function Dashboard() {
                         }
                       }}
                     >
-                      🎉 Télécharger Certificat de Réussite
+                      📄 Reçu d'inscription
                     </button>
-                  ) : (
-                    <p className="text-danger mt-3">⚠ Vous devez terminer tous les cours, tous les paiements et réussir l'examen.</p>
-                  )}
+                    <button
+                      className="download-btn"
+                      onClick={() => setActiveTab('paiements')}
+                    >
+                      🧾 Reçu des paiements
+                    </button>
+                    {user.cours_completes && user.paiements_completes && user.examen_reussi ? (
+                      <button
+                        className="download-btn success"
+                        onClick={async () => {
+                          try {
+                            const token = localStorage.getItem("token");
+                            if (!token) {
+                              alert("Vous devez être connecté pour télécharger ce document.");
+                              return;
+                            }
+
+                            const response = await axios.get("http://127.0.0.1:8000/api/pdf/certificat", {
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                                Accept: "application/pdf",
+                              },
+                              responseType: 'blob',
+                            });
+
+                            const url = window.URL.createObjectURL(new Blob([response.data]));
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.setAttribute('download', 'certificat_reussite.pdf');
+                            document.body.appendChild(link);
+                            link.click();
+                            link.remove();
+                            window.URL.revokeObjectURL(url);
+                          } catch (error) {
+                            console.error("Erreur téléchargement:", error);
+                            alert(`Erreur lors du téléchargement: ${error.message}`);
+                          }
+                        }}
+                      >
+                        🎉 Télécharger Certificat de Réussite
+                      </button>
+                    ) : (
+                      <p className="text-danger mt-3">⚠ Vous devez terminer tous les cours, tous les paiements et réussir l'examen.</p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
