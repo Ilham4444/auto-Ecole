@@ -14,6 +14,13 @@ export default function AdminDashboard() {
     const [showAssignModal, setShowAssignModal] = useState(false);
     const [selectedCandidate, setSelectedCandidate] = useState(null);
     const [selectedMonitor, setSelectedMonitor] = useState("");
+
+    // États de recherche
+    const [searchCandidate, setSearchCandidate] = useState("");
+    const [searchMonitor, setSearchMonitor] = useState("");
+    const [searchAssignment, setSearchAssignment] = useState("");
+    const [searchReservation, setSearchReservation] = useState("");
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -120,6 +127,34 @@ export default function AdminDashboard() {
         return null;
     };
 
+    // Fonctions de filtrage
+    const filteredCandidates = candidates.filter(c =>
+        (c.nom && c.nom.toLowerCase().includes(searchCandidate.toLowerCase())) ||
+        (c.prenom && c.prenom.toLowerCase().includes(searchCandidate.toLowerCase())) ||
+        (c.email && c.email.toLowerCase().includes(searchCandidate.toLowerCase())) ||
+        (c.categorie_permis && c.categorie_permis.toLowerCase().includes(searchCandidate.toLowerCase()))
+    );
+
+    const filteredMonitors = monitors.filter(m =>
+        (m.nom && m.nom.toLowerCase().includes(searchMonitor.toLowerCase())) ||
+        (m.prenom && m.prenom.toLowerCase().includes(searchMonitor.toLowerCase())) ||
+        (m.email && m.email.toLowerCase().includes(searchMonitor.toLowerCase()))
+    );
+
+    const filteredAssignments = assignments.filter(a =>
+        (a.candidate_name && a.candidate_name.toLowerCase().includes(searchAssignment.toLowerCase())) ||
+        (a.monitor_name && a.monitor_name.toLowerCase().includes(searchAssignment.toLowerCase())) ||
+        (a.candidat_nom && a.candidat_nom.toLowerCase().includes(searchAssignment.toLowerCase())) ||
+        (a.monitor_nom && a.monitor_nom.toLowerCase().includes(searchAssignment.toLowerCase()))
+    );
+
+    const filteredReservations = reservations.filter(r =>
+        (r.student_name && r.student_name.toLowerCase().includes(searchReservation.toLowerCase())) ||
+        (r.type && r.type.toLowerCase().includes(searchReservation.toLowerCase())) ||
+        (r.monitor_name && r.monitor_name.toLowerCase().includes(searchReservation.toLowerCase())) ||
+        (r.user && r.user.nom && r.user.nom.toLowerCase().includes(searchReservation.toLowerCase()))
+    );
+
     if (loading) {
         return (
             <div className="loading-container">
@@ -200,11 +235,23 @@ export default function AdminDashboard() {
                         {/* ONGLET CANDIDATS */}
                         <div className="tab-pane fade show active" id="candidats">
                             <h3>Liste des Candidats</h3>
-                            {candidates.length === 0 ? (
+
+                            {/* Barre de recherche */}
+                            <div className="mb-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="🔍 Rechercher par nom, email ou permis..."
+                                    value={searchCandidate}
+                                    onChange={(e) => setSearchCandidate(e.target.value)}
+                                />
+                            </div>
+
+                            {filteredCandidates.length === 0 ? (
                                 <div className="empty-state">
                                     <div className="empty-icon">👥</div>
-                                    <h4>Aucun candidat</h4>
-                                    <p>Aucun candidat n'est inscrit pour le moment.</p>
+                                    <h4>Aucun candidat trouvé</h4>
+                                    <p>{searchCandidate ? "Aucun résultat pour votre recherche." : "Aucun candidat n'est inscrit pour le moment."}</p>
                                 </div>
                             ) : (
                                 <table className="dashboard-table">
@@ -219,7 +266,7 @@ export default function AdminDashboard() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {candidates.map(candidate => {
+                                        {filteredCandidates.map(candidate => {
                                             const assignedMonitor = getCandidateMonitor(candidate);
                                             return (
                                                 <tr key={candidate.id}>
@@ -257,11 +304,23 @@ export default function AdminDashboard() {
                         {/* ONGLET MONITEURS */}
                         <div className="tab-pane fade" id="moniteurs">
                             <h3>Liste des Moniteurs</h3>
-                            {monitors.length === 0 ? (
+
+                            {/* Barre de recherche */}
+                            <div className="mb-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="🔍 Rechercher par nom ou email..."
+                                    value={searchMonitor}
+                                    onChange={(e) => setSearchMonitor(e.target.value)}
+                                />
+                            </div>
+
+                            {filteredMonitors.length === 0 ? (
                                 <div className="empty-state">
                                     <div className="empty-icon">🚗</div>
-                                    <h4>Aucun moniteur</h4>
-                                    <p>Aucun moniteur n'est enregistré.</p>
+                                    <h4>Aucun moniteur trouvé</h4>
+                                    <p>{searchMonitor ? "Aucun résultat pour votre recherche." : "Aucun moniteur n'est enregistré."}</p>
                                 </div>
                             ) : (
                                 <table className="dashboard-table">
@@ -276,7 +335,7 @@ export default function AdminDashboard() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {monitors.map(monitor => (
+                                        {filteredMonitors.map(monitor => (
                                             <tr key={monitor.id}>
                                                 <td>{monitor.nom} {monitor.prenom}</td>
                                                 <td>{monitor.email}</td>
@@ -308,11 +367,23 @@ export default function AdminDashboard() {
                         {/* ONGLET ASSIGNATIONS */}
                         <div className="tab-pane fade" id="assignations">
                             <h3>Toutes les Assignations</h3>
-                            {assignments.length === 0 ? (
+
+                            {/* Barre de recherche */}
+                            <div className="mb-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="🔍 Rechercher par candidat ou moniteur..."
+                                    value={searchAssignment}
+                                    onChange={(e) => setSearchAssignment(e.target.value)}
+                                />
+                            </div>
+
+                            {filteredAssignments.length === 0 ? (
                                 <div className="empty-state">
                                     <div className="empty-icon">📋</div>
-                                    <h4>Aucune assignation</h4>
-                                    <p>Aucune assignation en cours.</p>
+                                    <h4>Aucune assignation trouvée</h4>
+                                    <p>{searchAssignment ? "Aucun résultat pour votre recherche." : "Aucune assignation en cours."}</p>
                                 </div>
                             ) : (
                                 <table className="dashboard-table">
@@ -327,7 +398,7 @@ export default function AdminDashboard() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {assignments.map(assignment => (
+                                        {filteredAssignments.map(assignment => (
                                             <tr key={assignment.assignment_id}>
                                                 <td>{assignment.monitor_nom} {assignment.monitor_prenom}</td>
                                                 <td>
@@ -358,11 +429,23 @@ export default function AdminDashboard() {
                         {/* ONGLET RÉSERVATIONS */}
                         <div className="tab-pane fade" id="reservations">
                             <h3>Toutes les Réservations</h3>
-                            {reservations.length === 0 ? (
+
+                            {/* Barre de recherche */}
+                            <div className="mb-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="🔍 Rechercher par élève ou type..."
+                                    value={searchReservation}
+                                    onChange={(e) => setSearchReservation(e.target.value)}
+                                />
+                            </div>
+
+                            {filteredReservations.length === 0 ? (
                                 <div className="empty-state">
                                     <div className="empty-icon">📅</div>
-                                    <h4>Aucune réservation</h4>
-                                    <p>Aucune réservation n'a été effectuée pour le moment.</p>
+                                    <h4>Aucune réservation trouvée</h4>
+                                    <p>{searchReservation ? "Aucun résultat pour votre recherche." : "Aucune réservation n'a été effectuée pour le moment."}</p>
                                 </div>
                             ) : (
                                 <table className="dashboard-table">
@@ -377,7 +460,7 @@ export default function AdminDashboard() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {reservations.map(reservation => (
+                                        {filteredReservations.map(reservation => (
                                             <tr key={reservation.id}>
                                                 <td>{reservation.user ? `${reservation.user.nom} ${reservation.user.prenom}` : 'N/A'}</td>
                                                 <td>{reservation.type || 'N/A'}</td>
@@ -387,8 +470,8 @@ export default function AdminDashboard() {
                                                 <td>{reservation.time}</td>
                                                 <td>
                                                     <span className={`status-badge ${reservation.status === 'confirmed' ? 'confirmed' :
-                                                            reservation.status === 'rejected' ? 'cancelled' :
-                                                                'pending'
+                                                        reservation.status === 'rejected' ? 'cancelled' :
+                                                            'pending'
                                                         }`}>
                                                         {reservation.status === 'confirmed' ? 'Confirmé' :
                                                             reservation.status === 'rejected' ? 'Refusé' :
