@@ -8,57 +8,59 @@
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
             color: #333;
-            line-height: 1.6;
+            line-height: 1.4;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
         }
         .header-table {
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             border-bottom: 2px solid #0d6efd;
-            padding-bottom: 20px;
+            padding-bottom: 10px;
         }
         .logo-section h1 {
             color: #0d6efd;
             margin: 0;
-            font-size: 28px;
+            font-size: 24px;
             text-transform: uppercase;
         }
         .logo-section p {
-            margin: 5px 0;
-            font-size: 12px;
+            margin: 2px 0;
+            font-size: 11px;
             color: #666;
         }
         .document-title {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
         }
         .document-title h2 {
             background-color: #0d6efd;
             color: #fff;
             display: inline-block;
-            padding: 10px 30px;
+            padding: 8px 25px;
             border-radius: 20px;
-            font-size: 18px;
+            font-size: 16px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin: 0;
         }
         .section-title {
             color: #0d6efd;
             border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-            font-size: 16px;
+            padding-bottom: 3px;
+            margin-bottom: 10px;
+            font-size: 14px;
             font-weight: bold;
             text-transform: uppercase;
         }
         .info-table {
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             border-collapse: collapse;
+            font-size: 12px;
         }
         .info-table td {
-            padding: 10px;
+            padding: 6px;
             border-bottom: 1px solid #eee;
             vertical-align: top;
         }
@@ -75,51 +77,52 @@
             background-color: #f8f9fa;
             border: 2px solid #0d6efd;
             border-radius: 10px;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
-            margin: 30px 0;
+            margin: 20px 0;
         }
         .total-amount-box .label {
             color: #666;
-            font-size: 14px;
-            margin-bottom: 10px;
+            font-size: 12px;
+            margin-bottom: 5px;
         }
         .total-amount-box .amount {
             color: #0d6efd;
-            font-size: 36px;
+            font-size: 28px;
             font-weight: bold;
         }
         .footer-section {
-            margin-top: 50px;
+            margin-top: 30px;
             border-top: 1px solid #eee;
-            padding-top: 20px;
+            padding-top: 15px;
         }
         .signature-table {
             width: 100%;
         }
         .signature-box {
             text-align: center;
-            padding-top: 10px;
+            padding-top: 5px;
+            font-size: 12px;
         }
         .signature-line {
-            margin-top: 60px;
+            margin-top: 40px;
             border-top: 1px dashed #ccc;
-            width: 80%;
+            width: 70%;
             margin-left: auto;
             margin-right: auto;
         }
         .legal-text {
-            font-size: 10px;
+            font-size: 9px;
             color: #999;
             text-align: center;
-            margin-top: 40px;
+            margin-top: 20px;
         }
         .badge {
             background-color: #28a745;
             color: #fff;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 10px;
             font-weight: 600;
             text-transform: uppercase;
         }

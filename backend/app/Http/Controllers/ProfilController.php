@@ -28,8 +28,11 @@ class ProfilController extends Controller
         $validated = $request->validate([
             'nom' => 'sometimes|string|max:255',
             'prenom' => 'sometimes|string|max:255',
-            'telephone' => 'sometimes|string|max:10',
+            'telephone' => 'sometimes|string|max:20',
             'adresse' => 'sometimes|string|max:500',
+            'date_naissance' => 'sometimes|date',
+            'carte_nationale' => 'sometimes|string|max:20',
+            'methode_paiement' => 'sometimes|string|in:especes,virement,cheque',
         ]);
 
         $user->update($validated);
