@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, } from "react-router-dom";
 import { Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import "./assets/css/style.scss";
 
@@ -45,7 +47,7 @@ function AppContent() {
     <>
       <Header />
 
-      <main className="container" style={{ marginTop: "140px" }}>
+      <main className={location.pathname === "/" ? "" : "container"} style={{ marginTop: "140px" }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/permis" element={<Permis />} />
@@ -53,8 +55,8 @@ function AppContent() {
           <Route path="/moniteurs" element={<Moniteurs />} />
           <Route path="/apropos" element={<Apropos />} />
           <Route path="/paiement" element={<Paiement />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/admin" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
 
           {/* les 2 modals gardent Home derrière */}
           <Route path="/compte" element={<Home />} />
@@ -83,7 +85,7 @@ function AppContent() {
               onClick={(e) => e.stopPropagation()}
               style={{
                 width: "100%",
-                maxWidth: 520,
+                maxWidth: location.pathname === "/register" ? 1000 : 520,
                 background: "#fff",
                 borderRadius: 12,
                 padding: "20px",
@@ -98,6 +100,19 @@ function AppContent() {
           </div>
         )
       }
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
 
       <footer className="text-center py-3 bg-light text-muted border-top">
         © 2025 Drive UP — Tous droits réservés.

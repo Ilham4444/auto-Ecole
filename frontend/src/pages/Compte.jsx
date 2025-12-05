@@ -25,11 +25,13 @@ export default function Compte() {
       const response = await api.post("/login", formData);
 
       if (response.data.status) {
-        // Stocker le token et les infos utilisateur
+        // Stocker le token et les infos utilisateur dans le contexte
         loginUser(response.data.user, response.data.token);
 
-        // Redirection vers dashboard
-        navigate("/dashboard");
+        // Petite pause pour s'assurer que le contexte est mis à jour
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 100);
       } else {
         setError(response.data.message || "Email ou mot de passe incorrect");
       }

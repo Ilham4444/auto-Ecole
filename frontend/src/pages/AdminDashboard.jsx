@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Modal, Button, Form, Table, Badge, Alert } from 'react-bootstrap';
+import { Modal, Button, Form, Badge, Alert } from 'react-bootstrap';
+import { toast } from "react-toastify";
+import "../assets/css/AdminDashboard.css";
 
 export default function AdminDashboard() {
     const [candidates, setCandidates] = useState([]);
     const [monitors, setMonitors] = useState([]);
     const [assignments, setAssignments] = useState([]);
+    const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showAssignModal, setShowAssignModal] = useState(false);
     const [selectedCandidate, setSelectedCandidate] = useState(null);
@@ -27,21 +30,25 @@ export default function AdminDashboard() {
             const token = localStorage.getItem("token");
             const api = (await import('../api.jsx')).default;
 
-            const [candidatesRes, monitorsRes, assignmentsRes] = await Promise.all([
+            const [candidatesRes, monitorsRes, assignmentsRes, reservationsRes] = await Promise.all([
                 api.get('/admin/candidates'),
                 api.get('/admin/monitors'),
-                api.get('/admin/assignments')
+                api.get('/admin/assignments'),
+                api.get('/reservations')
             ]);
 
             setCandidates(candidatesRes.data.candidates || []);
             setMonitors(monitorsRes.data.monitors || []);
             setAssignments(assignmentsRes.data.assignments || []);
+            setReservations(reservationsRes.data || []);
             setLoading(false);
         } catch (error) {
             console.error("Erreur chargement données admin", error);
             if (error.response && error.response.status === 403) {
-                alert("Accès refusé. Vous n'avez pas les droits administrateur.");
+                toast.error("Accès refusé. Vous n'avez pas les droits administrateur.");
                 navigate("/");
+            } else {
+                toast.error("Erreur de chargement des données.");
             }
             setLoading(false);
         }
@@ -55,7 +62,7 @@ export default function AdminDashboard() {
 
     const handleAssignSubmit = async () => {
         if (!selectedMonitor) {
-            alert("Veuillez sélectionner un moniteur");
+            toast.warning("Veuillez sélectionner un moniteur");
             return;
         }
 
@@ -67,33 +74,29 @@ export default function AdminDashboard() {
             });
 
             if (response.data.status) {
-                alert("✅ " + response.data.message);
+                toast.success(response.data.message);
                 setShowAssignModal(false);
                 loadData(); // Recharger les données
             }
         } catch (error) {
             console.error("Erreur assignation", error);
             const errorMsg = error.response?.data?.message || "Erreur lors de l'assignation";
-            alert("❌ " + errorMsg);
+            toast.error(errorMsg);
         }
     };
 
     const handleUnassign = async (monitorId, candidatId) => {
-        if (!window.confirm("Êtes-vous sûr de vouloir retirer cette assignation ?")) {
-            return;
-        }
-
         try {
             const api = (await import('../api.jsx')).default;
             const response = await api.delete(`/admin/assign/${monitorId}/${candidatId}`);
 
             if (response.data.status) {
-                alert("✅ " + response.data.message);
+                toast.success(response.data.message);
                 loadData(); // Recharger les données
             }
         } catch (error) {
             console.error("Erreur suppression assignation", error);
-            alert("❌ Erreur lors de la suppression");
+            toast.error("Erreur lors de la suppression");
         }
     };
 
@@ -119,9 +122,9 @@ export default function AdminDashboard() {
 
     if (loading) {
         return (
-            <div className="text-center mt-5">
-                <div className="spinner-border text-primary" role="status"></div>
-                <p>Chargement...</p>
+            <div className="loading-container">
+                <div className="loading-spinner"></div>
+                <p className="ms-3">Chargement...</p>
             </div>
         );
     }
@@ -129,207 +132,280 @@ export default function AdminDashboard() {
     return (
         <>
             <div className="dashboard-container">
-                <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h2>🔧 Administration - Gestion des Assignations</h2>
-                    <button className="btn btn-outline-primary" onClick={() => navigate("/")}>
+                <div className="dashboard-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2>🔧 Administration</h2>
+                        <p>Gestion des Assignations et des Utilisateurs</p>
+                    </div>
+                    <button className="action-btn primary" onClick={() => navigate("/")}>
                         🏠 Accueil
                     </button>
                 </div>
 
                 {/* STATISTIQUES */}
-                <div className="row mb-4">
-                    <div className="col-md-3">
-                        <div className="dashboard-card p-3 bg-primary text-white">
-                            <h6>Candidats Inscrits</h6>
-                            <h3>{candidates.length}</h3>
-                        </div>
+                <div className="stats-grid">
+                    <div className="stat-card primary">
+                        <div className="stat-icon">👥</div>
+                        <div className="stat-label">Candidats Inscrits</div>
+                        <div className="stat-value">{candidates.length}</div>
                     </div>
-                    <div className="col-md-3">
-                        <div className="dashboard-card p-3 bg-success text-white">
-                            <h6>Moniteurs</h6>
-                            <h3>{monitors.length}</h3>
-                        </div>
+                    <div className="stat-card success">
+                        <div className="stat-icon">🚗</div>
+                        <div className="stat-label">Moniteurs</div>
+                        <div className="stat-value">{monitors.length}</div>
                     </div>
-                    <div className="col-md-3">
-                        <div className="dashboard-card p-3 bg-info text-white">
-                            <h6>Assignations</h6>
-                            <h3>{assignments.length}</h3>
-                        </div>
+                    <div className="stat-card warning">
+                        <div className="stat-icon">📋</div>
+                        <div className="stat-label">Assignations</div>
+                        <div className="stat-value">{assignments.length}</div>
                     </div>
-                    <div className="col-md-3">
-                        <div className="dashboard-card p-3 bg-warning text-dark">
-                            <h6>Non Assignés</h6>
-                            <h3>{candidates.filter(c => !getCandidateMonitor(c)).length}</h3>
-                        </div>
+                    <div className="stat-card danger">
+                        <div className="stat-icon">⚠</div>
+                        <div className="stat-label">Non Assignés</div>
+                        <div className="stat-value">{candidates.filter(c => !getCandidateMonitor(c)).length}</div>
+                    </div>
+                    <div className="stat-card info">
+                        <div className="stat-icon">📅</div>
+                        <div className="stat-label">Réservations</div>
+                        <div className="stat-value">{reservations.length}</div>
                     </div>
                 </div>
 
                 {/* ONGLETS */}
-                <ul className="nav nav-tabs">
-                    <li className="nav-item">
-                        <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#candidats">
-                            👥 Candidats
-                        </button>
-                    </li>
-                    <li className="nav-item">
-                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#moniteurs">
-                            🚗 Moniteurs
-                        </button>
-                    </li>
-                    <li className="nav-item">
-                        <button className="nav-link" data-bs-toggle="tab" data-bs-target="#assignations">
-                            📋 Assignations
-                        </button>
-                    </li>
-                </ul>
+                <div className="dashboard-section mt-4">
+                    <ul className="nav nav-tabs mb-4">
+                        <li className="nav-item">
+                            <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#candidats">
+                                👥 Candidats
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button className="nav-link" data-bs-toggle="tab" data-bs-target="#moniteurs">
+                                🚗 Moniteurs
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button className="nav-link" data-bs-toggle="tab" data-bs-target="#assignations">
+                                📋 Assignations
+                            </button>
+                        </li>
+                        <li className="nav-item">
+                            <button className="nav-link" data-bs-toggle="tab" data-bs-target="#reservations">
+                                📅 Réservations
+                            </button>
+                        </li>
+                    </ul>
 
-                <div className="tab-content p-3 border border-top-0">
-                    {/* ONGLET CANDIDATS */}
-                    <div className="tab-pane fade show active" id="candidats">
-                        <h4>Liste des Candidats</h4>
-                        {candidates.length === 0 ? (
-                            <Alert variant="info">Aucun candidat inscrit</Alert>
-                        ) : (
-                            <Table striped bordered hover responsive>
-                                <thead>
-                                    <tr>
-                                        <th>Nom</th>
-                                        <th>Email</th>
-                                        <th>Téléphone</th>
-                                        <th>Permis</th>
-                                        <th>Moniteur Assigné</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {candidates.map(candidate => {
-                                        const assignedMonitor = getCandidateMonitor(candidate);
-                                        return (
-                                            <tr key={candidate.id}>
-                                                <td>{candidate.nom} {candidate.prenom}</td>
-                                                <td>{candidate.email}</td>
-                                                <td>{candidate.telephone}</td>
+                    <div className="tab-content">
+                        {/* ONGLET CANDIDATS */}
+                        <div className="tab-pane fade show active" id="candidats">
+                            <h3>Liste des Candidats</h3>
+                            {candidates.length === 0 ? (
+                                <div className="empty-state">
+                                    <div className="empty-icon">👥</div>
+                                    <h4>Aucun candidat</h4>
+                                    <p>Aucun candidat n'est inscrit pour le moment.</p>
+                                </div>
+                            ) : (
+                                <table className="dashboard-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Email</th>
+                                            <th>Téléphone</th>
+                                            <th>Permis</th>
+                                            <th>Moniteur Assigné</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {candidates.map(candidate => {
+                                            const assignedMonitor = getCandidateMonitor(candidate);
+                                            return (
+                                                <tr key={candidate.id}>
+                                                    <td>{candidate.nom} {candidate.prenom}</td>
+                                                    <td>{candidate.email}</td>
+                                                    <td>{candidate.telephone}</td>
+                                                    <td>
+                                                        <span className="status-badge completed">{candidate.categorie_permis || 'N/A'}</span>
+                                                    </td>
+                                                    <td>
+                                                        {assignedMonitor ? (
+                                                            <span className="status-badge confirmed">{assignedMonitor}</span>
+                                                        ) : (
+                                                            <span className="status-badge pending">Non assigné</span>
+                                                        )}
+                                                    </td>
+                                                    <td>
+                                                        {!assignedMonitor && (
+                                                            <button
+                                                                className="action-btn primary"
+                                                                onClick={() => handleAssignClick(candidate)}
+                                                            >
+                                                                ➕ Assigner
+                                                            </button>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
+
+                        {/* ONGLET MONITEURS */}
+                        <div className="tab-pane fade" id="moniteurs">
+                            <h3>Liste des Moniteurs</h3>
+                            {monitors.length === 0 ? (
+                                <div className="empty-state">
+                                    <div className="empty-icon">🚗</div>
+                                    <h4>Aucun moniteur</h4>
+                                    <p>Aucun moniteur n'est enregistré.</p>
+                                </div>
+                            ) : (
+                                <table className="dashboard-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Email</th>
+                                            <th>Téléphone</th>
+                                            <th>Spécialité</th>
+                                            <th>Nombre d'élèves</th>
+                                            <th>Élèves</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {monitors.map(monitor => (
+                                            <tr key={monitor.id}>
+                                                <td>{monitor.nom} {monitor.prenom}</td>
+                                                <td>{monitor.email}</td>
+                                                <td>{monitor.telephone}</td>
                                                 <td>
-                                                    <Badge bg="primary">{candidate.categorie_permis || 'N/A'}</Badge>
+                                                    <span className="status-badge completed">
+                                                        {monitor.specialite_permis || 'Non définie'}
+                                                    </span>
                                                 </td>
                                                 <td>
-                                                    {assignedMonitor ? (
-                                                        <Badge bg="success">{assignedMonitor}</Badge>
+                                                    <span className="status-badge confirmed">{monitor.eleves_count || 0}</span>
+                                                </td>
+                                                <td>
+                                                    {monitor.eleves && monitor.eleves.length > 0 ? (
+                                                        <small>
+                                                            {monitor.eleves.map(e => `${e.nom} ${e.prenom}`).join(', ')}
+                                                        </small>
                                                     ) : (
-                                                        <Badge bg="secondary">Non assigné</Badge>
-                                                    )}
-                                                </td>
-                                                <td>
-                                                    {!assignedMonitor && (
-                                                        <Button
-                                                            size="sm"
-                                                            variant="primary"
-                                                            onClick={() => handleAssignClick(candidate)}
-                                                        >
-                                                            ➕ Assigner
-                                                        </Button>
+                                                        <small className="text-muted">Aucun élève</small>
                                                     )}
                                                 </td>
                                             </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </Table>
-                        )}
-                    </div>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
 
-                    {/* ONGLET MONITEURS */}
-                    <div className="tab-pane fade" id="moniteurs">
-                        <h4>Liste des Moniteurs</h4>
-                        {monitors.length === 0 ? (
-                            <Alert variant="info">Aucun moniteur enregistré</Alert>
-                        ) : (
-                            <Table striped bordered hover responsive>
-                                <thead>
-                                    <tr>
-                                        <th>Nom</th>
-                                        <th>Email</th>
-                                        <th>Téléphone</th>
-                                        <th>Spécialité</th>
-                                        <th>Nombre d'élèves</th>
-                                        <th>Élèves</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {monitors.map(monitor => (
-                                        <tr key={monitor.id}>
-                                            <td>{monitor.nom} {monitor.prenom}</td>
-                                            <td>{monitor.email}</td>
-                                            <td>{monitor.telephone}</td>
-                                            <td>
-                                                <Badge bg="info">
-                                                    {monitor.specialite_permis || 'Non définie'}
-                                                </Badge>
-                                            </td>
-                                            <td>
-                                                <Badge bg="success">{monitor.eleves_count || 0}</Badge>
-                                            </td>
-                                            <td>
-                                                {monitor.eleves && monitor.eleves.length > 0 ? (
-                                                    <small>
-                                                        {monitor.eleves.map(e => `${e.nom} ${e.prenom}`).join(', ')}
-                                                    </small>
-                                                ) : (
-                                                    <small className="text-muted">Aucun élève</small>
-                                                )}
-                                            </td>
+                        {/* ONGLET ASSIGNATIONS */}
+                        <div className="tab-pane fade" id="assignations">
+                            <h3>Toutes les Assignations</h3>
+                            {assignments.length === 0 ? (
+                                <div className="empty-state">
+                                    <div className="empty-icon">📋</div>
+                                    <h4>Aucune assignation</h4>
+                                    <p>Aucune assignation en cours.</p>
+                                </div>
+                            ) : (
+                                <table className="dashboard-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Moniteur</th>
+                                            <th>Spécialité</th>
+                                            <th>Candidat</th>
+                                            <th>Permis</th>
+                                            <th>Date d'assignation</th>
+                                            <th>Action</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </Table>
-                        )}
-                    </div>
+                                    </thead>
+                                    <tbody>
+                                        {assignments.map(assignment => (
+                                            <tr key={assignment.assignment_id}>
+                                                <td>{assignment.monitor_nom} {assignment.monitor_prenom}</td>
+                                                <td>
+                                                    <span className="status-badge completed">{assignment.monitor_specialite || 'N/A'}</span>
+                                                </td>
+                                                <td>{assignment.candidat_nom} {assignment.candidat_prenom}</td>
+                                                <td>
+                                                    <span className="status-badge completed">{assignment.candidat_permis || 'N/A'}</span>
+                                                </td>
+                                                <td>
+                                                    <small>{new Date(assignment.assigned_at || assignment.created_at).toLocaleDateString()}</small>
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        className="action-btn danger"
+                                                        onClick={() => handleUnassign(assignment.monitor_id, assignment.candidat_id)}
+                                                    >
+                                                        🗑 Retirer
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
 
-                    {/* ONGLET ASSIGNATIONS */}
-                    <div className="tab-pane fade" id="assignations">
-                        <h4>Toutes les Assignations</h4>
-                        {assignments.length === 0 ? (
-                            <Alert variant="info">Aucune assignation</Alert>
-                        ) : (
-                            <Table striped bordered hover responsive>
-                                <thead>
-                                    <tr>
-                                        <th>Moniteur</th>
-                                        <th>Spécialité</th>
-                                        <th>Candidat</th>
-                                        <th>Permis</th>
-                                        <th>Date d'assignation</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {assignments.map(assignment => (
-                                        <tr key={assignment.assignment_id}>
-                                            <td>{assignment.monitor_nom} {assignment.monitor_prenom}</td>
-                                            <td>
-                                                <Badge bg="info">{assignment.monitor_specialite || 'N/A'}</Badge>
-                                            </td>
-                                            <td>{assignment.candidat_nom} {assignment.candidat_prenom}</td>
-                                            <td>
-                                                <Badge bg="primary">{assignment.candidat_permis || 'N/A'}</Badge>
-                                            </td>
-                                            <td>
-                                                <small>{new Date(assignment.assigned_at || assignment.created_at).toLocaleDateString()}</small>
-                                            </td>
-                                            <td>
-                                                <Button
-                                                    size="sm"
-                                                    variant="danger"
-                                                    onClick={() => handleUnassign(assignment.monitor_id, assignment.candidat_id)}
-                                                >
-                                                    🗑 Retirer
-                                                </Button>
-                                            </td>
+                        {/* ONGLET RÉSERVATIONS */}
+                        <div className="tab-pane fade" id="reservations">
+                            <h3>Toutes les Réservations</h3>
+                            {reservations.length === 0 ? (
+                                <div className="empty-state">
+                                    <div className="empty-icon">📅</div>
+                                    <h4>Aucune réservation</h4>
+                                    <p>Aucune réservation n'a été effectuée pour le moment.</p>
+                                </div>
+                            ) : (
+                                <table className="dashboard-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Candidat</th>
+                                            <th>Type</th>
+                                            <th>Date</th>
+                                            <th>Heure</th>
+                                            <th>Statut</th>
+                                            <th>Permis</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </Table>
-                        )}
+                                    </thead>
+                                    <tbody>
+                                        {reservations.map(reservation => (
+                                            <tr key={reservation.id}>
+                                                <td>{reservation.user ? `${reservation.user.nom} ${reservation.user.prenom}` : 'N/A'}</td>
+                                                <td>{reservation.type || 'N/A'}</td>
+                                                <td>
+                                                    <small>{new Date(reservation.date).toLocaleDateString()}</small>
+                                                </td>
+                                                <td>{reservation.time}</td>
+                                                <td>
+                                                    <span className={`status-badge ${reservation.status === 'confirmed' ? 'confirmed' :
+                                                            reservation.status === 'rejected' ? 'cancelled' :
+                                                                'pending'
+                                                        }`}>
+                                                        {reservation.status === 'confirmed' ? 'Confirmé' :
+                                                            reservation.status === 'rejected' ? 'Refusé' :
+                                                                'En attente'}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span className="status-badge completed">
+                                                        {reservation.permis?.title || reservation.permis?.name || 'N/A'}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -346,7 +422,7 @@ export default function AdminDashboard() {
                                 <strong>Candidat:</strong> {selectedCandidate.nom} {selectedCandidate.prenom}
                             </p>
                             <p>
-                                <strong>Catégorie de permis:</strong> <Badge bg="primary">{selectedCandidate.categorie_permis || 'N/A'}</Badge>
+                                <strong>Catégorie de permis:</strong> <span className="status-badge completed">{selectedCandidate.categorie_permis || 'N/A'}</span>
                             </p>
 
                             <Form.Group className="mb-3">

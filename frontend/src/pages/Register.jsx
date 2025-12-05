@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "../assets/css/style.scss";
 import axios from "axios";
+import { useUser } from "../context/UserContext";
+import visaImg from "../assets/visa.jpg";
 
 export default function Register() {
   const navigate = useNavigate();
+  const { loginUser } = useUser();
 
   const [formData, setFormData] = useState({
     nom: '',
@@ -71,10 +74,13 @@ export default function Register() {
       if (response.data.status) {
         setStatus({ status: true, message: response.data.message });
 
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.user));
+        // Utiliser le contexte pour stocker les données utilisateur
+        loginUser(response.data.user, response.data.token);
 
-        setTimeout(() => navigate("/dashboard"), 2000);
+        // Redirection après 2 secondes (pour afficher le message de succès)
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
       }
 
     } catch (error) {
@@ -265,7 +271,10 @@ export default function Register() {
                 checked={formData.methode_paiement === "carte"}
                 onChange={handleChange}
               />
-              <span>Carte Bancaire</span>
+              <div className="payment-content">
+                <img src={visaImg} alt="Visa" style={{ width: "60px", height: "auto" }} />
+                <span>Carte Bancaire</span>
+              </div>
             </label>
 
             <label className="payment-box">
@@ -288,32 +297,32 @@ export default function Register() {
 
           <div className="upload-grid">
             <div className="upload-item">
-              <label>Photo d'identité</label>
-              <input type="file" name="photo_identite" onChange={handleChange} />
+              <label>Photo d'identité *</label>
+              <input type="file" name="photo_identite" onChange={handleChange} required accept="image/*" />
               {errors.photo_identite && (
                 <span className="error-text">{errors.photo_identite[0]}</span>
               )}
             </div>
 
             <div className="upload-item">
-              <label>Recto carte nationale</label>
-              <input type="file" name="recto_carte_nationale" onChange={handleChange} />
+              <label>Recto carte nationale *</label>
+              <input type="file" name="recto_carte_nationale" onChange={handleChange} required accept="image/*" />
               {errors.recto_carte_nationale && (
                 <span className="error-text">{errors.recto_carte_nationale[0]}</span>
               )}
             </div>
 
             <div className="upload-item">
-              <label>Verso carte nationale</label>
-              <input type="file" name="verso_carte_nationale" onChange={handleChange} />
+              <label>Verso carte nationale *</label>
+              <input type="file" name="verso_carte_nationale" onChange={handleChange} required accept="image/*" />
               {errors.verso_carte_nationale && (
                 <span className="error-text">{errors.verso_carte_nationale[0]}</span>
               )}
             </div>
 
             <div className="upload-item">
-              <label>Certificat médical</label>
-              <input type="file" name="certificat_medical" onChange={handleChange} />
+              <label>Certificat médical *</label>
+              <input type="file" name="certificat_medical" onChange={handleChange} required accept="image/*,application/pdf" />
               {errors.certificat_medical && (
                 <span className="error-text">{errors.certificat_medical[0]}</span>
               )}

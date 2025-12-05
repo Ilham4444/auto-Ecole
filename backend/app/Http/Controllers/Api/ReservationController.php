@@ -9,7 +9,18 @@ use Illuminate\Http\Request;
 class ReservationController extends Controller {
     
     public function index(Request $request) {
-        $reservations = $request->user()->reservations()->with('permis')->get();
+        $user = $request->user();
+        
+        // Si l'utilisateur est admin, retourner toutes les réservations
+        if ($user->role === 'admin') {
+            $reservations = Reservation::with(['user', 'permis'])
+                ->orderBy('date', 'desc')
+                ->get();
+        } else {
+            // Sinon, retourner seulement les réservations de l'utilisateur
+            $reservations = $user->reservations()->with('permis')->get();
+        }
+        
         return response()->json($reservations);
     }
 
@@ -71,6 +82,17 @@ class ReservationController extends Controller {
         return response()->json([
             'status' => true,
             'message' => 'Réservation confirmée',
+            'reservation' => $reservation
+        ]);
+    }
+
+    public function reject(Request $request, $id) {
+        $reservation = Reservation::findOrFail($id);
+        $reservation->update(['status' => 'rejected']);
+        
+        return response()->json([
+            'status' => true,
+            'message' => 'Réservation refusée',
             'reservation' => $reservation
         ]);
     }

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
 import { Modal, Button, Form } from "react-bootstrap";
+import "../assets/css/UnifiedDashboard.css";
 
 export default function Dashboard() {
   const { user: contextUser, logoutUser } = useUser();
@@ -139,8 +140,8 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="dashboard-container">
-        <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="unified-dashboard-container">
+        <div className="d-flex justify-content-between align-items-center mb-4 unified-dashboard-header">
           <h2>Tableau de Bord {user.role === "moniteur" ? "(Moniteur)" : ""}</h2>
           <div>
             <button
@@ -481,23 +482,26 @@ export default function Dashboard() {
           <>
             <div className="row mt-4">
               <div className="col-md-4 mb-4">
-                <div className="dashboard-card p-3">
+                <div className="stat-card primary p-3">
                   <h5>Mes Élèves</h5>
                   <p>Total : {user.candidates ? user.candidates.length : 0} élèves</p>
                   <p>Total : {user.candidates ? user.candidates.length : 0} élèves</p>
                   <button
                     className="btn btn-primary btn-sm"
                     onClick={() => {
-                      const el = document.getElementById('reservations-section');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                      const el = document.getElementById('students-section');
+                      if (el) {
+                        el.scrollIntoView({ behavior: 'smooth' });
+                        window.location.hash = 'students-section';
+                      }
                     }}
                   >
-                    Voir les réservations
+                    Voir mes élèves
                   </button>
                 </div>
               </div>
               <div className="col-md-4 mb-4">
-                <div className="dashboard-card p-3">
+                <div className="stat-card success p-3">
                   <h5>Planning Aujourd'hui</h5>
                   <p>{user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0} leçons confirmées</p>
                   <p>{user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0} leçons confirmées</p>
@@ -512,56 +516,92 @@ export default function Dashboard() {
                   </button>
                 </div>
               </div>
-              <div className="col-md-4 mb-4">
-                <div className="dashboard-card p-3">
-                  <h5>Ma Disponibilité</h5>
-                  <p>Gérer vos créneaux horaires</p>
-                  <button className="btn btn-warning btn-sm text-white" onClick={() => alert("Fonctionnalité de gestion de disponibilité à venir")}>Gérer</button>
+
+            </div>
+
+            {/* Section: Mes Élèves */}
+            <div className="mt-5" id="students-section">
+              <h4>Mes Élèves Assignés</h4>
+              {user.candidates && user.candidates.length > 0 ? (
+                <div className="row">
+                  {user.candidates.map((candidate) => (
+                    <div className="col-md-6 mb-3" key={candidate.id}>
+                      <div className="list-card">
+                        <div className="card-header">
+                          <div>
+                            <h5>👤 {candidate.nom} {candidate.prenom}</h5>
+                            <p className="mb-1">📧 {candidate.email}</p>
+                            <p className="mb-1">📞 {candidate.telephone}</p>
+                            <p className="mb-1">🚗 Permis: {candidate.categorie_permis}</p>
+                            <p className="mb-0">📍 {candidate.adresse}</p>
+                          </div>
+                          <span className="badge bg-info text-dark">Assigné</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
+              ) : (
+                <div className="alert alert-info">
+                  <h4>Aucun élève assigné</h4>
+                  <p>Vous n'avez pas encore d'élèves assignés par l'administrateur.</p>
+                </div>
+              )}
             </div>
 
             <div className="mt-5" id="reservations-section">
               <h4>Gestion des Réservations</h4>
               {user.reservations && user.reservations.length > 0 ? (
                 user.reservations.map((r) => (
-                  <div className="card p-3 mt-3" key={r.id}>
-                    <div className="d-flex justify-content-between align-items-center">
+                  <div className="list-card" key={r.id}>
+                    <div className="card-header">
                       <div>
                         <h5>{r.type} avec {r.student_name || "Élève"}</h5>
-                        <span className={`badge ${r.status === 'confirmed' ? 'bg-success' : 'bg-warning'}`}>
-                          {r.status === 'confirmed' ? 'Confirmé' : 'En attente'}
+                        <span className={`badge ${r.status === 'confirmed' ? 'bg-success' :
+                          r.status === 'rejected' ? 'bg-danger' :
+                            'bg-warning'
+                          }`}>
+                          {r.status === 'confirmed' ? 'Confirmé' :
+                            r.status === 'rejected' ? 'Refusé' :
+                              'En attente'}
                         </span>
                         <p className="mt-2">{r.permis?.title || 'Permis'}</p>
                         <small>📅 {r.date} à {r.time}</small>
                       </div>
-                      {r.status !== 'confirmed' && (
-                        <button
-                          className="btn btn-success"
-                          onClick={async () => {
-                            try {
-                              const api = (await import('../api.jsx')).default;
-                              await api.put(`/reservations/${r.id}/confirm`);
-                              alert("Réservation confirmée !");
-                              // Mettre à jour l'état local au lieu de recharger la page
-                              setUser({
-                                ...user,
-                                reservations: user.reservations.map(res =>
-                                  res.id === r.id ? { ...res, status: 'confirmed' } : res
-                                )
-                              });
-                            } catch (error) {
-                              console.error("Erreur confirmation", error);
-                              alert("Erreur lors de la confirmation");
-                            }
-                          }}
-                        >
-                          ✅ Confirmer
-                        </button>
-                      )}
-                      {r.status === 'confirmed' && (
-                        <button className="btn btn-outline-secondary" disabled>Déjà validé</button>
-                      )}
+                      <div className="d-flex gap-2">
+                        {r.status === 'pending' && (
+                          <>
+                            <button
+                              className="action-btn success"
+                              onClick={() => handleReservationStatus(r.id, 'confirmed')}
+                            >
+                              ✅ Confirmer
+                            </button>
+                            <button
+                              className="action-btn danger"
+                              onClick={() => handleReservationStatus(r.id, 'rejected')}
+                            >
+                              ❌ Annuler
+                            </button>
+                          </>
+                        )}
+                        {r.status === 'confirmed' && (
+                          <button
+                            className="action-btn danger"
+                            onClick={() => handleReservationStatus(r.id, 'rejected')}
+                          >
+                            Annuler confirmation
+                          </button>
+                        )}
+                        {r.status === 'rejected' && (
+                          <button
+                            className="action-btn success"
+                            onClick={() => handleReservationStatus(r.id, 'confirmed')}
+                          >
+                            Rétablir
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))

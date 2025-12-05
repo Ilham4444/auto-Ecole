@@ -14,7 +14,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f5f7fa;
-            padding: 20px 15px;
+            padding: 40px 20px;
             color: #333;
             line-height: 1.6;
         }
@@ -31,7 +31,7 @@
         .header {
             background: linear-gradient(135deg, #1e3a8a 0%, #0d6efd 100%);
             color: #ffffff;
-            padding: 20px 15px;
+            padding: 40px 30px;
             text-align: center;
             position: relative;
         }
@@ -47,7 +47,7 @@
         }
 
         .header h1 {
-            font-size: 20px;
+            font-size: 28px;
             font-weight: 700;
             margin-bottom: 8px;
             letter-spacing: 0.5px;
@@ -71,16 +71,16 @@
         }
 
         .content {
-            padding: 15px 20px;
+            padding: 35px 40px;
         }
 
         .section {
-            margin-bottom: 15px;
+            margin-bottom: 30px;
         }
 
         .section-title {
             color: #1e3a8a;
-            font-size: 14px;
+            font-size: 18px;
             font-weight: 700;
             margin-bottom: 15px;
             padding-bottom: 8px;

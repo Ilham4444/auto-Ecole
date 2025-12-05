@@ -42,5 +42,19 @@ class PdfController extends Controller
         $pdf = Pdf::loadView('pdfs.certificat', $data);
         return $pdf->download('certificat_'.$user->id.'.pdf');
     }
+
+    public function recuComplet($id, Request $request)
+    {
+        $paiement = Paiement::findOrFail($id);
+
+        // sécurité : vérifier propriétaire
+        if ($paiement->user_id !== $request->user()->id) {
+            abort(403);
+        }
+
+        $data = ['paiement' => $paiement, 'user' => $request->user()];
+        $pdf = Pdf::loadView('pdfs.recu_complet', $data);
+        return $pdf->download('recu_complet_'.$paiement->id.'.pdf');
+    }
 }
 

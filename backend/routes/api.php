@@ -75,6 +75,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reservations', [ReservationController::class, 'store']);    // Créer une réservation
     Route::get('/reservations/{id}', [ReservationController::class, 'show']); // Détail d'une réservation
     Route::put('/reservations/{id}/confirm', [ReservationController::class, 'confirm']); // Confirmer une réservation (Moniteur)
+    Route::put('/reservations/{id}/reject', [ReservationController::class, 'reject']); // Refuser une réservation (Moniteur)
     Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']); // Annuler une réservation
 
     /* ============================
@@ -109,5 +110,6 @@ Route::middleware('auth:sanctum')->group(function () {
     ============================ */
     Route::get('/pdf/recu-inscription', [PdfController::class, 'recuInscription']);  // Reçu d'inscription
     Route::get('/pdf/recu-paiement/{id}', [PdfController::class, 'recuPaiement']);   // Reçu de paiement
+    Route::get('/pdf/recu-complet/{id}', [PdfController::class, 'recuComplet']);     // Reçu complet (Inscription + Paiement)
     Route::get('/pdf/certificat', [PdfController::class, 'certificat']);              // Certificat de réussite
 });
