@@ -505,7 +505,6 @@ export default function Dashboard() {
                 <div className="stat-card primary p-3">
                   <h5>Mes Élèves</h5>
                   <p>Total : {user.candidates ? user.candidates.length : 0} élèves</p>
-                  <p>Total : {user.candidates ? user.candidates.length : 0} élèves</p>
                   <button
                     className="btn btn-primary btn-sm"
                     onClick={() => {
@@ -523,7 +522,6 @@ export default function Dashboard() {
               <div className="col-md-4 mb-4">
                 <div className="stat-card success p-3">
                   <h5>Planning Aujourd'hui</h5>
-                  <p>{user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0} leçons confirmées</p>
                   <p>{user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0} leçons confirmées</p>
                   <button
                     className="btn btn-info btn-sm text-white"
