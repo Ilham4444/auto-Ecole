@@ -25,14 +25,10 @@ export default function Home() {
               </p>
 
               <div className="d-flex gap-3 flex-wrap">
-                <Button variant="primary" className="rounded-pill px-4 py-2" href="#permis">
+                <Button variant="primary" href="#permis">
                   Réserver une leçon
                 </Button>
-                <Button
-                  variant="outline-primary"
-                  className="rounded-pill px-4 py-2"
-                  href="#examens"
-                >
+                <Button variant="primary" href="#examens">
                   Passer l'examen
                 </Button>
               </div>
@@ -92,14 +88,14 @@ export default function Home() {
             Consultez nos cours en ligne pour bien préparer votre permis de conduire
           </p>
           <div className="d-flex justify-content-center gap-4 flex-wrap">
-            <a href="https://conduire.ma/" className="btn btn-light px-4 py-2 rounded-pill fw-bold">
+            <a href="https://conduire.ma/" className="btn btn-primary fw-bold">
               Accéder aux Cours en Ligne
             </a>
             <a
               href="https://wa.me/212620958131"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-outline-light px-4 py-2 rounded-pill fw-bold"
+              className="btn btn-primary fw-bold"
             >
               Nous Contacter
             </a>
