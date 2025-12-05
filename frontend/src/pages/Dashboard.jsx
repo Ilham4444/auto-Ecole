@@ -500,65 +500,61 @@ export default function Dashboard() {
         {/* ================== VUE MONITEUR ================== */}
         {user.role === 'moniteur' && (
           <>
-            <div className="row mt-4">
-              <div className="col-md-4 mb-4">
-                <div className="stat-card primary p-3">
-                  <h5>Mes Élèves</h5>
-                  <p>Total : {user.candidates ? user.candidates.length : 0} élèves</p>
-                  <button
-                    className="btn btn-primary btn-sm"
-                    onClick={() => {
-                      const el = document.getElementById('students-section');
-                      if (el) {
-                        el.scrollIntoView({ behavior: 'smooth' });
-                        window.location.hash = 'students-section';
-                      }
-                    }}
-                  >
-                    Voir mes élèves
-                  </button>
+            {/* Cartes de statistiques colorées */}
+            <div className="stats-grid">
+              <div className="stat-card primary">
+                <div className="stat-icon">👥</div>
+                <div className="stat-label">Mes Élèves</div>
+                <div className="stat-value">{user.candidates ? user.candidates.length : 0}</div>
+              </div>
+              <div className="stat-card success">
+                <div className="stat-icon">✅</div>
+                <div className="stat-label">Réservations Confirmées</div>
+                <div className="stat-value">
+                  {user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0}
                 </div>
               </div>
-              <div className="col-md-4 mb-4">
-                <div className="stat-card success p-3">
-                  <h5>Planning Aujourd'hui</h5>
-                  <p>{user.reservations ? user.reservations.filter(r => r.status === 'confirmed').length : 0} leçons confirmées</p>
-                  <button
-                    className="btn btn-info btn-sm text-white"
-                    onClick={() => {
-                      const el = document.getElementById('reservations-section');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                  >
-                    Voir le planning
-                  </button>
+              <div className="stat-card warning">
+                <div className="stat-icon">⏳</div>
+                <div className="stat-label">Réservations en Attente</div>
+                <div className="stat-value">
+                  {user.reservations ? user.reservations.filter(r => r.status === 'pending').length : 0}
                 </div>
               </div>
-
             </div>
 
-            {/* Section: Mes Élèves */}
-            <div className="mt-5" id="students-section">
-              <h4>Mes Élèves Assignés</h4>
+            {/* Section: Mes Élèves - Tableau */}
+            <div className="dashboard-section mt-4">
+              <h3>👥 Mes Élèves Assignés</h3>
               {user.candidates && user.candidates.length > 0 ? (
-                <div className="row">
-                  {user.candidates.map((candidate) => (
-                    <div className="col-md-6 mb-3" key={candidate.id}>
-                      <div className="list-card">
-                        <div className="card-header">
-                          <div>
-                            <h5>👤 {candidate.nom} {candidate.prenom}</h5>
-                            <p className="mb-1">📧 {candidate.email}</p>
-                            <p className="mb-1">📞 {candidate.telephone}</p>
-                            <p className="mb-1">🚗 Permis: {candidate.categorie_permis}</p>
-                            <p className="mb-0">📍 {candidate.adresse}</p>
-                          </div>
-                          <span className="badge bg-info text-dark">Assigné</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <table className="dashboard-table">
+                  <thead>
+                    <tr>
+                      <th>Nom</th>
+                      <th>Email</th>
+                      <th>Téléphone</th>
+                      <th>Permis</th>
+                      <th>Adresse</th>
+                      <th>Statut</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {user.candidates.map((candidate) => (
+                      <tr key={candidate.id}>
+                        <td>{candidate.nom} {candidate.prenom}</td>
+                        <td>{candidate.email}</td>
+                        <td>{candidate.telephone}</td>
+                        <td>
+                          <span className="status-badge completed">{candidate.categorie_permis}</span>
+                        </td>
+                        <td>{candidate.adresse}</td>
+                        <td>
+                          <span className="status-badge confirmed">Assigné</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               ) : (
                 <div className="alert alert-info">
                   <h4>Aucun élève assigné</h4>
@@ -567,62 +563,78 @@ export default function Dashboard() {
               )}
             </div>
 
-            <div className="mt-5" id="reservations-section">
-              <h4>Gestion des Réservations</h4>
+            {/* Section: Gestion des Réservations - Tableau */}
+            <div className="dashboard-section mt-4">
+              <h3>📅 Gestion des Réservations</h3>
               {user.reservations && user.reservations.length > 0 ? (
-                user.reservations.map((r) => (
-                  <div className="list-card" key={r.id}>
-                    <div className="card-header">
-                      <div>
-                        <h5>{r.type} avec {r.student_name || "Élève"}</h5>
-                        <span className={`badge ${r.status === 'confirmed' ? 'bg-success' :
-                          r.status === 'rejected' ? 'bg-danger' :
-                            'bg-warning'
-                          }`}>
-                          {r.status === 'confirmed' ? 'Confirmé' :
-                            r.status === 'rejected' ? 'Refusé' :
-                              'En attente'}
-                        </span>
-                        <p className="mt-2">{r.permis?.title || 'Permis'}</p>
-                        <small>📅 {r.date} à {r.time}</small>
-                      </div>
-                      <div className="d-flex gap-2">
-                        {r.status === 'pending' && (
-                          <>
-                            <button
-                              className="action-btn success"
-                              onClick={() => handleReservationStatus(r.id, 'confirmed')}
-                            >
-                              ✅ Confirmer
-                            </button>
+                <table className="dashboard-table">
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Élève</th>
+                      <th>Permis</th>
+                      <th>Date</th>
+                      <th>Heure</th>
+                      <th>Statut</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {user.reservations.map((r) => (
+                      <tr key={r.id}>
+                        <td>{r.type}</td>
+                        <td>{r.student_name || "Élève"}</td>
+                        <td>{r.permis?.title || 'Permis'}</td>
+                        <td><small>{r.date}</small></td>
+                        <td>{r.time}</td>
+                        <td>
+                          <span className={`status-badge ${r.status === 'confirmed' ? 'confirmed' :
+                              r.status === 'rejected' ? 'cancelled' :
+                                'pending'
+                            }`}>
+                            {r.status === 'confirmed' ? 'Confirmé' :
+                              r.status === 'rejected' ? 'Refusé' :
+                                'En attente'}
+                          </span>
+                        </td>
+                        <td>
+                          {r.status === 'pending' && (
+                            <>
+                              <button
+                                className="action-btn success"
+                                onClick={() => handleReservationStatus(r.id, 'confirmed')}
+                              >
+                                ✅ Confirmer
+                              </button>
+                              <button
+                                className="action-btn danger"
+                                onClick={() => handleReservationStatus(r.id, 'rejected')}
+                              >
+                                ❌ Annuler
+                              </button>
+                            </>
+                          )}
+                          {r.status === 'confirmed' && (
                             <button
                               className="action-btn danger"
                               onClick={() => handleReservationStatus(r.id, 'rejected')}
                             >
-                              ❌ Annuler
+                              Annuler confirmation
                             </button>
-                          </>
-                        )}
-                        {r.status === 'confirmed' && (
-                          <button
-                            className="action-btn danger"
-                            onClick={() => handleReservationStatus(r.id, 'rejected')}
-                          >
-                            Annuler confirmation
-                          </button>
-                        )}
-                        {r.status === 'rejected' && (
-                          <button
-                            className="action-btn success"
-                            onClick={() => handleReservationStatus(r.id, 'confirmed')}
-                          >
-                            Rétablir
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))
+                          )}
+                          {r.status === 'rejected' && (
+                            <button
+                              className="action-btn success"
+                              onClick={() => handleReservationStatus(r.id, 'confirmed')}
+                            >
+                              Rétablir
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               ) : (
                 <p>Aucune réservation trouvée.</p>
               )}
