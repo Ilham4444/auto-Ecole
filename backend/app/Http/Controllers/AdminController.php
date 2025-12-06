@@ -42,7 +42,7 @@ class AdminController extends Controller
         }
 
         $monitors = User::where('role', 'moniteur')
-            ->select('id', 'nom', 'prenom', 'email', 'telephone', 'categorie_permis')
+            ->select('id', 'nom', 'prenom', 'email', 'telephone', 'specialite_permis')
             ->withCount('eleves')
             ->with(['eleves' => function($query) {
                 $query->select('users.id', 'users.nom', 'users.prenom', 'users.categorie_permis');
@@ -84,11 +84,11 @@ class AdminController extends Controller
         }
 
         // Vérifier la compatibilité des spécialités
-        if ($monitor->categorie_permis && $candidat->categorie_permis) {
-            if ($monitor->categorie_permis !== $candidat->categorie_permis) {
+        if ($monitor->specialite_permis && $candidat->categorie_permis) {
+            if ($monitor->specialite_permis !== $candidat->categorie_permis) {
                 return response()->json([
                     'status' => false,
-                    'message' => "Incompatibilité: moniteur spécialité {$monitor->categorie_permis}, candidat permis {$candidat->categorie_permis}"
+                    'message' => "Incompatibilité: moniteur spécialité {$monitor->specialite_permis}, candidat permis {$candidat->categorie_permis}"
                 ], 400);
             }
         }
@@ -159,7 +159,7 @@ class AdminController extends Controller
                 'monitor.id as monitor_id',
                 'monitor.nom as monitor_nom',
                 'monitor.prenom as monitor_prenom',
-                'monitor.categorie_permis as monitor_specialite',
+                'monitor.specialite_permis as monitor_specialite',
                 'candidat.id as candidat_id',
                 'candidat.nom as candidat_nom',
                 'candidat.prenom as candidat_prenom',
