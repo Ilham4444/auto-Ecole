@@ -49,7 +49,7 @@ function AppContent() {
 
       <main className={location.pathname === "/" ? "" : "container"} style={{ marginTop: "140px" }}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home key={location.key} />} /> {/* Force remount on navigation */}
           <Route path="/permis" element={<Permis />} />
           <Route path="/examens" element={<Examens />} />
           <Route path="/moniteurs" element={<Moniteurs />} />

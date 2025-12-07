@@ -85,7 +85,15 @@ class AdminController extends Controller
 
         // Vérifier la compatibilité des spécialités
         if ($monitor->specialite_permis && $candidat->categorie_permis) {
-            if ($monitor->specialite_permis !== $candidat->categorie_permis) {
+            $monitorPermis = strtoupper(trim($monitor->specialite_permis));
+            $candidatPermis = strtoupper(trim($candidat->categorie_permis));
+            
+            // Vérification souple: égalité ou inclusion (ex: "B" dans "PERMIS B")
+            $compatible = ($monitorPermis === $candidatPermis) || 
+                          (str_contains($monitorPermis, $candidatPermis)) || 
+                          (str_contains($candidatPermis, $monitorPermis));
+
+            if (!$compatible) {
                 return response()->json([
                     'status' => false,
                     'message' => "Incompatibilité: moniteur spécialité {$monitor->specialite_permis}, candidat permis {$candidat->categorie_permis}"

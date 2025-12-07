@@ -114,8 +114,15 @@ export default function AdminDashboard() {
         return monitors.filter(monitor => {
             // Si le moniteur n'a pas de spécialité définie, il peut enseigner tous les permis
             if (!monitor.specialite_permis) return true;
-            // Sinon, la spécialité doit correspondre
-            return monitor.specialite_permis === selectedCandidate.categorie_permis;
+
+            // Normalisation pour comparaison insensible à la casse et aux espaces
+            const monitorPermis = monitor.specialite_permis.trim().toUpperCase();
+            const candidatePermis = selectedCandidate.categorie_permis ? selectedCandidate.categorie_permis.trim().toUpperCase() : "";
+
+            // Comparaison large
+            return monitorPermis === candidatePermis ||
+                monitorPermis.includes(candidatePermis) ||
+                candidatePermis.includes(monitorPermis);
         });
     };
 

@@ -1,5 +1,8 @@
 import React from "react";
 import "../assets/css/style.scss";
+import moniteur1 from "../assets/Moniteur1.jpg";
+import moniteur2 from "../assets/Moniteur2.jpg";
+import moniteur4 from "../assets/Moniteur4.jpg";
 
 export default function Moniteurs() {
   const moniteurs = [
@@ -7,7 +10,7 @@ export default function Moniteurs() {
       id: 1,
       nom: "Youssef El Amrani",
       experience: "12 ans d'expérience",
-      image: "/src/assets/Moniteur1.jpg",
+      image: moniteur1,
       rating: "4.9",
       reviews: 156,
       skills: ["Débutants", "Conduite urbaine", "Autoroute"],
@@ -16,7 +19,7 @@ export default function Moniteurs() {
       id: 2,
       nom: "Fatima Zahra Bennani",
       experience: "8 ans d'expérience",
-      image: "/src/assets/Moniteur2.jpg",
+      image: moniteur2,
       rating: "4.8",
       reviews: 203,
       skills: ["Conduite accompagnée", "Manœuvres", "Perfectionnement"],
@@ -25,7 +28,7 @@ export default function Moniteurs() {
       id: 3,
       nom: "Mohammed Alaoui",
       experience: "15 ans d'expérience",
-      image: "/src/assets/Moniteur4.jpg",
+      image: moniteur4,
       rating: "4.9",
       reviews: 189,
       skills: ["Conduite sportive", "Éco-conduite", "Préparation examen"],

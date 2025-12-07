@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import "../assets/css/style.scss";
 import heroImage from "../assets/hero.jpg";
@@ -8,6 +8,10 @@ import Moniteurs from "./Moniteurs";
 import Apropos from "./Apropos";
 
 export default function Home() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       {/* 🌟 SECTION 1 : HERO PRINCIPALE */}
